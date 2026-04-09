@@ -9,7 +9,7 @@ import SwiftUI
 
 struct StickerView: View {
     var body: some View {
-        Text("Hello, World!")
+        Text("Sticker")
     }
 }
 
