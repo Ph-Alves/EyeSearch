@@ -25,7 +25,7 @@ class SearchObjectViewModel {
         await camera.checkAuthorization()
     }
     
-    func getResponse() -> AdesivoDetectorOutput {
+    func getResponse() -> StickerDetector1Output {
         camera.prediction!
     }
     

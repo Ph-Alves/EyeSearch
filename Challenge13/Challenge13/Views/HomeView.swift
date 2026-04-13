@@ -11,7 +11,12 @@ import SwiftData
 struct HomeView: View {
 
     var body: some View {
-        
+        NavigationStack {
+            SearchObjectView()
+            PrintStickerView()
+            HintsView()
+            SettingsView()
+        }
     }
 }
 
