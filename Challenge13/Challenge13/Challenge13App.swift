@@ -26,7 +26,7 @@ struct Challenge13App: App {
 
     var body: some Scene {
         WindowGroup {
-            CameraViewTest()
+            HomeView()
         }
         .modelContainer(sharedModelContainer)
     }

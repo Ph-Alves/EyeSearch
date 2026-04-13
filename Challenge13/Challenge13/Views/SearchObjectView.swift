@@ -1,15 +1,14 @@
 //
-//  CameraViewTest.swift
+//  SearchView.swift
 //  Challenge13
 //
-//  Created by Manoel Pedro Prado Sa Teles on 13/04/26.
+//  Created by Daniela Valadares on 09/04/26.
 //
 
 import SwiftUI
 import AVFoundation
 
-struct CameraViewTest: View {
-    
+struct SearchObjectView: View {
     @State private var objectDetection = SearchObjectViewModel()
     
     var body: some View {
@@ -24,6 +23,6 @@ struct CameraViewTest: View {
     }
 }
 
-#Preview {
-    CameraViewTest()
+#Preview{
+    SearchObjectView()
 }
