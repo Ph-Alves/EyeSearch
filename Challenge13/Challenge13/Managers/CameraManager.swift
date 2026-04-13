@@ -17,7 +17,7 @@ class CameraManager: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     private(set) var session = AVCaptureSession()
     private let videoOutput = AVCaptureVideoDataOutput()
     
-    let model = try? AdesivoDetector()
+    let model = try? AdesivoDetector(configuration: .init())
     var prediction: AdesivoDetectorOutput?
     
     //MARK: Functions
@@ -77,9 +77,7 @@ class CameraManager: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
         else { return }
         
-        self.prediction = try? model?.prediction(input: pixelBuffer)
-        
-            
+        self.prediction = try? model?.prediction(imagePath: pixelBuffer, iouThreshold: 0.25, confidenceThreshold: 0.25)
     }
     
     

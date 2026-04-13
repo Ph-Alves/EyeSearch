@@ -10,45 +10,18 @@ import AVFoundation
 
 struct CameraViewTest: View {
     
-    @State private var camera = CameraManager()
+    @State private var objectDetection = SearchObjectViewModel()
     
     var body: some View {
         VStack {
-            CameraPreview(session: camera.session)
+            objectDetection.getCameraPreview()
                 .ignoresSafeArea()
         }
         .padding()
         .task {
-            await camera.checkAuthorization()
+            await objectDetection.getPermission()
         }
     }
-}
-
-class PreviewView: UIView {
-    override class var layerClass: AnyClass {
-        AVCaptureVideoPreviewLayer.self
-    }
-    
-    var previewLayer: AVCaptureVideoPreviewLayer {
-        layer as! AVCaptureVideoPreviewLayer
-    }
-}
-
-struct CameraPreview: UIViewRepresentable {
-    let session: AVCaptureSession
-    
-    init(session: AVCaptureSession) {
-        self.session = session
-    }
-    
-    func makeUIView(context: Context) -> PreviewView {
-        let view = PreviewView()
-        view.previewLayer.session = session
-        view.previewLayer.videoGravity = .resizeAspectFill
-        return view
-    }
-    
-    func updateUIView(_ uiView: PreviewView, context: Context) {}
 }
 
 #Preview {
