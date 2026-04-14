@@ -12,13 +12,13 @@ import AVFoundation
 class SoundManager {
     
     // Essa é a instância, é static pois permite o uso sem precisar instanciar a classe antes, até por que ela também é uma instância.
-    static let shared = SoundManager()
+    static let manager = SoundManager()
     var player: AVAudioPlayer?
     
     // Init privado para proibir instanciação manual
     private init() {}
     
-    // Função de tocar som, pega um url e tenta dar play.
+    // Função de tocar som a partir de um url (.mp4 do audio)
     func playSound() {
         guard let url = URL(string: "") else { return }
         
@@ -28,5 +28,11 @@ class SoundManager {
         } catch {
             print("Error iniciating AVAudioPlayer: \(error.localizedDescription)")
         }
+    }
+    
+    // Função de parar o som caso um player exista (está tocando)
+    func stopSound() {
+        guard let player = self.player else { return }
+        player.stop()
     }
 }
