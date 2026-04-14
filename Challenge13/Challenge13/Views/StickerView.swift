@@ -6,13 +6,59 @@
 //
 
 import SwiftUI
+import PDFKit
 
 struct StickerView: View {
+    
+    @StateObject private var viewModel = StickerViewModel()
+    
     var body: some View {
-        Text("Sticker")
+        NavigationView {
+            VStack(spacing: 20) {
+                
+                Text("Gerador de Adesivos")
+                    .font(.title)
+                
+                Stepper(
+                    "Quantidade: \(viewModel.quantity)",
+                    value: $viewModel.quantity,
+                    in: 1...20
+                )
+                .padding()
+                
+                Button(action: {
+                    viewModel.generatePDF()
+                }) {
+                    Text("Gerar PDF")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+                                
+                if let document = viewModel.pdfDocument {
+                    PDFKitView(pdfDocument: document)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    Spacer()
+                }
+                
+                if !viewModel.pdfData.isEmpty {
+                    ShareLink(
+                        item: CustomPDFDoc(data: viewModel.pdfData),
+                        preview: SharePreview("Adesivos.pdf", image: Image("sticker"))
+                    ) {
+                        Label("Exportar PDF", systemImage: "square.and.arrow.up")
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundStyle(.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                    }
+                }
+            }
+            .padding()
+            .navigationTitle("PDF")
+        }
     }
-}
-
-#Preview {
-    StickerView()
 }
