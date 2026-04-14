@@ -18,21 +18,17 @@ class SoundManager {
     // Init privado para proibir instanciação manual
     private init() {}
     
-    // Função de tocar som a partir de um url (.mp4 do audio)
+    // Função de tocar som a partir de um url (.mp3 do audio)
     func playSound() {
-        guard let url = URL(string: "") else { return }
+        guard let url = Bundle.main.url(forResource: "item-found", withExtension: "mp3") else { return }
         
         do {
+            // instância do objeto audioPlayer
             player = try AVAudioPlayer(contentsOf: url)
+            player?.setVolume(10, fadeDuration: 3)
             player?.play()
         } catch {
             print("Error iniciating AVAudioPlayer: \(error.localizedDescription)")
         }
-    }
-    
-    // Função de parar o som caso um player exista (está tocando)
-    func stopSound() {
-        guard let player = self.player else { return }
-        player.stop()
     }
 }
