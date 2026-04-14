@@ -7,6 +7,13 @@
 
 import SwiftUI
 
+enum HomeDestination: Hashable {
+    case searchObject
+    case sticker
+    case hints
+    case settings
+}
+
 struct HomeView: View {
     private let screenTitle = "Nome do app"
     

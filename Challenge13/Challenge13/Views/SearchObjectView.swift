@@ -6,10 +6,20 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct SearchObjectView: View {
+    @State private var objectDetection = SearchObjectViewModel()
+    
     var body: some View {
-        Text("Search Object View")
+        VStack {
+            objectDetection.getCameraPreview()
+                .ignoresSafeArea()
+        }
+        .padding()
+        .task {
+            await objectDetection.getPermission()
+        }
     }
 }
 
