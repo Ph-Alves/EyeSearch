@@ -23,10 +23,15 @@ struct Challenge13App: App {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
+    
+    @State private var coordinator = Coordinator()
 
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            CoordinatedNavigationStack {
+                HomeView()
+            }
+            .environment(coordinator)
         }
         .modelContainer(sharedModelContainer)
     }
