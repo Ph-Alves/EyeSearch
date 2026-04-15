@@ -18,15 +18,16 @@ class SettingsViewModel {
         self.soundManager = SoundManager.manager
     }
     
-    func changeSound() {
-        
+    func toggleSound() {
+        soundManager.toggleSound()
     }
     
     func changeHaptics() {
-        
+        hapticsManager.toggleHaptics()
     }
     
     func resetConfiguration() {
-        
+        soundManager.reset()
+        hapticsManager.reset()
     }
 }
