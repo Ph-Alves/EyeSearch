@@ -68,7 +68,6 @@ struct CoordinatedNavigationStack<Content: View>: View {
                 .navigationDestination(for: HomeDestination.self) { destination in
                     coordinator.destination(for: destination)
                 }
-                .navigationBarBackButtonHidden(true)
         }
     }
 }

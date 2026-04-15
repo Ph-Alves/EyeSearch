@@ -16,11 +16,10 @@ struct SearchObjectView: View {
     
     // MARK: - Body View
     var body: some View {
-        ReturnButton(action: {
-            coordinator.pop()
-        })
-        
         VStack {
+            ReturnButton(action: {
+                coordinator.pop()
+            })
             objectDetection.getCameraPreview()
                 .ignoresSafeArea()
         }
@@ -28,6 +27,7 @@ struct SearchObjectView: View {
         .task {
             await objectDetection.getPermission()
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 

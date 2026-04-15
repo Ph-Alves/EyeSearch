@@ -13,11 +13,13 @@ struct SettingsView: View {
     
     // MARK: - Body View
     var body: some View {
-        ReturnButton(action: {
-            coordinator.pop()
-        })
-        
-        Text("Settings")
+        VStack {
+            ReturnButton(action: {
+                coordinator.pop()
+            })
+            Text("Settings")
+        }
+        .navigationBarBackButtonHidden(true)
     }
 }
 

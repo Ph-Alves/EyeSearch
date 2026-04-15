@@ -28,9 +28,11 @@ struct Challenge13App: App {
 
     var body: some Scene {
         WindowGroup {
+            // Para o coordinator receber a view raiz e fazer sua estrutura de navigationStack
             CoordinatedNavigationStack {
                 HomeView()
             }
+            // Coordinator injetado como variável de ambiente
             .environment(coordinator)
         }
         .modelContainer(sharedModelContainer)

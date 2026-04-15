@@ -13,10 +13,14 @@ struct HintsView: View {
     
     // MARK: - Body View
     var body: some View {
-        ReturnButton(action: {
-            coordinator.pop()
-        })
-        Text("Hints View")
+        VStack {
+            // Volta a view anterior
+            ReturnButton(action: {
+                coordinator.pop()
+            })
+            Text("Hints View")
+        }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
@@ -26,4 +30,5 @@ struct HintsView: View {
         HintsView()
     }
     .environment(Coordinator())
+    .environment(\.dynamicTypeSize, .large)
 }
