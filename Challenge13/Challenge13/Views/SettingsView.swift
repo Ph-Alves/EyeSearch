@@ -8,11 +8,23 @@
 import SwiftUI
 
 struct SettingsView: View {
+    // MARK: - Variables
+    @Environment(Coordinator.self) private var coordinator
+    
+    // MARK: - Body View
     var body: some View {
+        ReturnButton(action: {
+            coordinator.pop()
+        })
+        
         Text("Settings")
     }
 }
 
+// MARK: - Preview
 #Preview {
-    SettingsView()
+    CoordinatedNavigationStack {
+        SettingsView()
+    }
+    .environment(Coordinator())
 }

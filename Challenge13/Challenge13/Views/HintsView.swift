@@ -8,11 +8,22 @@
 import SwiftUI
 
 struct HintsView: View {
+    // MARK: - Variables
+    @Environment(Coordinator.self) private var coordinator
+    
+    // MARK: - Body View
     var body: some View {
+        ReturnButton(action: {
+            coordinator.pop()
+        })
         Text("Hints View")
     }
 }
 
+// MARK: - Preview
 #Preview {
-    HintsView()
+    CoordinatedNavigationStack {
+        HintsView()
+    }
+    .environment(Coordinator())
 }

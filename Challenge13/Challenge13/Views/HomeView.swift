@@ -13,11 +13,11 @@ struct HomeView: View {
     @Environment(Coordinator.self) private var coordinator
     
     private let screenTitle = "Nome do app"
-    private let items: [(title: String, icon: String, color: Color)] = [
-        ("Pesquisar",     "magnifyingglass", Color("SearchGreen")),
-        ("Monitorar",     "eye",             Color("StickerBlue")),
-        ("Dicas",         "lightbulb.fill",  Color("HintsYellow")),
-        ("Configurações", "gearshape.fill",  Color("SettingsPurple"))
+    private let items: [(title: String, icon: String, color: Color, screen: HomeDestination)] = [
+        ("Procurar",     "magnifyingglass", Color("SearchGreen"),    HomeDestination.searchObject),
+        ("Gerar",        "eye",             Color("StickerBlue"),    HomeDestination.sticker),
+        ("Dicas",        "lightbulb.fill",  Color("HintsYellow"),    HomeDestination.hints),
+        ("Configurações", "gearshape.fill", Color("SettingsPurple"), HomeDestination.settings)
     ]
     private var usesLargeCard: Bool {
         dynamicTypeSize >= .xxxLarge // True quando o Dynamic Type está em xxxLarge ou maior
@@ -29,7 +29,7 @@ struct HomeView: View {
             VStack(spacing: 16) {
                 ForEach(items, id: \.title) { item in
                     Button {
-                        coordinator.navigate(to: .sticker)
+                        coordinator.navigate(to: item.screen)
                     } label: {
                         if usesLargeCard {
                             BiggerCardView(title: item.title, icon: item.icon, color: item.color)

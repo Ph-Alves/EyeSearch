@@ -9,11 +9,16 @@ import SwiftUI
 import PDFKit
 
 struct StickerView: View {
-    
+    // MARK: - Variables
+    @Environment(Coordinator.self) private var coordinator
     @StateObject private var viewModel = StickerViewModel()
     
+    // MARK: - Body View
     var body: some View {
         NavigationView {
+            ReturnButton(action: {
+                coordinator.pop()
+            })
             VStack(spacing: 20) {
                 
                 Text("Gerador de Adesivos")

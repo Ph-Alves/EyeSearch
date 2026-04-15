@@ -61,12 +61,14 @@ struct CoordinatedNavigationStack<Content: View>: View {
     @ViewBuilder var content: Content
 
     var body: some View {
+        // O environment permite a leitura somente, com o bindable, permitimos a escrita também, por causa do .path
         @Bindable var coordinator = coordinator
         NavigationStack(path: $coordinator.path) {
             content
                 .navigationDestination(for: HomeDestination.self) { destination in
                     coordinator.destination(for: destination)
                 }
+                .navigationBarBackButtonHidden(true)
         }
     }
 }
