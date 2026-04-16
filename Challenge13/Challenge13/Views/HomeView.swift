@@ -7,78 +7,86 @@
 
 import SwiftUI
 
-enum HomeDestination: Hashable {
-    case searchObject
-    case sticker
-    case hints
-    case settings
-}
-
 struct HomeView: View {
-    private let screenTitle = "Nome do app"
-    
-    private let items: [(title: String, icon: String, color: Color)] = [
-        ("Pesquisar",     "magnifyingglass", Color("SearchGreen")),
-        ("Monitorar",     "eye",             Color("StickerBlue")),
-        ("Dicas",         "lightbulb.fill",  Color("HintsYellow")),
-        ("Configurações", "gearshape.fill",  Color("SettingsPurple"))
-    ]
-    
+    // MARK: - Variables
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(Coordinator.self) private var coordinator
+    
+    private let screenTitle = "Nome do app"
+    private let items: [(title: String, icon: String, color: Color, screen: HomeDestination)] = [
+        ("Procurar",     "magnifyingglass", Color("SearchGreen"),    HomeDestination.searchObject),
+        ("Gerar",        "eye",             Color("StickerBlue"),    HomeDestination.sticker),
+        ("Dicas",        "lightbulb.fill",  Color("HintsYellow"),    HomeDestination.hints),
+        ("Configurações", "gearshape.fill", Color("SettingsPurple"), HomeDestination.settings)
+    ]
     private var usesLargeCard: Bool {
         dynamicTypeSize >= .xxxLarge // True quando o Dynamic Type está em xxxLarge ou maior
     }
  
+    // MARK: - Body View
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 16) {
-                    ForEach(items, id: \.title) { item in
-                        Button { } label: {
-                            if usesLargeCard {
-                                BiggerCardView(title: item.title, icon: item.icon, color: item.color)
-                            } else {
-                                CompactCardView(title: item.title, icon: item.icon, color: item.color)
-                            }
+        ScrollView {
+            VStack(spacing: 16) {
+                ForEach(items, id: \.title) { item in
+                    Button {
+                        coordinator.navigate(to: item.screen)
+                    } label: {
+                        if usesLargeCard {
+                            BiggerCardView(title: item.title, icon: item.icon, color: item.color)
+                        } else {
+                            CompactCardView(title: item.title, icon: item.icon, color: item.color)
                         }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(item.title)
                     }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(item.title)
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
             }
-            .navigationTitle(screenTitle)
-            .navigationBarTitleDisplayMode(.large)
-//            .background(Color.black.ignoresSafeArea())
-//            .toolbarColorScheme(.dark, for: .navigationBar)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
         }
+        .navigationTitle(screenTitle)
+        .navigationBarTitleDisplayMode(.large)
     }
 }
 
 // MARK: - Previews
 
 #Preview("xSmall") {
-    HomeView()
-        .environment(\.dynamicTypeSize, .xSmall)
+    CoordinatedNavigationStack {
+        HomeView()
+    }
+    .environment(Coordinator())
+    .environment(\.dynamicTypeSize, .xSmall)
 }
 
 #Preview("Large (padrão)") {
-    HomeView()
-        .environment(\.dynamicTypeSize, .large)
+    CoordinatedNavigationStack {
+        HomeView()
+    }
+    .environment(Coordinator())
+    .environment(\.dynamicTypeSize, .large)
 }
 
 #Preview("xxLarge") {
-    HomeView()
-        .environment(\.dynamicTypeSize, .xxLarge)
+    CoordinatedNavigationStack {
+        HomeView()
+    }
+    .environment(Coordinator())
+    .environment(\.dynamicTypeSize, .xxLarge)
 }
 
 #Preview("xxxLarge (compacto)") {
-    HomeView()
-        .environment(\.dynamicTypeSize, .xxxLarge)
+    CoordinatedNavigationStack {
+        HomeView()
+    }
+    .environment(Coordinator())
+    .environment(\.dynamicTypeSize, .xxxLarge)
 }
 
 #Preview("AX5 (compacto máximo)") {
-    HomeView()
-        .environment(\.dynamicTypeSize, .accessibility5)
+    CoordinatedNavigationStack {
+        HomeView()
+    }
+    .environment(Coordinator())
+    .environment(\.dynamicTypeSize, .accessibility5)
 }
