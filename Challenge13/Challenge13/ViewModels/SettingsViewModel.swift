@@ -10,14 +10,17 @@ import Foundation
 @Observable
 class SettingsViewModel {
     
+    // MARK: - Variables
     private var hapticsManager: HapticsManager
     private var soundManager: SoundManager
     
+    // MARK: - Init
     init() {
         self.hapticsManager = HapticsManager.manager
         self.soundManager = SoundManager.manager
     }
     
+    // MARK: - Functions
     func toggleSound() {
         soundManager.toggleSound()
     }

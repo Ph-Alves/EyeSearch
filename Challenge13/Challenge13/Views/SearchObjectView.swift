@@ -9,10 +9,17 @@ import SwiftUI
 import AVFoundation
 
 struct SearchObjectView: View {
+    // MARK: - Variables
+    @Environment(Coordinator.self) private var coordinator
+    
     @State private var objectDetection = SearchObjectViewModel()
     
+    // MARK: - Body View
     var body: some View {
         VStack {
+            ReturnButton(action: {
+                coordinator.pop()
+            })
             objectDetection.getCameraPreview()
                 .ignoresSafeArea()
         }
@@ -20,9 +27,14 @@ struct SearchObjectView: View {
         .task {
             await objectDetection.getPermission()
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
+// MARK: - Preview
 #Preview{
-    SearchObjectView()
+    CoordinatedNavigationStack {
+        SearchObjectView()
+    }
+    .environment(Coordinator())
 }
