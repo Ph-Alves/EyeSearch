@@ -83,16 +83,12 @@ final class FoundationsManager: ObservableObject {
         // Acessibilidade iOS
         "voiceover", "zoom", "lupa", "contraste", "acessibilidade", "fonte",
         "tamanho de texto", "brilho", "leitor de tela", "talkback", "siri",
-        "aumentar", "ampliar", "magnificar", "cursor", "foco", "descrição por voz", "leitura",
+        "aumentar", "ampliar", "magnificar", "cursor", "foco", "descrição por voz",
+        "leitura", "alto contraste", "modo escuro",
 
         // App
         "app", "aplicativo", "visionassist", "funcionalidade", "recurso",
         "configuração", "tela", "botão", "navegar", "menu",
-
-        // Dia a dia com baixa visão
-        "ler", "leitura", "documento", "texto", "imagem", "descrever",
-        "identificar", "reconhecer", "câmera", "lanterna", "filtro de cor",
-        "modo escuro", "alto contraste", "invertido",
 
         // Ajuda e orientação
         "como usar", "como ativar", "ajuda", "suporte", "dica", "passo",
@@ -211,8 +207,8 @@ final class FoundationsManager: ObservableObject {
 
     private func scopeDenialMessage() -> String {
         return """
-        Desculpe, só consigo ajudar com assuntos relacionados à baixa visão, \
-        acessibilidade visual e funcionalidades do VisionAssist. \
+        Desculpe, só consigo ajudar com assuntos relacionados à \
+        acessibilidade visual e funcionalidades do EyeSearch. \
         Tem alguma dúvida sobre isso que eu possa responder? 👁️
         """
     }
