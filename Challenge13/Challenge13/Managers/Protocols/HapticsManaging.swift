@@ -11,4 +11,5 @@ import UIKit
 protocol HapticsManaging {
     func trigger()
     func setEnabled(_ enabled: Bool)
+    func reset()
 }

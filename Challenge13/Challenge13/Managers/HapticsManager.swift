@@ -40,4 +40,8 @@ class HapticsManager: HapticsManaging {
         //Atualiza o estado interno
         self.isEnabled = enabled
     }
+    
+    func reset() {
+        self.isEnabled = true
+    }
 }

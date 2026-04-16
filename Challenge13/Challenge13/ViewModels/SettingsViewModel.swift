@@ -16,7 +16,7 @@ class SettingsViewModel {
     private var soundManager: SoundManager
     
     //Estado da UI
-    @Published var isHapticsOn: Bool = true
+    private var isHapticsOn: Bool = true
     
     //init recebendo o manager de fora
     init(haptics:  HapticsManaging) {
@@ -36,6 +36,6 @@ class SettingsViewModel {
     
     func resetConfiguration() {
         soundManager.reset()
-//        hapticsManager.reset()
+        haptics.reset()
     }
 }
