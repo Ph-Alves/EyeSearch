@@ -73,12 +73,12 @@ struct HomeView: View {
         .environment(\.dynamicTypeSize, .xxLarge)
 }
 
-#Preview("xxxLarge (compacto)") {
+#Preview("xxxLarge") {
     HomeView()
         .environment(\.dynamicTypeSize, .xxxLarge)
 }
 
-#Preview("AX5 (compacto máximo)") {
+#Preview("AX5") {
     HomeView()
         .environment(\.dynamicTypeSize, .accessibility5)
 }
