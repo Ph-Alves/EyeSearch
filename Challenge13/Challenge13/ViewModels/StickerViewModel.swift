@@ -7,16 +7,64 @@
 
 import PDFKit
 import Combine
+import SwiftUI
 
-class StickerViewModel: ObservableObject {
+// Para permitir reatividade
+@Observable
+class StickerViewModel {
     
-    @Published var quantity: Int = 1
-    @Published var pdfDocument: PDFDocument?
-    @Published var pdfData: Data = Data()
+    // MARK: - Variables
     
-    func generatePDF() {
-        let data = PDFManager.generatePDF(quantity: quantity)
-        pdfData = data 
-        pdfDocument = PDFDocument(data: data)
+    // Dados do pdf
+    private var pdfData: Data?
+    // Documento gerado
+    private var pdfDocument: PDFDocument?
+    // Preview do doc
+    private var pdfView: PDFKitView?
+    
+    // MARK: - Init
+    init() {  }
+    
+    // MARK: - Functions
+    
+    // Função para gerar o pdf com a quantidade de adesivos
+    func generatePDF(stickerQuantity: Int) {
+        self.pdfData = PDFManager.generatePDF(quantity: stickerQuantity)
+        defineDocument()
+    }
+    
+    // Função para pegar o doc personalizado
+    func getDoc() -> CustomPDFDoc? {
+        guard let pdfData = self.pdfData else { return nil }
+        return CustomPDFDoc(data: pdfData)
+    }
+    
+    // Função para pegar a view de como está o estado do documento
+    func getView() -> PDFKitView? {
+        guard let document = self.pdfDocument else { return nil }
+        self.pdfView = PDFKitView(pdfDocument: document)
+        return pdfView
+    }
+    
+    // Helper para definir o documento da viewModel assim que o pdf for criado.
+    private func defineDocument() {
+        guard let pdfData = self.pdfData else { return }
+        self.pdfDocument = PDFDocument(data: pdfData)
+    }
+}
+
+// Estrutura de conversão da UIView de
+struct PDFKitView: UIViewRepresentable {
+    
+    var pdfDocument: PDFDocument
+    
+    func makeUIView(context: Context) -> PDFView {
+        let pdfView = PDFView()
+        pdfView.autoScales = true
+        return pdfView
+    }
+    
+    func updateUIView(_ pdfView: PDFView, context: Context) {
+        pdfView.document = pdfDocument
     }
 }

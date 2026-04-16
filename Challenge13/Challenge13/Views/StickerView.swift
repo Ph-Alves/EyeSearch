@@ -11,7 +11,10 @@ import PDFKit
 struct StickerView: View {
     // MARK: - Variables
     @Environment(Coordinator.self) private var coordinator
-    @StateObject private var viewModel = StickerViewModel()
+    
+    @State var quantity: Int = 1
+    
+    private var viewModel = StickerViewModel()
     
     // MARK: - Body View
     var body: some View {
@@ -23,14 +26,14 @@ struct StickerView: View {
                 .font(.title)
             
             Stepper(
-                "Quantidade: \(viewModel.quantity)",
-                value: $viewModel.quantity,
+                "Quantidade: \(quantity)",
+                value: $quantity,
                 in: 1...20
             )
             .padding()
             
             Button(action: {
-                viewModel.generatePDF()
+                viewModel.generatePDF(stickerQuantity: quantity)
             }) {
                 Text("Gerar PDF")
                     .frame(maxWidth: .infinity)
@@ -40,16 +43,13 @@ struct StickerView: View {
                     .cornerRadius(10)
             }
                             
-            if let document = viewModel.pdfDocument {
-                PDFKitView(pdfDocument: document)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-                Spacer()
-            }
             
-            if !viewModel.pdfData.isEmpty {
+            viewModel.getView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            
+            if let document = viewModel.getDoc() {
                 ShareLink(
-                    item: CustomPDFDoc(data: viewModel.pdfData),
+                    item: document,
                     preview: SharePreview("Adesivos.pdf", image: Image("sticker"))
                 ) {
                     Label("Exportar PDF", systemImage: "square.and.arrow.up")
