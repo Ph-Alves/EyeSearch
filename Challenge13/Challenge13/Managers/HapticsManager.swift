@@ -36,11 +36,12 @@ class HapticsManager: HapticsManaging {
     }
     
     //função para ligar ou desligar,
-    func setEnabled(_ enabled: Bool) {
+    func setEnabled() {
         //Atualiza o estado interno
-        self.isEnabled = enabled
+        self.isEnabled.toggle()
     }
     
+    // Função de reset para as configs normais
     func reset() {
         self.isEnabled = true
     }
