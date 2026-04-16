@@ -12,7 +12,7 @@ final class MLModelManagerTests: XCTestCase {
     
     // MARK: - T31 — Verificar se o singleton retorna a mesma instância
     
-    func testSingletonReturnsSameInstance() {
+    func test_Singleton_ReturnsSameInstance() {
         // Arrange
         let instance1 = MLModelManager.manager
         let instance2 = MLModelManager.manager
@@ -23,7 +23,7 @@ final class MLModelManagerTests: XCTestCase {
     
     // MARK: - T30 — Verificar se os modelos ML carregam corretamente
     
-    func testModelsLoadSuccessfully() {
+    func test_Models_LoadSuccessfully() {
         // Arrange
         let manager = MLModelManager.manager
         let expectation = expectation(description: "Modelos devem carregar em background")
