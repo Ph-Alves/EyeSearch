@@ -35,10 +35,12 @@ class SoundManager {
         }
     }
     
+    // Altera o som entre on/off
     func toggleSound() {
         self.muted.toggle()
     }
     
+    // Reseta o manager para as configurações padrão
     func reset() {
         self.muted = false
         self.player = nil

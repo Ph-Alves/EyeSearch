@@ -10,6 +10,6 @@ import UIKit
 //qualquer um que assinar esse protocolo, precisa implementar essas funções 
 protocol HapticsManaging {
     func trigger()
-    func setEnabled(_ enabled: Bool)
+    func setEnabled()
     func reset()
 }
