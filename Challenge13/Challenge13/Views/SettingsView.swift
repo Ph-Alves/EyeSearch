@@ -10,21 +10,8 @@ import SwiftUI
 struct SettingsView: View {
     // MARK: - Variables
     @Environment(Coordinator.self) private var coordinator
-    
-    @State private var settingsManager = SettingsManager()
 
-    @State private var viewModel: SettingsViewModel
-
-    init() {
-        let manager = SettingsManager()
-        
-        self._viewModel = State(
-            initialValue: SettingsViewModel(
-                settingsManager: manager,
-                haptics: HapticsManager(settingsManager: manager)
-            )
-        )
-    }
+    @State private var viewModel = SettingsViewModel(haptics: HapticsManager())
     
     // MARK: - Body View
     var body: some View {
@@ -33,18 +20,6 @@ struct SettingsView: View {
                 coordinator.pop()
             })
             Text("Settings")
-            
-            Button {
-                viewModel.toggleHaptics()
-            } label: {
-                Text(viewModel.settings.isHapticsEnabled ? "Haptics ON" : "Haptics OFF")
-                    .font(.headline)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(viewModel.settings.isHapticsEnabled ? Color.green : Color.red)
-                    .foregroundColor(.white)
-                    .cornerRadius(12)
-            }
         }
         .navigationBarBackButtonHidden(true)
     }

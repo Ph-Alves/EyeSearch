@@ -36,5 +36,5 @@ final class SoundManager: SoundManaging {
     
     func reset() {
             player = nil
-        }
+    }
 }
