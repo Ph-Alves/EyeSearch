@@ -8,6 +8,7 @@
 import Foundation
 
 class DependencyContainer {
+    lazy var homeViewModel = HomeViewModel()
     lazy var searchViewModel = SearchObjectViewModel()
     lazy var stickerViewModel = StickerViewModel()
     lazy var settingsViewModel = SettingsViewModel(haptics: HapticsManager(), soundManager: SoundManager.manager)

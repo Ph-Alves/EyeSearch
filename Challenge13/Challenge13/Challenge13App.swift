@@ -30,7 +30,7 @@ struct Challenge13App: App {
         WindowGroup {
             // Para o coordinator receber a view raiz e fazer sua estrutura de navigationStack
             CoordinatedNavigationStack {
-                HomeView()
+                HomeView(homeVM: coordinator.dependencyContainer.homeViewModel)
             }
             // Coordinator injetado como variável de ambiente
             .environment(coordinator)
