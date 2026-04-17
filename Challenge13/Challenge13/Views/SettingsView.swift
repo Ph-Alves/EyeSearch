@@ -30,5 +30,5 @@ struct SettingsView: View {
     CoordinatedNavigationStack {
         SettingsView(settingsVM: SettingsViewModel(haptics: HapticsManager()))
     }
-    .environment(Coordinator())
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
 }

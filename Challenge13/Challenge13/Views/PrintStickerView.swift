@@ -47,5 +47,5 @@ struct PrintStickerView: View {
     CoordinatedNavigationStack {
         PrintStickerView(stickerVM: StickerViewModel())
     }
-    .environment(Coordinator())
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
 }

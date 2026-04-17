@@ -36,5 +36,5 @@ struct SearchObjectView: View {
     CoordinatedNavigationStack {
         SearchObjectView(SearchObjectVM: SearchObjectViewModel())
     }
-    .environment(Coordinator())
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
 }

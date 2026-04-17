@@ -56,5 +56,5 @@ struct StickerView: View {
     CoordinatedNavigationStack {
         StickerView(stickerVM: StickerViewModel())
     }
-    .environment(Coordinator())
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
 }

@@ -28,7 +28,12 @@ class Coordinator {
     // Dependency container é uma classe que armazena as views prontas com seus parâmetros para serem usadas
     // como instância única durante toda a navegação, mantendo a responsabilidade única e resolvendo o problema
     // de views que precisam de parâmetros
-    var dependencyContainer = DependencyContainer()
+    var dependencyContainer: DependencyContainer
+    
+    // MARK: - Coordinator Init
+    init(dependencyContainer: DependencyContainer) {
+        self.dependencyContainer = dependencyContainer
+    }
     
     // MARK: - Coordinator Functions
     // Adiciona a pilha de navegação o enum do destination

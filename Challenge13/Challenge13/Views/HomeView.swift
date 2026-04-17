@@ -55,7 +55,7 @@ struct HomeView: View {
     CoordinatedNavigationStack {
         HomeView()
     }
-    .environment(Coordinator())
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
     .environment(\.dynamicTypeSize, .xSmall)
 }
 
@@ -63,7 +63,7 @@ struct HomeView: View {
     CoordinatedNavigationStack {
         HomeView()
     }
-    .environment(Coordinator())
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
     .environment(\.dynamicTypeSize, .large)
 }
 
@@ -71,6 +71,6 @@ struct HomeView: View {
     CoordinatedNavigationStack {
         HomeView()
     }
-    .environment(Coordinator())
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
     .environment(\.dynamicTypeSize, .xxLarge)
 }
