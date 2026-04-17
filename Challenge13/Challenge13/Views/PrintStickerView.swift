@@ -45,7 +45,7 @@ struct PrintStickerView: View {
 // MARK: - Preview
 #Preview {
     CoordinatedNavigationStack {
-        PrintStickerView(stickerVM: StickerViewModel())
+        PrintStickerView(stickerVM: StickerViewModel(pdfManager: PDFManager()))
     }
     .environment(Coordinator(dependencyContainer: DependencyContainer()))
 }
