@@ -7,8 +7,9 @@
 
 import Foundation
 
-struct Hint: Identifiable {
-    let id = UUID()
+struct Hint: Identifiable, Equatable {
+    let id: UUID
     let title: String
     let description: String
 }
+

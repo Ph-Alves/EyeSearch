@@ -14,11 +14,13 @@
 
 import Foundation
 
+@Observable
 class HintsViewModel {
+
     var hints: [Hint] = [
-        Hint(title: "Como usar o app", description: "Explore os recursos e registre seus pensamentos."),
-        Hint(title: "Gerenciar emoções", description: "Escreva regularmente para acompanhar seus sentimentos."),
-        Hint(title: "Dicas de foco", description: "Use o app diariamente por alguns minutos.")
+        Hint(id: UUID(), title: "Como usar o app", description: "Explore os recursos e registre seus pensamentos diariamente."),
+        Hint(id: UUID(), title: "Gerenciar emoções", description: "Escreva com frequência para identificar padrões emocionais."),
+        Hint(id: UUID(), title: "Dicas de foco", description: "Reserve alguns minutos do dia para refletir e se organizar.")
     ]
     
     //UI State

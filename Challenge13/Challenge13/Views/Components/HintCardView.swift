@@ -30,7 +30,7 @@ struct HintCardView: View {
             
             // Conteúdo
             if isExpanded {
-                Text(hint.description)
+                Text("isExpanded: \(isExpanded.description)")
                     .font(.subheadline)
                     .foregroundColor(.gray)
                     .transition(.opacity.combined(with: .move(edge: .top)))
@@ -39,8 +39,10 @@ struct HintCardView: View {
         .padding()
         .background(Color(.systemGray6))
         .cornerRadius(12)
+        .contentShape(Rectangle())
         .onTapGesture {
             withAnimation(.easeInOut) {
+                print("clicou no card")
                 action()
             }
         }
