@@ -10,7 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     // MARK: - Variables
     @Environment(Coordinator.self) private var coordinator
-    
+
     var settingsVM: SettingsViewModel
     
     // MARK: - Body View
@@ -32,3 +32,4 @@ struct SettingsView: View {
     }
     .environment(Coordinator(dependencyContainer: DependencyContainer()))
 }
+
