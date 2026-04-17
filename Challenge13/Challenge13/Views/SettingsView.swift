@@ -11,6 +11,8 @@ struct SettingsView: View {
     // MARK: - Variables
     @Environment(Coordinator.self) private var coordinator
     
+    var settingsVM: SettingsViewModel
+    
     // MARK: - Body View
     var body: some View {
         VStack {
@@ -26,7 +28,7 @@ struct SettingsView: View {
 // MARK: - Preview
 #Preview {
     CoordinatedNavigationStack {
-        SettingsView()
+        SettingsView(settingsVM: SettingsViewModel(haptics: HapticsManager()))
     }
     .environment(Coordinator())
 }

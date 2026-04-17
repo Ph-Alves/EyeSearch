@@ -12,7 +12,7 @@ struct SearchObjectView: View {
     // MARK: - Variables
     @Environment(Coordinator.self) private var coordinator
     
-    @State private var objectDetection = SearchObjectViewModel()
+    var SearchObjectVM: SearchObjectViewModel
     
     // MARK: - Body View
     var body: some View {
@@ -20,12 +20,12 @@ struct SearchObjectView: View {
             ReturnButton(action: {
                 coordinator.pop()
             })
-            objectDetection.getCameraPreview()
+            SearchObjectVM.getCameraPreview()
                 .ignoresSafeArea()
         }
         .padding()
         .task {
-            await objectDetection.getPermission()
+            await SearchObjectVM.getPermission()
         }
         .navigationBarBackButtonHidden(true)
     }
@@ -34,7 +34,7 @@ struct SearchObjectView: View {
 // MARK: - Preview
 #Preview{
     CoordinatedNavigationStack {
-        SearchObjectView()
+        SearchObjectView(SearchObjectVM: SearchObjectViewModel())
     }
     .environment(Coordinator())
 }

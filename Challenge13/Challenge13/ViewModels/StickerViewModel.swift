@@ -27,8 +27,9 @@ class StickerViewModel {
     // MARK: - Functions
     
     // Função para gerar o pdf com a quantidade de adesivos
-    func generatePDF(stickerQuantity: Int) -> Data {
-        return PDFManager.generatePDF(quantity: stickerQuantity)
+    func generatePDF(stickerQuantity: Int) {
+        self.pdfData = PDFManager.generatePDF(quantity: stickerQuantity)
+        defineDocument()
     }
     
     // Função para pegar o doc personalizado
@@ -53,7 +54,7 @@ class StickerViewModel {
 // Estrutura de conversão da UIView de
 struct PDFKitView: UIViewRepresentable {
     
-    var pdfDocument: PDFDocument
+    let pdfDocument: PDFDocument
     
     func makeUIView(context: Context) -> PDFView {
         let pdfView = PDFView()

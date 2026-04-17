@@ -11,8 +11,7 @@ struct PrintStickerView: View {
     // MARK: - Variables
     @Environment(Coordinator.self) private var coordinator
     
-    var data: Data
-    @State private var viewModel = PrintStickerViewModel()
+    var stickerVM: StickerViewModel
     
     // MARK: - Body View
     var body: some View {
@@ -20,10 +19,13 @@ struct PrintStickerView: View {
             ReturnButton(action: {
                 coordinator.pop()
             })
-            viewModel.getView()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
             
-            if let document = viewModel.getDoc() {
+            if let stickerView = stickerVM.getView() {
+                stickerView
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            
+            if let document = stickerVM.getDoc() {
                 ShareLink(
                     item: document,
                     preview: SharePreview("Adesivos.pdf", image: Image("sticker"))
@@ -37,16 +39,13 @@ struct PrintStickerView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
-        .onAppear() {
-            viewModel.setPDFData(data: data)
-        }
     }
 }
 
 // MARK: - Preview
 #Preview {
     CoordinatedNavigationStack {
-        PrintStickerView(data: Data())
+        PrintStickerView(stickerVM: StickerViewModel())
     }
     .environment(Coordinator())
 }

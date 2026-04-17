@@ -12,9 +12,9 @@ struct StickerView: View {
     // MARK: - Variables
     @Environment(Coordinator.self) private var coordinator
     
+    // States
     @State var quantity: Int = 1
-    
-    @State private var stickerVM = StickerViewModel()
+    var stickerVM: StickerViewModel
     
     // MARK: - Body View
     var body: some View {
@@ -51,9 +51,10 @@ struct StickerView: View {
 }
 
 // MARK: - Preview
+// Se tentarem visualizar pelo preview, a visualização de pdf não vai funcionar.
 #Preview {
     CoordinatedNavigationStack {
-        StickerView()
+        StickerView(stickerVM: StickerViewModel())
     }
     .environment(Coordinator())
 }
