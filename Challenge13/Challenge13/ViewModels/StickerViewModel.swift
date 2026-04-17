@@ -14,6 +14,8 @@ import SwiftUI
 class StickerViewModel {
     // MARK: - Variables
     
+    // Manager
+    private let pdfManager: PDFManaging
     // Data do pdf
     private var pdfData: Data?
     // Documento gerado
@@ -22,13 +24,15 @@ class StickerViewModel {
     private var pdfView: PDFKitView?
     
     // MARK: - Init
-    init () { }
+    init (pdfManager: PDFManaging) {
+        self.pdfManager = pdfManager
+    }
     
     // MARK: - Functions
     
     // Função para gerar o pdf com a quantidade de adesivos
     func generatePDF(stickerQuantity: Int) {
-        self.pdfData = PDFManager.generatePDF(quantity: stickerQuantity)
+        self.pdfData = pdfManager.generatePDF(quantity: stickerQuantity)
         defineDocument()
     }
     
