@@ -74,19 +74,3 @@ struct HomeView: View {
     .environment(Coordinator())
     .environment(\.dynamicTypeSize, .xxLarge)
 }
-
-#Preview("xxxLarge (compacto)") {
-    CoordinatedNavigationStack {
-        HomeView()
-    }
-    .environment(Coordinator())
-    .environment(\.dynamicTypeSize, .xxxLarge)
-}
-
-#Preview("AX5 (compacto máximo)") {
-    CoordinatedNavigationStack {
-        HomeView()
-    }
-    .environment(Coordinator())
-    .environment(\.dynamicTypeSize, .accessibility5)
-}

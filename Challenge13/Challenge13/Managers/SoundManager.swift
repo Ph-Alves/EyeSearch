@@ -34,6 +34,8 @@ final class SoundManager: SoundManaging {
         }
     }
     
+    
+    // Reseta o manager para as configurações padrão
     func reset() {
             player = nil
     }

@@ -1,13 +1,16 @@
 //
 //  CameraManager.swift
-//  [NOME APP]
+//  EyeSearch
 //
 //  Created by Manoel Pedro Prado Sa Teles on 13/04/26.
 //
 
 import AVFoundation
 import Foundation
-import CoreML
+
+protocol CameraManagerDelegate: AnyObject {
+    func cameraManager(_ manager: CameraManager, didCapture sampleBuffer: CMSampleBuffer)
+}
 
 @Observable
 class CameraManager: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
@@ -17,8 +20,9 @@ class CameraManager: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     private(set) var session = AVCaptureSession()
     private let videoOutput = AVCaptureVideoDataOutput()
     
-    let model = try? StickerDetector1(configuration: .init())
-    var prediction: StickerDetector1Output?
+    
+    weak var delegate: CameraManagerDelegate?
+    
     
     //MARK: Functions
     @MainActor
@@ -73,14 +77,17 @@ class CameraManager: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
         }
     }
     
-    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
-        else { return }
-        
-        self.prediction = try? model?.prediction(image: pixelBuffer, iouThreshold: 0.25, confidenceThreshold: 0.25)
+    func stop() {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            self?.session.stopRunning()
+        }
     }
     
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        delegate?.cameraManager(self, didCapture: sampleBuffer)
+    }
     
-    
+    deinit {
+        session.stopRunning()
+    }
 }
-

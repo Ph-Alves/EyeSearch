@@ -20,6 +20,8 @@ import Foundation
 class SettingsViewModel {
     
     //Dependências
+    // MARK: - Variables
+    //injetando a dependência - usando o protocolo, e não a classe
     private let haptics: HapticsManaging
     private let soundManager: SoundManaging
     private let settingsManager: SettingsManager
@@ -27,15 +29,17 @@ class SettingsViewModel {
     
     var settings: UserSettings
     
+    // MARK: - Init
+    
     //init recebendo o manager de fora
     init(haptics: HapticsManaging, soundManager: SoundManaging = SoundManager.manager, settingsManager: SettingsManager = SettingsManager()) {
-            self.haptics = haptics
-            self.settingsManager = settingsManager
-            self.soundManager = soundManager
-            
-            //carrega o UserDefaults
-            self.settings = settingsManager.load()
-        }
+        self.haptics = haptics
+        self.settingsManager = settingsManager
+        self.soundManager = soundManager
+        
+        //carrega o UserDefaults
+        self.settings = settingsManager.load()
+    }
     
     
     //MARK: Haptics
@@ -57,9 +61,10 @@ class SettingsViewModel {
     }
     
     func playSound() {
-            soundManager.playSound(isEnabled: settings.isSoundEnabled)
+        soundManager.playSound(isEnabled: settings.isSoundEnabled)
     }
-    
+        
+        
     func resetConfiguration() {
         settings = UserSettings(
             isHapticsEnabled: true,

@@ -42,6 +42,7 @@ class HapticsManager: HapticsManaging {
         self.isEnabled = enabled
     }
     
+    // Função de reset para as configs normais
     func reset() {
         isEnabled = true
     }
