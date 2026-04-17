@@ -21,21 +21,16 @@ import UIKit
 //criando a classe e assinando o protocolo
 class HapticsManager: HapticsManaging {
     
-    private let settingsManager: SettingsManager
-    
-    init(settingsManager: SettingsManager) {
-        self.settingsManager = settingsManager
-    }
+    private var isEnabled: Bool = true
     
     //var interna que controla o estado de ON/OFF
-    private var isHapticsEnabled: Bool = true
+//    private var isHapticsEnabled: Bool = true
     
     //função que executa o haptic
-    func trigger() {
-        let settings = settingsManager.load()
+    func trigger(isEnabled: Bool) {
         
         //Se estiver desativado, saia da função
-        guard settings.isHapticsEnabled else { return }
+        guard isEnabled else { return }
         
         //Cria o gerador de haptic com o estilo no medium
         let generator = UIImpactFeedbackGenerator(style: .medium)
@@ -43,14 +38,11 @@ class HapticsManager: HapticsManaging {
         generator.impactOccurred()
     }
     
-    //função para ligar ou desligar,
     func setEnabled(_ enabled: Bool) {
-        //Atualiza o estado interno
-//        self.isHapticsEnabled.toggle()
-        self.isHapticsEnabled = enabled
+        self.isEnabled = enabled
     }
     
     func reset() {
-        self.isHapticsEnabled = true
+        isEnabled = true
     }
 }

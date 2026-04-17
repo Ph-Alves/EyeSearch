@@ -14,7 +14,7 @@ struct UserSettings {
 }
 
 //MARK: - Manager (Persistência com UserDefault)
-class SettingsManager {
+final class SettingsManager {
     
     private let userDefaults = UserDefaults.standard
     
@@ -27,7 +27,7 @@ class SettingsManager {
     func load() -> UserSettings {
         return UserSettings(
             isHapticsEnabled: userDefaults.object(forKey: Keys.haptics) as? Bool ?? true,
-            isSoundEnabled: userDefaults.object(forKey: Keys.sound) as? Bool ?? true,
+            isSoundEnabled: userDefaults.object(forKey: Keys.sound) as? Bool ?? true
         )
     }
     

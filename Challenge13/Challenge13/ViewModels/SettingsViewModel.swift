@@ -11,27 +11,40 @@ import Combine
 @Observable
 class SettingsViewModel {
     
-    //injetando a dependência - usando o protocolo, e não a classe
+    //Dependências
     private let haptics: HapticsManaging
     private var soundManager: SoundManager
+    private let settingsManager: SettingsManager
     
-    //Estado da UI
-    private var isHapticsOn: Bool = true
+    
+    var settings: UserSettings
     
     //init recebendo o manager de fora
-    init(haptics:  HapticsManaging) {
-        self.haptics = haptics
-        self.soundManager = SoundManager.manager
+    init(haptics: HapticsManaging, settingsManager: SettingsManager = SettingsManager()) {
+            self.haptics = haptics
+            self.settingsManager = settingsManager
+            self.soundManager = SoundManager.manager
+            
+            //carrega o UserDefaults
+            self.settings = settingsManager.load()
+        }
+    
+    
+    //MARK: Haptics
+    func toggleHaptics() {
+        settings.isHapticsEnabled.toggle()
+        settingsManager.save(settings)
     }
+    
+    func triggerHaptic() {
+        haptics.trigger(isEnabled: settings.isHapticsEnabled)
+    }
+    
+    
+    //MARK: Sound
     
     func toggleSound() {
         soundManager.toggleSound()
-    }
-    
-    //Função chamada quando usuário muda o toggle
-    func toogleHaptics() {
-        //sincroniza o valor que está na UI com a lógica do manager
-        haptics.setEnabled(isHapticsOn)
     }
     
     func resetConfiguration() {

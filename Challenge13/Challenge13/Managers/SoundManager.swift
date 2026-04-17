@@ -11,6 +11,7 @@ import AVFoundation
 // É um singleton, ou seja, só permite uma instância dele no projeto
 class SoundManager {
     
+    
     // Essa é a instância, é static pois permite o uso sem precisar instanciar a classe antes, até por que ela também é uma instância.
     static let manager = SoundManager()
     private var muted: Bool = false
