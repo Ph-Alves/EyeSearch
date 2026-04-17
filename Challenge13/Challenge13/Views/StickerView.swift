@@ -54,7 +54,7 @@ struct StickerView: View {
 // Se tentarem visualizar pelo preview, a visualização de pdf não vai funcionar.
 #Preview {
     CoordinatedNavigationStack {
-        StickerView(stickerVM: StickerViewModel())
+        StickerView(stickerVM: StickerViewModel(pdfManager: PDFManager()))
     }
     .environment(Coordinator(dependencyContainer: DependencyContainer()))
 }
