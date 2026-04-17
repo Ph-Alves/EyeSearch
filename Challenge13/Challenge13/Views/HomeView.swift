@@ -15,7 +15,7 @@ struct HomeView: View {
     private let screenTitle = "Nome do app"
     private let items: [(title: String, icon: String, color: Color, screen: HomeDestination)] = [
         ("Procurar",     "magnifyingglass", Color("SearchGreen"),    HomeDestination.searchObject),
-        ("Gerar",        "eye",             Color("StickerBlue"),    HomeDestination.sticker),
+        ("Gerar",        "eye",             Color("StickerBlue"),    HomeDestination.stickerConfig),
         ("Dicas",        "lightbulb.fill",  Color("HintsYellow"),    HomeDestination.hints),
         ("Configurações", "gearshape.fill", Color("SettingsPurple"), HomeDestination.settings)
     ]
@@ -55,7 +55,7 @@ struct HomeView: View {
     CoordinatedNavigationStack {
         HomeView()
     }
-    .environment(Coordinator())
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
     .environment(\.dynamicTypeSize, .xSmall)
 }
 
@@ -63,7 +63,7 @@ struct HomeView: View {
     CoordinatedNavigationStack {
         HomeView()
     }
-    .environment(Coordinator())
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
     .environment(\.dynamicTypeSize, .large)
 }
 
@@ -71,6 +71,6 @@ struct HomeView: View {
     CoordinatedNavigationStack {
         HomeView()
     }
-    .environment(Coordinator())
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
     .environment(\.dynamicTypeSize, .xxLarge)
 }

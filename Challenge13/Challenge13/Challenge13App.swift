@@ -24,7 +24,7 @@ struct Challenge13App: App {
         }
     }()
     
-    @State private var coordinator = Coordinator()
+    @State private var coordinator = Coordinator(dependencyContainer: DependencyContainer())
 
     var body: some Scene {
         WindowGroup {

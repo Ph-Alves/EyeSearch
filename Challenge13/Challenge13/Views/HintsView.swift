@@ -29,6 +29,6 @@ struct HintsView: View {
     CoordinatedNavigationStack {
         HintsView()
     }
-    .environment(Coordinator())
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
     .environment(\.dynamicTypeSize, .large)
 }
