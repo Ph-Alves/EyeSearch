@@ -8,33 +8,63 @@
 import Foundation
 import AVFoundation
 import SwiftUI
-
-struct Detection: Identifiable {
-    let id = UUID()
-    let label: String
-    let confidence: Float
-    let boundingBox: CGRect  // Coordenadas normalizadas (0...1)
-}
+import CoreMedia
 
 @Observable
-class SearchObjectViewModel {
-    
-    var camera = CameraManager()
-    
+class SearchObjectViewModel: CameraManagerDelegate {
+
+
+    private(set) var detections: [CombinedDetection] = []
+
+    var isModelLoaded: Bool { mlManager.isLoaded }
+    var modelError: String? { mlManager.error }
+
+
+    private var camera = CameraManager()
+    private let mlManager = MLModelManager.manager
+    private var isProcessing = false
+
+
+    init() {
+        camera.delegate = self
+    }
+
+
     func getPermission() async {
         await camera.checkAuthorization()
-    }
-    
-    func getResponse() -> StickerDetector1Output {
-        camera.prediction!
     }
     
     func getCameraPreview() -> some View {
         CameraPreview(session: camera.session)
     }
-    
-    func getView() -> some View {
-        CameraPreview(session: camera.session)
+
+    func stop() {
+        camera.delegate = nil
+        camera.stop()
+    }
+
+
+    deinit {
+        stop()
+    }
+}
+
+// MARK:  CameraManagerDelegate
+extension SearchObjectViewModel {
+    func cameraManager(_ manager: CameraManager, didCapture sampleBuffer: CMSampleBuffer) {
+        guard !isProcessing, mlManager.isLoaded else { return }
+
+        isProcessing = true
+        defer { isProcessing = false }
+
+        do {
+            let results = try mlManager.detect(in: sampleBuffer)
+            DispatchQueue.main.async { [weak self] in
+                self?.detections = results
+            }
+        } catch {
+            // Frame perdido — normal em pipeline de camera, nao propagar erro
+        }
     }
 }
 
