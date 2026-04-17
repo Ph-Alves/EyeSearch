@@ -10,6 +10,8 @@ import SwiftUI
 struct SettingsView: View {
     // MARK: - Variables
     @Environment(Coordinator.self) private var coordinator
+
+    @State private var viewModel = SettingsViewModel(haptics: HapticsManager())
     
     // MARK: - Body View
     var body: some View {
@@ -30,3 +32,4 @@ struct SettingsView: View {
     }
     .environment(Coordinator())
 }
+
