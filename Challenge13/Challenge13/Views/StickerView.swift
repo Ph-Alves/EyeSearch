@@ -14,7 +14,7 @@ struct StickerView: View {
     
     @State var quantity: Int = 1
     
-    private var viewModel = StickerViewModel()
+    @State private var stickerVM = StickerViewModel()
     
     // MARK: - Body View
     var body: some View {
@@ -33,7 +33,8 @@ struct StickerView: View {
             .padding()
             
             Button(action: {
-                viewModel.generatePDF(stickerQuantity: quantity)
+                stickerVM.generatePDF(stickerQuantity: quantity)
+                coordinator.navigate(to: .stickerPreview)
             }) {
                 Text("Gerar PDF")
                     .frame(maxWidth: .infinity)
@@ -41,23 +42,6 @@ struct StickerView: View {
                     .background(Color.blue)
                     .foregroundColor(.white)
                     .cornerRadius(10)
-            }
-                            
-            
-            viewModel.getView()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
-            if let document = viewModel.getDoc() {
-                ShareLink(
-                    item: document,
-                    preview: SharePreview("Adesivos.pdf", image: Image("sticker"))
-                ) {
-                    Label("Exportar PDF", systemImage: "square.and.arrow.up")
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundStyle(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                }
             }
         }
         .padding()
