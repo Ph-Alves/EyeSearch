@@ -12,9 +12,9 @@ struct StickerView: View {
     // MARK: - Variables
     @Environment(Coordinator.self) private var coordinator
     
+    // States
     @State var quantity: Int = 1
-    
-    private var viewModel = StickerViewModel()
+    var stickerVM: StickerViewModel
     
     // MARK: - Body View
     var body: some View {
@@ -33,7 +33,8 @@ struct StickerView: View {
             .padding()
             
             Button(action: {
-                viewModel.generatePDF(stickerQuantity: quantity)
+                stickerVM.generatePDF(stickerQuantity: quantity)
+                coordinator.navigate(to: .stickerPreview)
             }) {
                 Text("Gerar PDF")
                     .frame(maxWidth: .infinity)
@@ -41,23 +42,6 @@ struct StickerView: View {
                     .background(Color.blue)
                     .foregroundColor(.white)
                     .cornerRadius(10)
-            }
-                            
-            
-            viewModel.getView()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
-            if let document = viewModel.getDoc() {
-                ShareLink(
-                    item: document,
-                    preview: SharePreview("Adesivos.pdf", image: Image("sticker"))
-                ) {
-                    Label("Exportar PDF", systemImage: "square.and.arrow.up")
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundStyle(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                }
             }
         }
         .padding()
@@ -67,9 +51,10 @@ struct StickerView: View {
 }
 
 // MARK: - Preview
+// Se tentarem visualizar pelo preview, a visualização de pdf não vai funcionar.
 #Preview {
     CoordinatedNavigationStack {
-        StickerView()
+        StickerView(stickerVM: StickerViewModel(pdfManager: PDFManager()))
     }
-    .environment(Coordinator())
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
 }

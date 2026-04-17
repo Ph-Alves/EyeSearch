@@ -12,13 +12,11 @@ struct HomeView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(Coordinator.self) private var coordinator
     
+    @State private var items: [(title: String, icon: String, color: Color, screen: HomeDestination)] = []
+    
+    var homeVM: HomeViewModel
+    
     private let screenTitle = "Nome do app"
-    private let items: [(title: String, icon: String, color: Color, screen: HomeDestination)] = [
-        ("Procurar",     "magnifyingglass", Color("SearchGreen"),    HomeDestination.searchObject),
-        ("Gerar",        "eye",             Color("StickerBlue"),    HomeDestination.sticker),
-        ("Dicas",        "lightbulb.fill",  Color("HintsYellow"),    HomeDestination.hints),
-        ("Configurações", "gearshape.fill", Color("SettingsPurple"), HomeDestination.settings)
-    ]
     private var usesLargeCard: Bool {
         dynamicTypeSize >= .xxxLarge // True quando o Dynamic Type está em xxxLarge ou maior
     }
@@ -46,6 +44,9 @@ struct HomeView: View {
         }
         .navigationTitle(screenTitle)
         .navigationBarTitleDisplayMode(.large)
+        .onAppear() {
+            items = homeVM.generateItems()
+        }
     }
 }
 
@@ -53,24 +54,24 @@ struct HomeView: View {
 
 #Preview("xSmall") {
     CoordinatedNavigationStack {
-        HomeView()
+        HomeView(homeVM: HomeViewModel())
     }
-    .environment(Coordinator())
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
     .environment(\.dynamicTypeSize, .xSmall)
 }
 
 #Preview("Large (padrão)") {
     CoordinatedNavigationStack {
-        HomeView()
+        HomeView(homeVM: HomeViewModel())
     }
-    .environment(Coordinator())
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
     .environment(\.dynamicTypeSize, .large)
 }
 
 #Preview("xxLarge") {
     CoordinatedNavigationStack {
-        HomeView()
+        HomeView(homeVM: HomeViewModel())
     }
-    .environment(Coordinator())
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
     .environment(\.dynamicTypeSize, .xxLarge)
 }

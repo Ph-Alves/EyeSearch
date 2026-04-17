@@ -10,13 +10,13 @@ import UIKit
 import SwiftUI
 import UniformTypeIdentifiers
 
- struct PDFManager {
-     static func generatePDF(quantity: Int) -> Data {
+final class PDFManager: PDFManaging {
+    func generatePDF(quantity: Int) -> Data? {
         //MARK: Configuração do adesivo
         
         //imagem do STICKER que será utilizada em todas as impressões, caso o sistema não carregue a imagem, return data.
         guard let sticker = UIImage(named: "sticker") else {
-            return Data()
+            return nil
         }
         //Tamanho do Sticker e espaçamento entre eles
         let stickerSize = CGSize(width: 200, height: 200)
@@ -52,7 +52,7 @@ import UniformTypeIdentifiers
                 x += stickerSize.width + spacing
                 
                 // quebra de linha
-                if x + stickerSize.width > 595 {
+                if x + stickerSize.width > pageWidth {
                     //o X volta ao seu valor inicial
                     x = margin
                     //atualizando o Y para iniciar uma nova linha
@@ -60,7 +60,7 @@ import UniformTypeIdentifiers
                 }
                 
                 // nova página, x e y voltam ao seu valor inicial
-                if y + stickerSize.height > 842 {
+                if y + stickerSize.height > pageHeight {
                     context.beginPage()
                     x = margin
                     y = margin

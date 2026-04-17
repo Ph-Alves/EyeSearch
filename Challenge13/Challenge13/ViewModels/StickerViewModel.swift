@@ -12,10 +12,11 @@ import SwiftUI
 // Para permitir reatividade
 @Observable
 class StickerViewModel {
-    
     // MARK: - Variables
     
-    // Dados do pdf
+    // Manager
+    private let pdfManager: PDFManaging
+    // Data do pdf
     private var pdfData: Data?
     // Documento gerado
     private var pdfDocument: PDFDocument?
@@ -23,13 +24,15 @@ class StickerViewModel {
     private var pdfView: PDFKitView?
     
     // MARK: - Init
-    init() {  }
+    init (pdfManager: PDFManaging) {
+        self.pdfManager = pdfManager
+    }
     
     // MARK: - Functions
     
     // Função para gerar o pdf com a quantidade de adesivos
     func generatePDF(stickerQuantity: Int) {
-        self.pdfData = PDFManager.generatePDF(quantity: stickerQuantity)
+        self.pdfData = pdfManager.generatePDF(quantity: stickerQuantity)
         defineDocument()
     }
     
@@ -39,7 +42,6 @@ class StickerViewModel {
         return CustomPDFDoc(data: pdfData)
     }
     
-    // Função para pegar a view de como está o estado do documento
     func getView() -> PDFKitView? {
         guard let document = self.pdfDocument else { return nil }
         self.pdfView = PDFKitView(pdfDocument: document)
@@ -56,7 +58,7 @@ class StickerViewModel {
 // Estrutura de conversão da UIView de
 struct PDFKitView: UIViewRepresentable {
     
-    var pdfDocument: PDFDocument
+    let pdfDocument: PDFDocument
     
     func makeUIView(context: Context) -> PDFView {
         let pdfView = PDFView()
@@ -68,3 +70,4 @@ struct PDFKitView: UIViewRepresentable {
         pdfView.document = pdfDocument
     }
 }
+

@@ -24,13 +24,13 @@ struct Challenge13App: App {
         }
     }()
     
-    @State private var coordinator = Coordinator()
+    @State private var coordinator = Coordinator(dependencyContainer: DependencyContainer())
 
     var body: some Scene {
         WindowGroup {
             // Para o coordinator receber a view raiz e fazer sua estrutura de navigationStack
             CoordinatedNavigationStack {
-                HomeView()
+                HomeView(homeVM: coordinator.dependencyContainer.homeViewModel)
             }
             // Coordinator injetado como variável de ambiente
             .environment(coordinator)
