@@ -9,16 +9,25 @@ import AVFoundation
 import Foundation
 
 // MARK: - Manager
+/// # Manager - CameraManager
+/// Gerencia a câmera traseira do dispositivo utilizando `AVFoundation`.
+/// Configura a sessão de captura, verifica autorização e delega os frames capturados.
+/// ## Usado em:
+/// - ``SearchObjectViewModel``
 final class CameraManager: NSObject, CameraManaging, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     // MARK: - Variables
+    /// Indica se o usuário autorizou o acesso à câmera.
     private(set) var isAuthorized = false
+    /// Sessão de captura de vídeo do AVFoundation.
     private(set) var session = AVCaptureSession()
+    /// Delegate que recebe os frames capturados.
     weak var delegate: CameraManagerDelegate?
-    
+    // Saída de vídeo que processa os frames da câmera.
     private let videoOutput = AVCaptureVideoDataOutput()
     
     // MARK: - Functions
+    /// Verifica e solicita permissão de acesso à câmera. Se autorizado, configura a sessão.
     @MainActor
     func checkAuthorization() async {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
@@ -35,28 +44,33 @@ final class CameraManager: NSObject, CameraManaging, AVCaptureVideoDataOutputSam
         }
     }
     
+    /// Para a captura de vídeo em background.
     func stop() {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             self?.session.stopRunning()
         }
     }
     
+    /// Callback do AVFoundation chamado a cada frame capturado. Delega o buffer ao ``CameraManagerDelegate``.
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         delegate?.cameraManager(self, didCapture: sampleBuffer)
     }
     
     // MARK: - Helpers
     private func setupSession() {
-        //Uses the main rear lens of the iPhone
+        // Usa a lente traseira principal do iPhone
         guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
         else { return }
         
+        // Cria o input a partir do dispositivo de câmera
         guard let input = try? AVCaptureDeviceInput(device: device)
         else { return }
         
+        // Cria fila dedicada para processar os frames sem bloquear a main thread
         let processingQueue = DispatchQueue(label: "videoProcessing")
         videoOutput.setSampleBufferDelegate(self, queue: processingQueue)
         
+        // Configura a sessão: define qualidade e conecta input/output
         session.beginConfiguration()
         session.sessionPreset = .high
         
@@ -69,6 +83,7 @@ final class CameraManager: NSObject, CameraManaging, AVCaptureVideoDataOutputSam
         
         session.commitConfiguration()
         
+        // Inicia a captura em background para não travar a UI
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             self?.session.startRunning()
         }

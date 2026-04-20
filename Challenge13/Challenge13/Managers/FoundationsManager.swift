@@ -9,6 +9,11 @@ import Foundation
 import FoundationModels
 
 // MARK: - Manager
+/// # Manager - FoundationsManager
+/// Gerencia o chatbot de acessibilidade visual utilizando `FoundationModels` (Apple Intelligence).
+/// Filtra mensagens fora do escopo e mantém o histórico da conversa.
+/// ## Usado em:
+/// - ``ChatView`` (via ViewModel)
 final class FoundationsManager: FoundationsManaging {
     // MARK: - Errors
     private enum ChatbotError: LocalizedError {
@@ -32,10 +37,13 @@ final class FoundationsManager: FoundationsManaging {
     }
     
     // MARK: - Variables
+    // Histórico de mensagens da conversa.
     private var messages: [ChatMessage] = []
+    // Indica se uma resposta está sendo processada.
     private var isLoading: Bool = false
+    // Mensagem de erro atual, se houver.
     private var errorMessage: String? = nil
-
+    // Sessão do modelo de linguagem Apple Intelligence.
     private var session: LanguageModelSession?
 
     private let systemPrompt = """
@@ -112,6 +120,8 @@ final class FoundationsManager: FoundationsManaging {
     }
 
     // MARK: - Functions
+    /// Envia uma mensagem ao chatbot, faz validação local de escopo e processa a resposta do modelo.
+    /// - Parameter userInput: Texto digitado pelo usuário.
     func sendMessage(_ userInput: String) async {
         let trimmed = userInput.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
@@ -122,6 +132,7 @@ final class FoundationsManager: FoundationsManaging {
         errorMessage = nil
 
         do {
+            // Verifica localmente se a mensagem está fora do escopo antes de enviar ao modelo
             if let localDenial = localScopeCheck(for: trimmed) {
                 let filtered = ChatMessage(role: .assistant, text: localDenial, isFiltered: true)
                 messages.append(filtered)
@@ -129,9 +140,13 @@ final class FoundationsManager: FoundationsManaging {
                 return
             }
 
+            // Garante que a sessão do modelo está disponível
             guard let session else { throw ChatbotError.modelUnavailable }
+            
+            // Envia a mensagem ao modelo e aguarda a resposta
             let response = try await session.respond(to: trimmed)
 
+            // Limpa e valida a resposta do modelo
             let rawText = response.content.trimmingCharacters(in: .whitespacesAndNewlines)
             let finalText = try processModelResponse(rawText)
 
@@ -139,6 +154,7 @@ final class FoundationsManager: FoundationsManaging {
             messages.append(assistantMessage)
 
         } catch let error as ChatbotError {
+            // Trata erros específicos do chatbot (off-topic, modelo indisponível, etc.)
             errorMessage = error.errorDescription
             let errorMsg = ChatMessage(
                 role: .assistant,
@@ -147,6 +163,7 @@ final class FoundationsManager: FoundationsManaging {
             )
             messages.append(errorMsg)
         } catch {
+            // Trata erros genéricos da sessão
             let chatError = ChatbotError.sessionFailed(error.localizedDescription)
             errorMessage = chatError.errorDescription
         }
@@ -154,6 +171,7 @@ final class FoundationsManager: FoundationsManaging {
         isLoading = false
     }
 
+    /// Limpa o histórico de mensagens e reinicia a sessão do modelo.
     func clearConversation() {
         messages.removeAll()
         errorMessage = nil
@@ -173,19 +191,24 @@ final class FoundationsManager: FoundationsManaging {
         )
     }
 
+    // Verifica localmente se a mensagem do usuário está dentro do escopo do chatbot.
+    // Retorna uma mensagem de negação se estiver fora, ou nil se estiver dentro do escopo.
     private func localScopeCheck(for input: String) -> String? {
         let lower = input.lowercased()
 
+        // Se contém palavras explicitamente fora do escopo, rejeita imediatamente
         for keyword in outOfScopeKeywords {
             if lower.contains(keyword) {
                 return scopeDenialMessage()
             }
         }
 
+        // Mensagens curtas (até 3 palavras) passam direto — podem ser saudações ou comandos simples
         if input.split(separator: " ").count <= 3 {
             return nil
         }
 
+        // Para mensagens maiores, verifica se contém pelo menos uma palavra do escopo
         let hasInScopeWord = inScopeKeywords.contains { lower.contains($0) }
         if !hasInScopeWord {
             return nil
@@ -194,13 +217,16 @@ final class FoundationsManager: FoundationsManaging {
         return nil
     }
 
+    // Processa e limpa a resposta bruta do modelo, verificando se ele se recusou a responder.
     private func processModelResponse(_ raw: String) throws -> String {
         guard !raw.isEmpty else { throw ChatbotError.emptyResponse }
 
+        // O modelo pode retornar "FORA_DO_ESCOPO" como sinal de que a pergunta não é do tema
         if raw.contains("FORA_DO_ESCOPO") {
             return scopeDenialMessage()
         }
 
+        // Remove linhas vazias e espaços extras da resposta
         return raw
             .components(separatedBy: .newlines)
             .map { $0.trimmingCharacters(in: .whitespaces) }

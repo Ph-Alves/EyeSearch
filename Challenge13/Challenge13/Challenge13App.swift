@@ -8,10 +8,15 @@
 import SwiftUI
 import SwiftData
 
+// MARK: - App
+/// # App - Challenge13App
+/// Ponto de entrada principal do app EyeSearch.
+/// Configura o `Coordinator`, o `DependencyContainer` e o `ModelContainer` do SwiftData.
 @main
 struct Challenge13App: App {
-    // Config do banco de dados
+    /// Container do SwiftData para persistência de dados.
     var sharedModelContainer: ModelContainer = {
+        // Define o schema (modelos de dados) — vazio por enquanto
         let schema = Schema([
             
         ])
@@ -24,6 +29,7 @@ struct Challenge13App: App {
         }
     }()
     
+    // Coordinator principal do app, gerencia toda a navegação
     @State private var coordinator = Coordinator(dependencyContainer: DependencyContainer())
 
     var body: some Scene {

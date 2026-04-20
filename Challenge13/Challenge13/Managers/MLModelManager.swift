@@ -11,18 +11,26 @@ import Vision
 import CoreMedia   // Para CMSampleBuffer (frames da câmera)
 
 // MARK: - Manager
+/// # Manager - MLModelManager
+/// Gerencia os modelos de Machine Learning (StickerDetector + YOLOv3) usando CoreML e Vision.
+/// Carrega os modelos em background e processa frames da câmera para detecção.
+/// ## Usado em:
+/// - ``SearchObjectViewModel``
 final class MLModelManager: MLModelManaging {
     // MARK: - Variables
+    /// Indica se os modelos foram carregados com sucesso.
     private(set) var isLoaded: Bool = false
+    /// Mensagem de erro caso o carregamento falhe.
     private(set) var error: String?
-    
+    /// Modelo CoreML para detecção de adesivos.
     private(set) var stickerModel: MLModel?
+    /// Modelo CoreML YOLOv3 para detecção de objetos.
     private(set) var yoloModel: MLModel?
-    
+    /// Limiar mínimo de confiança para considerar uma detecção válida.
     private(set) var confidenceThreshold: Float = 0.5
-    
-    // Requests do Vision ficam em cache, criados uma vez, reutilizados a cada frame na funções de detect
+    /// Request do Vision para o modelo de adesivos (cache, reutilizado a cada frame).
     private var stickerRequest: VNCoreMLRequest?
+    /// Request do Vision para o modelo YOLO (cache, reutilizado a cada frame).
     private var yoloRequest: VNCoreMLRequest?
     
     // MARK: - Init
@@ -32,7 +40,10 @@ final class MLModelManager: MLModelManaging {
     
     // MARK: - Functions
     
-    // Detecta o sticker no frame, retorna todas as detecções acima do confidenceThreshold
+    /// Detecta adesivos no frame da câmera, retornando todas as detecções acima do `confidenceThreshold`.
+    /// - Parameter buffer: Frame capturado pela câmera.
+    /// - Returns: Lista de `StickerDetection` com bounding box e confiança.
+    /// - Throws: `NSError` se o modelo de sticker não estiver carregado.
     func detectSticker(in buffer: CMSampleBuffer) throws -> [StickerDetection] {
         
         guard let request = stickerRequest else {
@@ -66,7 +77,10 @@ final class MLModelManager: MLModelManaging {
             }
     }
     
-    // Classifica o objeto principal na cena e retorna o label mais confiante do YOLO
+    /// Classifica o objeto principal na cena usando YOLOv3 e retorna o resultado mais confiante.
+    /// - Parameter buffer: Frame capturado pela câmera.
+    /// - Returns: O objeto detectado com maior confiança, ou `nil` se nenhum for encontrado.
+    /// - Throws: `NSError` se o modelo YOLO não estiver carregado.
     func detectObject(in buffer: CMSampleBuffer) throws -> ObjectDetection? {
         
         guard let request = yoloRequest else {
@@ -96,7 +110,11 @@ final class MLModelManager: MLModelManaging {
             }
     }
     
-    // Pipeline completo: roda sticker + objeto no mesmo frame e combina os resultados
+    /// Pipeline completo: detecta adesivos e objetos no mesmo frame e combina os resultados.
+    /// Só executa o YOLO se encontrar pelo menos um adesivo no frame.
+    /// - Parameter buffer: Frame capturado pela câmera.
+    /// - Returns: Lista de `CombinedDetection` associando cada adesivo ao objeto detectado.
+    /// - Throws: Erro se algum modelo não estiver carregado.
     func detect(in buffer: CMSampleBuffer) throws -> [CombinedDetection] {
         let stickers = try detectSticker(in: buffer)
         

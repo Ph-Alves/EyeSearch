@@ -21,6 +21,10 @@ O projeto é feito seguindo a arquitetura MVVM-C, se aproveitando ao máximo de 
 
 ## Topics
 
+### Coordinator (Navegação)
+- ``Coordinator``
+- ``DependencyContainer``
+
 ### Views (Telas)
 - ``HomeView``
 - ``SearchObjectView``
@@ -65,7 +69,3 @@ O projeto é feito seguindo a arquitetura MVVM-C, se aproveitando ao máximo de 
 - ``ChatMessage``
 - ``Hint``
 - ``UserSettings``
-
-### Coordinator (Navegação)
-- ``Coordinator``
-- ``DependencyContainer``

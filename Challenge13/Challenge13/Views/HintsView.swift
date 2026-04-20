@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+// MARK: - View
+/// # View - HintsView
+/// Tela de dicas de acessibilidade com cards expansíveis.
+/// Exibe uma lista de dicas que o usuário pode tocar para expandir e ver o conteúdo completo.
 struct HintsView: View {
     // MARK: - Variables
     @Environment(Coordinator.self) private var coordinator

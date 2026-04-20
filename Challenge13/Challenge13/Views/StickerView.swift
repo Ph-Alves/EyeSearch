@@ -8,11 +8,15 @@
 import SwiftUI
 import PDFKit
 
+// MARK: - View
+/// # View - StickerView
+/// Tela de configuração para geração de adesivos em PDF.
+/// Permite selecionar a quantidade de adesivos e navegar para o preview do PDF.
 struct StickerView: View {
     // MARK: - Variables
     @Environment(Coordinator.self) private var coordinator
     
-    // States
+    // Quantidade de adesivos selecionada pelo usuário (1 a 20)
     @State var quantity: Int = 1
     var stickerVM: StickerViewModel
     
@@ -33,6 +37,7 @@ struct StickerView: View {
             .padding()
             
             Button(action: {
+                // Gera o PDF e navega para a tela de preview
                 stickerVM.generatePDF(stickerQuantity: quantity)
                 coordinator.navigate(to: .stickerPreview)
             }) {

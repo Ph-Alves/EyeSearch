@@ -7,8 +7,15 @@
 
 import AVFoundation
 
-// MARK: - Protocol para SoundManager
+// MARK: - Protocol
+/// # Protocol - SoundManaging
+/// Interface para reprodução de sons de feedback no app.
+/// ## Implementado por:
+/// - ``SoundManager``
 protocol SoundManaging {
+    /// Reproduz o som de feedback quando um objeto é detectado.
+    /// - Parameter isEnabled: Indica se o som está habilitado pelo usuário.
     func playSound(isEnabled: Bool)
+    /// Restaura o manager para o estado padrão, liberando o player.
     func reset()
 }
