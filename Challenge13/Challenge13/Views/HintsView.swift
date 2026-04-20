@@ -19,6 +19,12 @@ struct HintsView: View {
                 coordinator.pop()
             })
             Text("Hints View")
+            Button {
+                coordinator.navigate(to: HomeDestination.chat)
+            } label: {
+                Text("CHATBOT")
+                    .bold()
+            }
         }
         .navigationBarBackButtonHidden(true)
     }

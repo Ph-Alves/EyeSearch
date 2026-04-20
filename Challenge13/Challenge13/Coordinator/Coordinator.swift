@@ -14,6 +14,7 @@ enum HomeDestination: Hashable {
     case sticker
     case hints
     case settings
+    case chat
 }
 
 // Coordinator observável, para manter a view reativa
@@ -48,6 +49,7 @@ class Coordinator {
         case .sticker : StickerView()
         case .hints : HintsView()
         case .settings : SettingsView()
+        case .chat : ChatView(coordinator: self)
         }
     }
 }

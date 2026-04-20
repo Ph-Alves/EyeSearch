@@ -11,7 +11,6 @@ struct ChatMessage: Identifiable {
     let id: UUID
     let role: MessageRole
     let text: String
-    let timestamp: Date
     var isFiltered: Bool
 
     enum MessageRole {
@@ -22,7 +21,6 @@ struct ChatMessage: Identifiable {
         self.id = UUID()
         self.role = role
         self.text = text
-        self.timestamp = Date()
         self.isFiltered = isFiltered
     }
 }
