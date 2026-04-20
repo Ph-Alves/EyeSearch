@@ -28,7 +28,7 @@ struct SettingsView: View {
 // MARK: - Preview
 #Preview {
     CoordinatedNavigationStack {
-        SettingsView(settingsVM: SettingsViewModel(haptics: HapticsManager()))
+        SettingsView(settingsVM: SettingsViewModel(haptics: HapticsManager(), soundManager: SoundManager(), settingsManager: SettingsManager()))
     }
     .environment(Coordinator(dependencyContainer: DependencyContainer()))
 }

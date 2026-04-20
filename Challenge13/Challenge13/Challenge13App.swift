@@ -34,6 +34,11 @@ struct Challenge13App: App {
             }
             // Coordinator injetado como variável de ambiente
             .environment(coordinator)
+            // Expõe o coordinator ao IntentsManager para que os AppIntents (Siri)
+            // possam disparar navegações seguindo o padrão do Coordinator.
+            .task {
+                IntentsManager.shared.coordinator = coordinator
+            }
         }
         .modelContainer(sharedModelContainer)
     }
