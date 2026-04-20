@@ -18,14 +18,16 @@
 
 import UIKit
 
+// MARK: - Manager
 //criando a classe e assinando o protocolo
-class HapticsManager: HapticsManaging {
-    
+final class HapticsManager: HapticsManaging {
+    // MARK: - Variables
     private var isEnabled: Bool = true
+
+    // MARK: - Init
+    init() { }
     
-    //var interna que controla o estado de ON/OFF
-//    private var isHapticsEnabled: Bool = true
-    
+    // MARK: - Functions
     //função que executa o haptic
     func trigger(isEnabled: Bool) {
         

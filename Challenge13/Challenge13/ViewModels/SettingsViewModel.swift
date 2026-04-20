@@ -24,7 +24,7 @@ class SettingsViewModel {
     //injetando a dependência - usando o protocolo, e não a classe
     private let haptics: HapticsManaging
     private let soundManager: SoundManaging
-    private let settingsManager: SettingsManager
+    private let settingsManager: SettingsManaging
     
     
     var settings: UserSettings
@@ -32,7 +32,7 @@ class SettingsViewModel {
     // MARK: - Init
     
     //init recebendo o manager de fora
-    init(haptics: HapticsManaging, soundManager: SoundManaging = SoundManager.manager, settingsManager: SettingsManager = SettingsManager()) {
+    init(haptics: HapticsManaging, soundManager: SoundManaging, settingsManager: SettingsManager) {
         self.haptics = haptics
         self.settingsManager = settingsManager
         self.soundManager = soundManager
