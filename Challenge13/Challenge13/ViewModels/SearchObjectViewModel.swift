@@ -21,7 +21,7 @@ class SearchObjectViewModel: CameraManagerDelegate {
 
 
     private var camera = CameraManager()
-    private let mlManager = MLModelManager.manager
+    private let mlManager = MLModelManager()
     private var isProcessing = false
 
 
@@ -51,7 +51,7 @@ class SearchObjectViewModel: CameraManagerDelegate {
 
 // MARK:  CameraManagerDelegate
 extension SearchObjectViewModel {
-    func cameraManager(_ manager: CameraManager, didCapture sampleBuffer: CMSampleBuffer) {
+    func cameraManager(_ manager: CameraManaging, didCapture sampleBuffer: CMSampleBuffer) {
         guard !isProcessing, mlManager.isLoaded else { return }
 
         isProcessing = true

@@ -7,7 +7,8 @@
 
 import UIKit
 
-//qualquer um que assinar esse protocolo, precisa implementar essas funções 
+// MARK: - Protocol para HapticsManager
+//qualquer um que assinar esse protocolo, precisa implementar essas funções
 protocol HapticsManaging {
     func trigger(isEnabled: Bool)
     func setEnabled(_ enabled: Bool)

@@ -7,17 +7,20 @@
 
 import Foundation
 
-//MARK: - Manager (Persistência com UserDefault)
-final class SettingsManager {
-    
+// MARK: - Manager (Persistência com UserDefault)
+final class SettingsManager: SettingsManaging {
+    // MARK: - Variables
     private let userDefaults = UserDefaults.standard
-    
     private enum Keys {
         static let haptics = "isHapticsEnabled"
         static let sound = "isSoundEnabled"
     }
     
-    // MARK: - Load completo
+    // MARK: - Init
+    init() { }
+    
+    // MARK: - Functions
+    // Load
     func load() -> UserSettings {
         return UserSettings(
             isHapticsEnabled: userDefaults.object(forKey: Keys.haptics) as? Bool ?? true,
@@ -25,7 +28,7 @@ final class SettingsManager {
         )
     }
     
-    // MARK: - Save completo
+    // Save
     func save(_ settings: UserSettings) {
         userDefaults.set(settings.isHapticsEnabled, forKey: Keys.haptics)
         userDefaults.set(settings.isSoundEnabled, forKey: Keys.sound)

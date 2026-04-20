@@ -43,6 +43,15 @@ O projeto é feito seguindo a arquitetura MVVM-C, se aproveitando ao máximo de 
 - ``HintsViewModel``
 - ``SettingsViewModel``
 
+### Protocols (Protocolos de managers)
+- ``CameraManaging``
+- ``FoundationsManaging``
+- ``HapticsManaging``
+- ``MLModelManaging``
+- ``PDFManaging``
+- ``SettingsManager``
+- ``SoundManaging``
+
 ### Managers (Ferramentas, utilitários)
 - ``CameraManager``
 - ``MLModelManager``
