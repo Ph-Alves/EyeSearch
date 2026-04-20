@@ -52,6 +52,7 @@ O projeto é feito seguindo a arquitetura MVVM-C, se aproveitando ao máximo de 
 - ``FoundationsManaging``
 - ``HapticsManaging``
 - ``MLModelManaging``
+- ``IntentsManaging``
 - ``PDFManaging``
 - ``SettingsManager``
 - ``SoundManaging``
@@ -62,6 +63,7 @@ O projeto é feito seguindo a arquitetura MVVM-C, se aproveitando ao máximo de 
 - ``FoundationsManager``
 - ``PDFManager``
 - ``HapticsManager``
+- ``IntentsManager``
 - ``SoundManager``
 - ``SettingsManager``
 
