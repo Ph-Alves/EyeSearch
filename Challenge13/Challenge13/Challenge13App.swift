@@ -11,23 +11,9 @@ import SwiftData
 // MARK: - App
 /// # App - Challenge13App
 /// Ponto de entrada principal do app EyeSearch.
-/// Configura o `Coordinator`, o `DependencyContainer` e o `ModelContainer` do SwiftData.
+/// Configura o ``Coordinator``, o ``DependencyContainer``, e prepara o ``IntentsManager``.
 @main
 struct Challenge13App: App {
-    /// Container do SwiftData para persistência de dados.
-    var sharedModelContainer: ModelContainer = {
-        // Define o schema (modelos de dados) — vazio por enquanto
-        let schema = Schema([
-            
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
     
     // Coordinator principal do app, gerencia toda a navegação
     @State private var coordinator = Coordinator(dependencyContainer: DependencyContainer())
@@ -40,7 +26,11 @@ struct Challenge13App: App {
             }
             // Coordinator injetado como variável de ambiente
             .environment(coordinator)
+            // Expõe o coordinator ao IntentsManager para que os AppIntents (Siri)
+            // possam disparar navegações seguindo o padrão do Coordinator.
+            .task {
+                IntentsManager.shared.coordinator = coordinator
+            }
         }
-        .modelContainer(sharedModelContainer)
     }
 }
