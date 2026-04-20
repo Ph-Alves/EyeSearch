@@ -12,10 +12,14 @@ import UniformTypeIdentifiers
 
 // MARK: - Manager
 final class PDFManager: PDFManaging {
+    // MARK: - Init
+    init() {  }
+    
     // MARK: - Functions
+    // Função responsável por gerar e retornar os dados do pdf
     func generatePDF(quantity: Int) -> Data? {
-        //MARK: Configuração do adesivo
         
+        //Configuração do adesivo
         //imagem do STICKER que será utilizada em todas as impressões, caso o sistema não carregue a imagem, return data.
         guard let sticker = UIImage(named: "sticker") else {
             return nil
@@ -24,8 +28,7 @@ final class PDFManager: PDFManaging {
         let stickerSize = CGSize(width: 200, height: 200)
         let spacing: CGFloat = 20
         
-        //MARK: Configuração do tamanho da folha do PDF
-        
+        //Configuração do tamanho da folha do PDF
         // Tamanho da folha A4
         let pageWidth: CGFloat = 595.2
         let pageHeight: CGFloat = 841.8
@@ -33,7 +36,7 @@ final class PDFManager: PDFManaging {
         //renderizando a página do PDF.
         let pdfRenderer = UIGraphicsPDFRenderer(bounds: CGRect(x: 0, y: 0, width: pageWidth, height: pageHeight)) // A4
         
-        //MARK: Criação do conteúdo do PDF
+        //Criação do conteúdo do PDF
         let data = pdfRenderer.pdfData { context in
             
             //criação da página no PDF

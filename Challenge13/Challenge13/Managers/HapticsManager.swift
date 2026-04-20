@@ -18,8 +18,9 @@
 
 import UIKit
 
+// MARK: - Manager
 //criando a classe e assinando o protocolo
-class HapticsManager: HapticsManaging {
+final class HapticsManager: HapticsManaging {
     // MARK: - Variables
     private var isEnabled: Bool = true
 
@@ -28,7 +29,7 @@ class HapticsManager: HapticsManaging {
     
     // MARK: - Functions
     //função que executa o haptic
-    func trigger(isEnabled: Bool) {
+    func trigger(isEnabled: Bool) -> Void {
         
         //Se estiver desativado, saia da função
         guard isEnabled else { return }
@@ -39,12 +40,12 @@ class HapticsManager: HapticsManaging {
         generator.impactOccurred()
     }
     
-    func setEnabled(_ enabled: Bool) {
+    func setEnabled(_ enabled: Bool) -> Void {
         self.isEnabled = enabled
     }
     
     // Função de reset para as configs normais
-    func reset() {
+    func reset() -> Void {
         isEnabled = true
     }
 }

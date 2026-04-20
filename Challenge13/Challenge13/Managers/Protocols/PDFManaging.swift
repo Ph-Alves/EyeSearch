@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: - Protocol para PDFManager
 protocol PDFManaging {
     func generatePDF(quantity: Int) -> Data?
 }

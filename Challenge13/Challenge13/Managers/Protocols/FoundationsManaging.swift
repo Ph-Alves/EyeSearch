@@ -7,7 +7,8 @@
 
 import Foundation
 
-protocol FoundationManaging {
+// MARK: - Protocol para FoundationsManager
+protocol FoundationsManaging {
     func sendMessage(_ userInput: String) async -> Void
     func clearConversation() -> Void
 }

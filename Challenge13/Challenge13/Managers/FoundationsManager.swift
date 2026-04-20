@@ -7,10 +7,9 @@
 
 import Foundation
 import FoundationModels
-import Combine
 
 // MARK: - Manager
-final class FoundationsManager: FoundationManaging {
+final class FoundationsManager: FoundationsManaging {
     // MARK: - Errors
     private enum ChatbotError: LocalizedError {
         case offTopic
@@ -162,7 +161,7 @@ final class FoundationsManager: FoundationManaging {
     }
     
     // MARK: - Helpers
-    private func setupSession() {
+    private func setupSession() -> Void {
         guard SystemLanguageModel.default.isAvailable else {
             errorMessage = ChatbotError.modelUnavailable.errorDescription
             return

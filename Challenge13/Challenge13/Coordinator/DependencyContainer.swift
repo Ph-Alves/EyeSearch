@@ -11,5 +11,5 @@ class DependencyContainer {
     lazy var homeViewModel = HomeViewModel()
     lazy var searchViewModel = SearchObjectViewModel()
     lazy var stickerViewModel = StickerViewModel(pdfManager: PDFManager())
-    lazy var settingsViewModel = SettingsViewModel(haptics: HapticsManager(), soundManager: SoundManager.manager)
+    lazy var settingsViewModel = SettingsViewModel(haptics: HapticsManager(), soundManager: SoundManager())
 }

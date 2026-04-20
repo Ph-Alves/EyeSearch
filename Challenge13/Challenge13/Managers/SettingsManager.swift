@@ -7,7 +7,7 @@
 
 import Foundation
 
-//MARK: - Manager (Persistência com UserDefault)
+// MARK: - Manager (Persistência com UserDefault)
 final class SettingsManager: SettingsManaging {
     // MARK: - Variables
     private let userDefaults = UserDefaults.standard
@@ -29,7 +29,7 @@ final class SettingsManager: SettingsManaging {
     }
     
     // Save
-    func save(_ settings: UserSettings) {
+    func save(_ settings: UserSettings) -> Void {
         userDefaults.set(settings.isHapticsEnabled, forKey: Keys.haptics)
         userDefaults.set(settings.isSoundEnabled, forKey: Keys.sound)
     }

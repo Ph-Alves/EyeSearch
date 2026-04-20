@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: - Protocol para SettingsManager
 protocol SettingsManaging {
     func load() -> UserSettings
     func save(_ settings: UserSettings) -> Void

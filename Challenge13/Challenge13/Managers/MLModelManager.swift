@@ -10,6 +10,7 @@ import CoreML
 import Vision
 import CoreMedia   // Para CMSampleBuffer (frames da câmera)
 
+// MARK: - Manager
 final class MLModelManager: MLModelManaging {
     // MARK: - Variables
     private(set) var isLoaded: Bool = false
@@ -110,7 +111,7 @@ final class MLModelManager: MLModelManaging {
     
     // MARK: - Helpers
     
-    private func loadModels() {
+    private func loadModels() -> Void {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 let sticker = try self.loadModel(named: "StickerDetector1")

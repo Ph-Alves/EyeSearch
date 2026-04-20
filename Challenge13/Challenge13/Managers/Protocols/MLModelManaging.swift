@@ -9,6 +9,7 @@ import Foundation
 import CoreML
 import AVFoundation
 
+// MARK: - Protocol para MLModelManager
 protocol MLModelManaging {
     var isLoaded: Bool { get }
     var error: String? { get }
