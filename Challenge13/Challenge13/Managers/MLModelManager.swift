@@ -111,7 +111,7 @@ final class MLModelManager: MLModelManaging {
     
     // MARK: - Helpers
     
-    private func loadModels() -> Void {
+    private func loadModels() {
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 let sticker = try self.loadModel(named: "StickerDetector1")

@@ -11,14 +11,14 @@ import AVFoundation
 // MARK: - Manager
 final class SoundManager: SoundManaging {
     // MARK: - Variables
-    private(set) var player: AVAudioPlayer?
+    private var player: AVAudioPlayer?
     
     // MARK: - Init
     init() {}
     
     // MARK: - Functions
     // Função de tocar som a partir de um url (.mp3 do audio)
-    func playSound(isEnabled: Bool) -> Void {
+    func playSound(isEnabled: Bool) {
         guard isEnabled else { return }
         
         guard let url = Bundle.main.url(forResource: "item-found", withExtension: "mp3") else { return }
@@ -34,7 +34,7 @@ final class SoundManager: SoundManaging {
     }
     
     // Reseta o manager para as configurações padrão
-    func reset() -> Void {
+    func reset() {
         player = nil
     }
 }

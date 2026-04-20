@@ -11,16 +11,16 @@ import Foundation
 // MARK: - Manager
 final class CameraManager: NSObject, CameraManaging, AVCaptureVideoDataOutputSampleBufferDelegate {
     
-    //MARK: - Variables
+    // MARK: - Variables
     private(set) var isAuthorized = false
     private(set) var session = AVCaptureSession()
     weak var delegate: CameraManagerDelegate?
     
     private let videoOutput = AVCaptureVideoDataOutput()
     
-    //MARK: - Functions
+    // MARK: - Functions
     @MainActor
-    func checkAuthorization() async -> Void {
+    func checkAuthorization() async {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized:
             isAuthorized = true
@@ -35,18 +35,18 @@ final class CameraManager: NSObject, CameraManaging, AVCaptureVideoDataOutputSam
         }
     }
     
-    func stop() -> Void {
+    func stop() {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             self?.session.stopRunning()
         }
     }
     
-    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) -> Void {
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         delegate?.cameraManager(self, didCapture: sampleBuffer)
     }
     
     // MARK: - Helpers
-    private func setupSession() -> Void {
+    private func setupSession() {
         //Uses the main rear lens of the iPhone
         guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
         else { return }

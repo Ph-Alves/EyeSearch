@@ -29,7 +29,7 @@ final class HapticsManager: HapticsManaging {
     
     // MARK: - Functions
     //função que executa o haptic
-    func trigger(isEnabled: Bool) -> Void {
+    func trigger(isEnabled: Bool) {
         
         //Se estiver desativado, saia da função
         guard isEnabled else { return }
@@ -40,12 +40,12 @@ final class HapticsManager: HapticsManaging {
         generator.impactOccurred()
     }
     
-    func setEnabled(_ enabled: Bool) -> Void {
+    func setEnabled(_ enabled: Bool) {
         self.isEnabled = enabled
     }
     
     // Função de reset para as configs normais
-    func reset() -> Void {
+    func reset() {
         isEnabled = true
     }
 }

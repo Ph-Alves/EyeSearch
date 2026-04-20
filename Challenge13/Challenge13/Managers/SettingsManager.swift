@@ -29,7 +29,7 @@ final class SettingsManager: SettingsManaging {
     }
     
     // Save
-    func save(_ settings: UserSettings) -> Void {
+    func save(_ settings: UserSettings) {
         userDefaults.set(settings.isHapticsEnabled, forKey: Keys.haptics)
         userDefaults.set(settings.isSoundEnabled, forKey: Keys.sound)
     }

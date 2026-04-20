@@ -112,7 +112,7 @@ final class FoundationsManager: FoundationsManaging {
     }
 
     // MARK: - Functions
-    func sendMessage(_ userInput: String) async -> Void {
+    func sendMessage(_ userInput: String) async {
         let trimmed = userInput.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
 
@@ -154,14 +154,14 @@ final class FoundationsManager: FoundationsManaging {
         isLoading = false
     }
 
-    func clearConversation() -> Void {
+    func clearConversation() {
         messages.removeAll()
         errorMessage = nil
         setupSession()
     }
     
     // MARK: - Helpers
-    private func setupSession() -> Void {
+    private func setupSession() {
         guard SystemLanguageModel.default.isAvailable else {
             errorMessage = ChatbotError.modelUnavailable.errorDescription
             return
