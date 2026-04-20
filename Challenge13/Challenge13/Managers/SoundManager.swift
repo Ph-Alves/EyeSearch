@@ -8,16 +8,14 @@
 import Foundation
 import AVFoundation
 
-
 final class SoundManager: SoundManaging {
+    // MARK: - Variables
+    private(set) var player: AVAudioPlayer?
     
-    // Essa é a instância, é static pois permite o uso sem precisar instanciar a classe antes, até por que ela também é uma instância.
-    static let manager = SoundManager()
-    var player: AVAudioPlayer?
+    // MARK: - Init
+    init() {}
     
-    // Init privado para proibir instanciação manual
-    private init() {}
-    
+    // MARK: - Functions
     // Função de tocar som a partir de um url (.mp3 do audio)
     func playSound(isEnabled: Bool) {
         guard isEnabled else { return }
@@ -33,7 +31,6 @@ final class SoundManager: SoundManaging {
             print("Error initiating AVAudioPlayer: \(error.localizedDescription)")
         }
     }
-    
     
     // Reseta o manager para as configurações padrão
     func reset() {

@@ -9,32 +9,33 @@ import Foundation
 import FoundationModels
 import Combine
 
-enum ChatbotError: LocalizedError {
-    case offTopic
-    case modelUnavailable
-    case emptyResponse
-    case sessionFailed(String)
+// MARK: - Manager
+final class FoundationsManager: FoundationManaging {
+    // MARK: - Errors
+    private enum ChatbotError: LocalizedError {
+        case offTopic
+        case modelUnavailable
+        case emptyResponse
+        case sessionFailed(String)
 
-    var errorDescription: String? {
-        switch self {
-        case .offTopic:
-            return "Só posso ajudar com temas relacionados a baixa visão, acessibilidade visual e funcionalidades do app."
-        case .modelUnavailable:
-            return "O assistente não está disponível no momento. Verifique se o Apple Intelligence está ativado nas configurações."
-        case .emptyResponse:
-            return "Não consegui gerar uma resposta. Tente reformular sua pergunta."
-        case .sessionFailed(let reason):
-            return "Falha na sessão: \(reason)"
+        var errorDescription: String? {
+            switch self {
+            case .offTopic:
+                return "Só posso ajudar com temas relacionados a baixa visão, acessibilidade visual e funcionalidades do app."
+            case .modelUnavailable:
+                return "O assistente não está disponível no momento. Verifique se o Apple Intelligence está ativado nas configurações."
+            case .emptyResponse:
+                return "Não consegui gerar uma resposta. Tente reformular sua pergunta."
+            case .sessionFailed(let reason):
+                return "Falha na sessão: \(reason)"
+            }
         }
     }
-}
-
-@MainActor
-final class FoundationsManager: ObservableObject {
-
-    @Published var messages: [ChatMessage] = []
-    @Published var isLoading: Bool = false
-    @Published var errorMessage: String? = nil
+    
+    // MARK: - Variables
+    private var messages: [ChatMessage] = []
+    private var isLoading: Bool = false
+    private var errorMessage: String? = nil
 
     private var session: LanguageModelSession?
 
@@ -106,23 +107,13 @@ final class FoundationsManager: ObservableObject {
         "código", "programar", "python", "javascript", "html"
     ]
 
+    // MARK: - Init
     init() {
         setupSession()
     }
 
-    private func setupSession() {
-        guard SystemLanguageModel.default.isAvailable else {
-            errorMessage = ChatbotError.modelUnavailable.errorDescription
-            return
-        }
-
-        session = LanguageModelSession(
-            model: .default,
-            instructions: systemPrompt
-        )
-    }
-
-    func sendMessage(_ userInput: String) async {
+    // MARK: - Functions
+    func sendMessage(_ userInput: String) async -> Void {
         let trimmed = userInput.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
 
@@ -164,10 +155,23 @@ final class FoundationsManager: ObservableObject {
         isLoading = false
     }
 
-    func clearConversation() {
+    func clearConversation() -> Void {
         messages.removeAll()
         errorMessage = nil
         setupSession()
+    }
+    
+    // MARK: - Helpers
+    private func setupSession() {
+        guard SystemLanguageModel.default.isAvailable else {
+            errorMessage = ChatbotError.modelUnavailable.errorDescription
+            return
+        }
+
+        session = LanguageModelSession(
+            model: .default,
+            instructions: systemPrompt
+        )
     }
 
     private func localScopeCheck(for input: String) -> String? {

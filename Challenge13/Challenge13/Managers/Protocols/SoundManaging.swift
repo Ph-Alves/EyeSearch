@@ -5,8 +5,10 @@
 //  Created by Raquel Souza on 17/04/26.
 //
 
+import AVFoundation
 
 protocol SoundManaging {
-    func playSound(isEnabled: Bool)
-    func reset()
+    var player: AVAudioPlayer? { get }
+    func playSound(isEnabled: Bool) -> Void
+    func reset() -> Void
 }

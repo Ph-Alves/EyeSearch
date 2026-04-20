@@ -21,7 +21,7 @@ class SearchObjectViewModel: CameraManagerDelegate {
 
 
     private var camera = CameraManager()
-    private let mlManager = MLModelManager.manager
+    private let mlManager = MLModelManager()
     private var isProcessing = false
 
 

@@ -10,88 +10,26 @@ import CoreML
 import Vision
 import CoreMedia   // Para CMSampleBuffer (frames da câmera)
 
-// MARK: Results
-
-struct StickerDetection {
-    let boundingBox: CGRect
-    let confidence: Float
-}
-
-struct ObjectDetection {
-    let label: String
-    let confidence: Float
-}
-
-struct CombinedDetection {
-    let sticker: StickerDetection
-    let object: ObjectDetection?
-}
-
-// MARK: Manager
-
-@Observable
-class MLModelManager {
-    
-    static let manager = MLModelManager()
-    
-    var isLoaded: Bool = false
-    var error: String?
+final class MLModelManager: MLModelManaging {
+    // MARK: - Variables
+    private(set) var isLoaded: Bool = false
+    private(set) var error: String?
     
     private(set) var stickerModel: MLModel?
     private(set) var yoloModel: MLModel?
     
-    var confidenceThreshold: Float = 0.5
+    private(set) var confidenceThreshold: Float = 0.5
     
     // Requests do Vision ficam em cache, criados uma vez, reutilizados a cada frame na funções de detect
     private var stickerRequest: VNCoreMLRequest?
     private var yoloRequest: VNCoreMLRequest?
     
+    // MARK: - Init
     init() {
         loadModels()
     }
     
-    // MARK: Load
-    
-    private func loadModels() {
-        DispatchQueue.global(qos: .userInitiated).async {
-            do {
-                let sticker = try self.loadModel(named: "StickerDetector1")
-                let yolo    = try self.loadModel(named: "YOLOv3")
-                
-                // Adapta os resultados do modelo para que o framework Vision possa entender
-                let stickerVN = try VNCoreMLModel(for: sticker)
-                let yoloVN    = try VNCoreMLModel(for: yolo)
-                
-                DispatchQueue.main.async {
-                    
-                    self.stickerModel   = sticker
-                    self.yoloModel      = yolo
-                    
-                    self.stickerRequest = VNCoreMLRequest(model: stickerVN)
-                    self.yoloRequest    = VNCoreMLRequest(model: yoloVN)
-                    
-                    self.isLoaded       = true
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    self.error = error.localizedDescription
-                }
-            }
-        }
-    }
-    
-    private func loadModel(named name: String) throws -> MLModel {
-        guard let url = Bundle.main.url(forResource: name, withExtension: "mlmodelc") else {
-            throw NSError(
-                domain: "MLModelManager",
-                code: -1,
-                userInfo: [NSLocalizedDescriptionKey: "Modelo '\(name)' não encontrado no bundle."]
-            )
-        }
-        return try MLModel(contentsOf: url)
-    }
-    
-    // MARK: Inferência
+    // MARK: - Functions
     
     // Detecta o sticker no frame, retorna todas as detecções acima do confidenceThreshold
     func detectSticker(in buffer: CMSampleBuffer) throws -> [StickerDetection] {
@@ -168,5 +106,46 @@ class MLModelManager {
         
         // Associa o mesmo objeto detectado a cada sticker encontrado no frame
         return stickers.map { CombinedDetection(sticker: $0, object: object) }
+    }
+    
+    // MARK: - Helpers
+    
+    private func loadModels() {
+        DispatchQueue.global(qos: .userInitiated).async {
+            do {
+                let sticker = try self.loadModel(named: "StickerDetector1")
+                let yolo    = try self.loadModel(named: "YOLOv3")
+                
+                // Adapta os resultados do modelo para que o framework Vision possa entender
+                let stickerVN = try VNCoreMLModel(for: sticker)
+                let yoloVN    = try VNCoreMLModel(for: yolo)
+                
+                DispatchQueue.main.async {
+                    
+                    self.stickerModel   = sticker
+                    self.yoloModel      = yolo
+                    
+                    self.stickerRequest = VNCoreMLRequest(model: stickerVN)
+                    self.yoloRequest    = VNCoreMLRequest(model: yoloVN)
+                    
+                    self.isLoaded       = true
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    self.error = error.localizedDescription
+                }
+            }
+        }
+    }
+    
+    private func loadModel(named name: String) throws -> MLModel {
+        guard let url = Bundle.main.url(forResource: name, withExtension: "mlmodelc") else {
+            throw NSError(
+                domain: "MLModelManager",
+                code: -1,
+                userInfo: [NSLocalizedDescriptionKey: "Modelo '\(name)' não encontrado no bundle."]
+            )
+        }
+        return try MLModel(contentsOf: url)
     }
 }

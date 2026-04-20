@@ -10,7 +10,9 @@ import UIKit
 import SwiftUI
 import UniformTypeIdentifiers
 
+// MARK: - Manager
 final class PDFManager: PDFManaging {
+    // MARK: - Functions
     func generatePDF(quantity: Int) -> Data? {
         //MARK: Configuração do adesivo
         
