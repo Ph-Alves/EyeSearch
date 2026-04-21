@@ -7,10 +7,17 @@
 
 import Foundation
 
-// MARK: - Manager (Persistência com UserDefault)
+// MARK: - Manager
+/// # Manager - SettingsManager
+/// Gerencia a persistência das configurações do usuário utilizando `UserDefaults`.
+/// Salva e carrega preferências de haptics e som.
+/// ## Usado em:
+/// - ``SettingsViewModel``
 final class SettingsManager: SettingsManaging {
     // MARK: - Variables
+    /// Instância de UserDefaults para persistência.
     private let userDefaults = UserDefaults.standard
+    /// Chaves utilizadas no UserDefaults.
     private enum Keys {
         static let haptics = "isHapticsEnabled"
         static let sound = "isSoundEnabled"
@@ -20,7 +27,8 @@ final class SettingsManager: SettingsManaging {
     init() { }
     
     // MARK: - Functions
-    // Load
+    /// Carrega as configurações salvas do usuário. Retorna valores padrão (`true`) se não houver dados salvos.
+    /// - Returns: Instância de `UserSettings` com os valores persistidos.
     func load() -> UserSettings {
         return UserSettings(
             isHapticsEnabled: userDefaults.object(forKey: Keys.haptics) as? Bool ?? true,
@@ -28,7 +36,8 @@ final class SettingsManager: SettingsManaging {
         )
     }
     
-    // Save
+    /// Salva as configurações do usuário no UserDefaults.
+    /// - Parameter settings: Configurações a serem persistidas.
     func save(_ settings: UserSettings) {
         userDefaults.set(settings.isHapticsEnabled, forKey: Keys.haptics)
         userDefaults.set(settings.isSoundEnabled, forKey: Keys.sound)

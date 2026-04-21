@@ -7,10 +7,15 @@
 
 import SwiftUI
 
+// MARK: - Component
+/// # Component - ReturnButton
+/// Botão de retorno reutilizável com ícone de chevron e texto "Voltar".
+/// Usado em todas as telas internas para navegação de volta.
 struct ReturnButton: View {
     // MARK: - Variables
+    /// Ação executada ao tocar no botão.
     var action: () -> Void
-    
+    /// Texto exibido no botão.
     let returnText: String = "Voltar"
     
     // MARK: - Body view

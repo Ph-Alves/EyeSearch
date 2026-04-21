@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+// MARK: - View
+/// # View - SettingsView
+/// Tela de configurações do app.
+/// Permite ao usuário ajustar preferências de haptics e som.
 struct SettingsView: View {
     // MARK: - Variables
     @Environment(Coordinator.self) private var coordinator

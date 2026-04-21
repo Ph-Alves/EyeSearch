@@ -8,22 +8,14 @@
 import SwiftUI
 import SwiftData
 
+// MARK: - App
+/// # App - Challenge13App
+/// Ponto de entrada principal do app EyeSearch.
+/// Configura o ``Coordinator``, o ``DependencyContainer``, e prepara o ``IntentsManager``.
 @main
 struct Challenge13App: App {
-    // Config do banco de dados
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
     
+    // Coordinator principal do app, gerencia toda a navegação
     @State private var coordinator = Coordinator(dependencyContainer: DependencyContainer())
 
     var body: some Scene {
@@ -40,6 +32,5 @@ struct Challenge13App: App {
                 IntentsManager.shared.coordinator = coordinator
             }
         }
-        .modelContainer(sharedModelContainer)
     }
 }

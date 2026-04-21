@@ -7,10 +7,18 @@
 
 import SwiftUI
 
+// MARK: - Component
+/// # Component - HintCardView
+/// Card expansível que exibe uma dica de acessibilidade.
+/// Ao ser tocado, expande para mostrar a descrição completa da dica.
+/// ## Usado em:
+/// - ``HintsView``
 struct HintCardView: View {
-    
+    /// Dados da dica a ser exibida.
     let hint: Hint
+    /// Indica se o card está expandido (mostrando a descrição).
     let isExpanded: Bool
+    /// Ação executada ao tocar no card.
     let action: () -> Void
     
     var body: some View {

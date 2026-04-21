@@ -9,21 +9,24 @@ import Foundation
 import AppIntents
 import SwiftUI
 
-// Responsável por expor o Coordinator ao sistema de App Intents (Siri/Atalhos),
-// mantendo a responsabilidade única de navegação no Coordinator.
+// MARK: - Manager
+/// # Manager - IntentsManager
+/// Responsável por expor o Coordinator ao sistema de App Intents (Siri/Atalhos),
+/// mantendo a responsabilidade única de navegação no Coordinator.
+/// ## Usado em:
+/// - ``Challenge13App``
 final class IntentsManager: IntentsManaging {
     
-    // Instância compartilhada para ser acessada dentro de AppIntents,
-    // já que AppIntents são instanciados pelo sistema e não têm acesso ao Environment.
+    /// Instância compartilhada para ser acessada dentro de AppIntents,
+    /// já que AppIntents são instanciados pelo sistema e não têm acesso ao Environment.
     static let shared = IntentsManager()
 
-    // Referência fraca ao Coordinator para evitar ciclo de retenção.
+    /// Referência fraca ao Coordinator para evitar ciclo de retenção.
     weak var coordinator: Coordinator?
 
-    
     private init() { }
 
-    // Navega até a SearchObjectView respeitando o padrão do Coordinator.
+    /// Navega até a SearchObjectView respeitando o padrão do ``Coordinator``.
     @MainActor
     func openSearchObject() {
         guard let coordinator else { return }
@@ -37,24 +40,30 @@ final class IntentsManager: IntentsManaging {
 }
 
 // MARK: - App Intent
-// Intent exposta à Siri e ao app Atalhos para abrir a tela de busca de objetos.
+/// # Manager - App Intent
+/// Intent exposta à Siri e ao app Atalhos para abrir a tela de busca de objetos.
 struct OpenSearchObjectIntent: AppIntent {
     static var title: LocalizedStringResource = "Buscar objeto"
     static var description = IntentDescription("Abre a tela de busca de objetos pela câmera.")
 
-    // Garante que o app seja trazido para o primeiro plano ao executar a intent.
+    /// Garante que o app seja trazido para o primeiro plano ao executar a intent.
     static var openAppWhenRun: Bool = true
 
+    /// Define a ação do intents definido
+    /// - Returns: um `IntentResult` que é o resultado de uma ação performada
     @MainActor
-    func perform() async throws -> some IntentResult {
+    func perform() async -> some IntentResult {
         IntentsManager.shared.openSearchObject()
         return .result()
     }
 }
 
 // MARK: - App Shortcuts Provider
-// Expõe as frases que a Siri reconhece para ativar a intent sem configuração do usuário.
+/// # Manager - App Shortcuts
+/// Prepara um shortcuts a partir do intent customizado recebido,
+/// e define as frases de ativação da siri para utilização.
 struct Challenge13Shortcuts: AppShortcutsProvider {
+    /// Define um array de shortcuts, com apenas um no momento que é o intents de abrir o app na tela de procurar objeto
     static var appShortcuts: [AppShortcut] {
         AppShortcut(
             intent: OpenSearchObjectIntent(),

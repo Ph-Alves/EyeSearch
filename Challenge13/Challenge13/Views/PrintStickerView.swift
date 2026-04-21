@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+// MARK: - View
+/// # View - PrintStickerView
+/// Tela de preview e exportação do PDF de adesivos gerado.
+/// Exibe o documento e permite compartilhar via `ShareLink`.
 struct PrintStickerView: View {
     // MARK: - Variables
     @Environment(Coordinator.self) private var coordinator
@@ -20,11 +24,13 @@ struct PrintStickerView: View {
                 coordinator.pop()
             })
             
+            // Exibe o preview do PDF gerado
             if let stickerView = stickerVM.getView() {
                 stickerView
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             
+            // Botão de exportação via ShareLink (só aparece se o PDF foi gerado)
             if let document = stickerVM.getDoc() {
                 ShareLink(
                     item: document,

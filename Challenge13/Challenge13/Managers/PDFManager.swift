@@ -11,12 +11,19 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 // MARK: - Manager
+/// # Manager - PDFManager
+/// Gerencia a geração de documentos PDF contendo adesivos para recorte.
+/// Distribui os adesivos em folhas A4 com espaçamento uniforme e paginação automática.
+/// ## Usado em:
+/// - ``StickerViewModel``
 final class PDFManager: PDFManaging {
     // MARK: - Init
-    init() {  }
+    init() { }
     
     // MARK: - Functions
-    // Função responsável por gerar e retornar os dados do pdf
+    /// Gera um PDF com a quantidade especificada de adesivos distribuídos em folha A4.
+    /// - Parameter quantity: Número de adesivos a incluir no PDF.
+    /// - Returns: Os dados binários do PDF, ou `nil` se a imagem do adesivo não for encontrada no bundle.
     func generatePDF(quantity: Int) -> Data? {
         
         //Configuração do adesivo
@@ -77,9 +84,11 @@ final class PDFManager: PDFManaging {
 }
 
 // MARK: - CUSTOM PDF
-// Struct para permitir exportar o doc pronto
-
+/// # Model - CustomPDFDoc
+/// Estrutura que encapsula os dados de um PDF gerado, permitindo exportação via `ShareLink`.
+/// Conforma com `Transferable` para integração com o sistema de compartilhamento do iOS.
 struct CustomPDFDoc: Transferable {
+    /// Dados binários do PDF gerado.
     let data: Data
     
     static var transferRepresentation: some TransferRepresentation {

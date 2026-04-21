@@ -5,37 +5,34 @@
 //  Created by Raquel Souza on 17/04/26.
 //
 
-/*
- Na sua VIEW, quando o card for clicado, você só precisa chamar:
-  viewModel.toggleHint(hint)
- ps: vc precisa passar o hint que foi clicado
- */
-
-
 import Foundation
 
+// MARK: - ViewModel
+/// # ViewModel - HintsViewModel
+/// ViewModel da tela de dicas de acessibilidade.
+/// Gerencia a lista de dicas e controla qual dica está expandida na interface.
+/// ## Usado em:
+/// - ``HintsView``
 @Observable
 class HintsViewModel {
-
+    // MARK: - Variables
+    /// Lista de dicas exibidas na tela.
     var hints: [Hint] = [
         Hint(id: UUID(), title: "Como usar o app", description: "Explore os recursos e registre seus pensamentos diariamente."),
         Hint(id: UUID(), title: "Gerenciar emoções", description: "Escreva com frequência para identificar padrões emocionais."),
         Hint(id: UUID(), title: "Dicas de foco", description: "Reserve alguns minutos do dia para refletir e se organizar.")
     ]
     
-    //UI State
-    /*A ideia é que eu não guardo o estado de ‘expandido’ dentro de cada card. Em vez disso, eu guardo só um selectedHintID,
-    que representa qual card está aberto no momento.*/
+    /// ID da dica atualmente expandida. `nil` se nenhuma estiver aberta.
     var selectedHintID: UUID?
     
-    //MARK: - Actions with hints list
+    // MARK: - Functions
+    /// Alterna o estado de expansão de uma dica. Se já estiver aberta, fecha. Se estiver fechada, abre.
+    /// - Parameter hint: A dica que foi tocada pelo usuário.
     func toggleHint(_ hint: Hint) {
-        
-        //se o card ja estava aberto, a função fecha o card (o valor recebe nil)
         if selectedHintID == hint.id {
             selectedHintID = nil
         } else {
-            //se ele não tiver aberto, ela salva o id do card
             selectedHintID = hint.id
         }
     }
