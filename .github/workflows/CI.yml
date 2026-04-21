@@ -16,6 +16,7 @@ jobs:
       - name: Build
         run: |
           xcodebuild build \
+            -project EyeSearch.xcodeproj \
             -scheme Challenge13 \
             -destination 'platform=iOS Simulator,name=iPhone 16,OS=26.0' \
             CODE_SIGNING_ALLOWED=NO
@@ -23,6 +24,7 @@ jobs:
       - name: Run Tests
         run: |
           xcodebuild test \
+            -project EyeSearch.xcodeproj \
             -scheme Challenge13 \
             -destination 'platform=iOS Simulator,name=iPhone 16,OS=26.0' \
             CODE_SIGNING_ALLOWED=NO
