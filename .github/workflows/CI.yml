@@ -12,9 +12,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Debug structure
-        run: find . -name "*.xcodeproj" -o -name "*.xcworkspace" | head -20
       
       - name: Build
         run: |
