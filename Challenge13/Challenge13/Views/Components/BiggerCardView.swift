@@ -7,10 +7,16 @@
 
 import SwiftUI
 
-// Card maior usado de xSmall até xxLarge
+// MARK: - Component
+/// # Component - BiggerCardView
+/// Card de navegação com layout vertical (ícone em cima, título embaixo).
+/// Usado na `HomeView` quando o Dynamic Type é `xxxLarge` ou maior.
 struct BiggerCardView: View {
+    /// Título exibido no card.
     let title: String
+    /// Nome do SF Symbol exibido no card.
     let icon: String
+    /// Cor de fundo do card.
     let color: Color
 
     var body: some View {

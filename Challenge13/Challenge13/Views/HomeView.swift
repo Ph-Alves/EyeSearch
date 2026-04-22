@@ -7,51 +7,56 @@
 
 import SwiftUI
 
-enum HomeDestination: Hashable {
-    case searchObject
-    case sticker
-    case hints
-    case settings
-}
-
+// MARK: - View
+/// # View - HomeView
+/// Tela principal do app que exibe os cards de navegação para as funcionalidades.
+/// Adapta o layout dos cards conforme o Dynamic Type do usuário.
 struct HomeView: View {
-    private let screenTitle = "Nome do app"
-    
-    private let items: [(title: String, icon: String, color: Color)] = [
-        ("Pesquisar",     "magnifyingglass", Color("SearchGreen")),
-        ("Monitorar",     "eye",             Color("StickerBlue")),
-        ("Dicas",         "lightbulb.fill",  Color("HintsYellow")),
-        ("Configurações", "gearshape.fill",  Color("SettingsPurple"))
-    ]
-    
+    // MARK: - Variables
+    // Tamanho de fonte dinâmico do sistema (para adaptar layout)
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    // Coordinator para navegação entre telas
+    @Environment(Coordinator.self) private var coordinator
+    
+    // Lista de itens do menu principal (carregada no onAppear)
+    @State private var items: [(title: String, icon: String, color: Color, screen: HomeDestination)] = []
+    
+    var homeVM: HomeViewModel
+    
+    private let screenTitle = "Nome do app"
+    // Decide se usa cards grandes (quando acessibilidade de texto grande está ativa)
     private var usesLargeCard: Bool {
-        dynamicTypeSize >= .xxxLarge // True quando o Dynamic Type está em xxxLarge ou maior
+        dynamicTypeSize >= .xxxLarge
     }
  
+    // MARK: - Body View
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 16) {
-                    ForEach(items, id: \.title) { item in
-                        Button { } label: {
-                            if usesLargeCard {
-                                BiggerCardView(title: item.title, icon: item.icon, color: item.color)
-                            } else {
-                                CompactCardView(title: item.title, icon: item.icon, color: item.color)
-                            }
+        ScrollView {
+            VStack(spacing: 16) {
+                ForEach(items, id: \.title) { item in
+                    Button {
+                        // Navega para a tela correspondente ao card tocado
+                        coordinator.navigate(to: item.screen)
+                    } label: {
+                        // Alterna entre card grande e compacto conforme Dynamic Type
+                        if usesLargeCard {
+                            BiggerCardView(title: item.title, icon: item.icon, color: item.color)
+                        } else {
+                            CompactCardView(title: item.title, icon: item.icon, color: item.color)
                         }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(item.title)
                     }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(item.title)
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
             }
-            .navigationTitle(screenTitle)
-            .navigationBarTitleDisplayMode(.large)
-//            .background(Color.black.ignoresSafeArea())
-//            .toolbarColorScheme(.dark, for: .navigationBar)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+        }
+        .navigationTitle(screenTitle)
+        .navigationBarTitleDisplayMode(.large)
+        .onAppear {
+            // Carrega os itens do menu ao aparecer na tela
+            items = homeVM.generateItems()
         }
     }
 }
@@ -59,26 +64,25 @@ struct HomeView: View {
 // MARK: - Previews
 
 #Preview("xSmall") {
-    HomeView()
-        .environment(\.dynamicTypeSize, .xSmall)
+    CoordinatedNavigationStack {
+        HomeView(homeVM: HomeViewModel())
+    }
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
+    .environment(\.dynamicTypeSize, .xSmall)
 }
 
 #Preview("Large (padrão)") {
-    HomeView()
-        .environment(\.dynamicTypeSize, .large)
+    CoordinatedNavigationStack {
+        HomeView(homeVM: HomeViewModel())
+    }
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
+    .environment(\.dynamicTypeSize, .large)
 }
 
 #Preview("xxLarge") {
-    HomeView()
-        .environment(\.dynamicTypeSize, .xxLarge)
-}
-
-#Preview("xxxLarge (compacto)") {
-    HomeView()
-        .environment(\.dynamicTypeSize, .xxxLarge)
-}
-
-#Preview("AX5 (compacto máximo)") {
-    HomeView()
-        .environment(\.dynamicTypeSize, .accessibility5)
+    CoordinatedNavigationStack {
+        HomeView(homeVM: HomeViewModel())
+    }
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
+    .environment(\.dynamicTypeSize, .xxLarge)
 }
