@@ -26,22 +26,22 @@ struct StickerView: View {
             coordinator.pop()
         })
         VStack(spacing: 20) {
-            Text("Gerador de Adesivos")
+            Text("sticker.screen.title")
                 .font(.title)
-            
+
             Stepper(
-                "Quantidade: \(quantity)",
+                "sticker.quantity.label \(quantity)",
                 value: $quantity,
                 in: 1...20
             )
             .padding()
-            
+
             Button(action: {
                 // Gera o PDF e navega para a tela de preview
                 stickerVM.generatePDF(stickerQuantity: quantity)
                 coordinator.navigate(to: .stickerPreview)
             }) {
-                Text("Gerar PDF")
+                Text("sticker.button.generatePDF")
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color.blue)
@@ -50,7 +50,7 @@ struct StickerView: View {
             }
         }
         .padding()
-        .navigationTitle("PDF")
+        .navigationTitle("sticker.preview.navigationTitle")
         .navigationBarBackButtonHidden(true)
     }
 }

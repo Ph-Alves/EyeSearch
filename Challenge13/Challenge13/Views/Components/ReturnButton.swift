@@ -16,7 +16,7 @@ struct ReturnButton: View {
     /// Ação executada ao tocar no botão.
     var action: () -> Void
     /// Texto exibido no botão.
-    let returnText: String = "Voltar"
+    let returnText: String = String(localized: "common.button.back")
     
     // MARK: - Body view
     var body: some View {

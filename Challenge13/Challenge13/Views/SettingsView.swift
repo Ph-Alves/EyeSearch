@@ -23,7 +23,7 @@ struct SettingsView: View {
             ReturnButton(action: {
                 coordinator.pop()
             })
-            Text("Settings")
+            Text("settings.screen.title")
         }
         .navigationBarBackButtonHidden(true)
     }

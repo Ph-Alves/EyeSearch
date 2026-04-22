@@ -18,9 +18,9 @@ class HintsViewModel {
     // MARK: - Variables
     /// Lista de dicas exibidas na tela.
     var hints: [Hint] = [
-        Hint(id: UUID(), title: "Como usar o app", description: "Explore os recursos e registre seus pensamentos diariamente."),
-        Hint(id: UUID(), title: "Gerenciar emoções", description: "Escreva com frequência para identificar padrões emocionais."),
-        Hint(id: UUID(), title: "Dicas de foco", description: "Reserve alguns minutos do dia para refletir e se organizar.")
+        Hint(id: UUID(), title: String(localized: "hints.card.howToUse.title"),        description: String(localized: "hints.card.howToUse.description")),
+        Hint(id: UUID(), title: String(localized: "hints.card.manageEmotions.title"),  description: String(localized: "hints.card.manageEmotions.description")),
+        Hint(id: UUID(), title: String(localized: "hints.card.focusTips.title"),       description: String(localized: "hints.card.focusTips.description"))
     ]
     
     /// ID da dica atualmente expandida. `nil` se nenhuma estiver aberta.

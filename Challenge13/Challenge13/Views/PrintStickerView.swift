@@ -36,7 +36,7 @@ struct PrintStickerView: View {
                     item: document,
                     preview: SharePreview("Adesivos.pdf", image: Image("sticker"))
                 ) {
-                    Label("Exportar PDF", systemImage: "square.and.arrow.up")
+                    Label("sticker.button.exportPDF", systemImage: "square.and.arrow.up")
                         .padding()
                         .background(Color.blue)
                         .foregroundStyle(.white)
