@@ -30,7 +30,7 @@ class SearchObjectViewModel: CameraManagerDelegate {
     /// Manager da câmera.
     private var camera = CameraManager()
     /// Manager dos modelos de ML.
-    private let mlManager = MLModelManager()
+    private let mlManager = MLModelManager.shared
     /// Flag para evitar processamento concorrente de frames.
     private var isProcessing = false
 

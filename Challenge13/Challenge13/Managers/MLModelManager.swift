@@ -18,6 +18,8 @@ import CoreMedia   // Para CMSampleBuffer (frames da câmera)
 /// - ``SearchObjectViewModel``
 final class MLModelManager: MLModelManaging {
     // MARK: - Variables
+    /// Singleton de instância para os modelos
+    static var shared: MLModelManager = MLModelManager()
     /// Indica se os modelos foram carregados com sucesso.
     private(set) var isLoaded: Bool = false
     /// Mensagem de erro caso o carregamento falhe.
@@ -34,7 +36,7 @@ final class MLModelManager: MLModelManaging {
     private var yoloRequest: VNCoreMLRequest?
     
     // MARK: - Init
-    init() {
+    private init() {
         loadModels()
     }
     
