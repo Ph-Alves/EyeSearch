@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import Challenge13
+@testable import EyeSearch
 
 final class MLModelManagerTests: XCTestCase {
     
@@ -14,8 +14,8 @@ final class MLModelManagerTests: XCTestCase {
     
     func test_Singleton_ReturnsSameInstance() {
         // Arrange
-        let instance1 = MLModelManager.manager
-        let instance2 = MLModelManager.manager
+        let instance1 = MLModelManager.shared
+        let instance2 = MLModelManager.shared
         
         // Act & Assert
         XCTAssertTrue(instance1 === instance2, "MLModelManager.manager deve retornar a mesma instância sempre.")
@@ -25,7 +25,7 @@ final class MLModelManagerTests: XCTestCase {
     
     func test_Models_LoadSuccessfully() {
         // Arrange
-        let manager = MLModelManager.manager
+        let manager = MLModelManager.shared
         let expectation = expectation(description: "Modelos devem carregar em background")
         
         // Act

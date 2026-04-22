@@ -1,0 +1,39 @@
+{
+  "configurations" : [
+    {
+      "id" : "26C3E49E-B96C-4FF4-ADFA-47BC3F70F612",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:EyeSearch.xcodeproj",
+      "identifier" : "EF69E88A2F87CFDB00FD9AE7",
+      "name" : "EyeSearch"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:EyeSearch.xcodeproj",
+        "identifier" : "EF69E8992F87CFDD00FD9AE7",
+        "name" : "EyeSearchTests"
+      }
+    },
+    {
+      "enabled" : false,
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:EyeSearch.xcodeproj",
+        "identifier" : "EF69E8A32F87CFDD00FD9AE7",
+        "name" : "EyeSearchUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

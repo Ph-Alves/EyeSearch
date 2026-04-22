@@ -32,6 +32,7 @@
 		EF69E89A2F87CFDD00FD9AE7 /* EyeSearchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EyeSearchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF69E8A42F87CFDD00FD9AE7 /* EyeSearchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EyeSearchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFAB54E92F96C95A00A009CE /* EyeSearchDoc.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = EyeSearchDoc.docc; sourceTree = "<group>"; };
+		EFE2E23A2F9903D100413ED1 /* Challenge13.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Challenge13.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -80,6 +81,7 @@
 		EF69E8822F87CFDB00FD9AE7 = {
 			isa = PBXGroup;
 			children = (
+				EFE2E23A2F9903D100413ED1 /* Challenge13.xctestplan */,
 				EFAB54E92F96C95A00A009CE /* EyeSearchDoc.docc */,
 				EF69E88D2F87CFDB00FD9AE7 /* Challenge13 */,
 				EF69E89D2F87CFDD00FD9AE7 /* Challenge13Tests */,
