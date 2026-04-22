@@ -18,7 +18,7 @@ jobs:
           xcodebuild build \
             -project Challenge13/EyeSearch.xcodeproj \
             -scheme Challenge13 \
-            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.0.1' \
+            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.0' \
             CODE_SIGNING_ALLOWED=NO
 
       - name: Run Tests
@@ -26,5 +26,5 @@ jobs:
           xcodebuild test \
             -project Challenge13/EyeSearch.xcodeproj \
             -scheme Challenge13 \
-            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.0.1' \
+            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.0' \
             CODE_SIGNING_ALLOWED=NO
