@@ -8,57 +8,58 @@
 import SwiftUI
 import PDFKit
 
+// MARK: - View
+/// # View - StickerView
+/// Tela de configuração para geração de adesivos em PDF.
+/// Permite selecionar a quantidade de adesivos e navegar para o preview do PDF.
 struct StickerView: View {
+    // MARK: - Variables
+    @Environment(Coordinator.self) private var coordinator
     
-    @StateObject private var viewModel = StickerViewModel()
+    // Quantidade de adesivos selecionada pelo usuário (1 a 20)
+    @State var quantity: Int = 1
+    var stickerVM: StickerViewModel
     
+    // MARK: - Body View
     var body: some View {
-        NavigationView {
-            VStack(spacing: 20) {
-                
-                Text("Gerador de Adesivos")
-                    .font(.title)
-                
-                Stepper(
-                    "Quantidade: \(viewModel.quantity)",
-                    value: $viewModel.quantity,
-                    in: 1...20
-                )
-                .padding()
-                
-                Button(action: {
-                    viewModel.generatePDF()
-                }) {
-                    Text("Gerar PDF")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-                                
-                if let document = viewModel.pdfDocument {
-                    PDFKitView(pdfDocument: document)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else {
-                    Spacer()
-                }
-                
-                if !viewModel.pdfData.isEmpty {
-                    ShareLink(
-                        item: CustomPDFDoc(data: viewModel.pdfData),
-                        preview: SharePreview("Adesivos.pdf", image: Image("sticker"))
-                    ) {
-                        Label("Exportar PDF", systemImage: "square.and.arrow.up")
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundStyle(.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 20))
-                    }
-                }
-            }
+        ReturnButton(action: {
+            coordinator.pop()
+        })
+        VStack(spacing: 20) {
+            Text("Gerador de Adesivos")
+                .font(.title)
+            
+            Stepper(
+                "Quantidade: \(quantity)",
+                value: $quantity,
+                in: 1...20
+            )
             .padding()
-            .navigationTitle("PDF")
+            
+            Button(action: {
+                // Gera o PDF e navega para a tela de preview
+                stickerVM.generatePDF(stickerQuantity: quantity)
+                coordinator.navigate(to: .stickerPreview)
+            }) {
+                Text("Gerar PDF")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            }
         }
+        .padding()
+        .navigationTitle("PDF")
+        .navigationBarBackButtonHidden(true)
     }
+}
+
+// MARK: - Preview
+// Se tentarem visualizar pelo preview, a visualização de pdf não vai funcionar.
+#Preview {
+    CoordinatedNavigationStack {
+        StickerView(stickerVM: StickerViewModel(pdfManager: PDFManager()))
+    }
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
 }

@@ -8,18 +8,26 @@
 import Foundation
 import AVFoundation
 
-// É um singleton, ou seja, só permite uma instância dele no projeto
-class SoundManager {
+// MARK: - Manager
+/// # Manager - SoundManager
+/// Gerencia a reprodução de sons de feedback utilizando `AVAudioPlayer`.
+/// Toca o som de detecção quando um objeto adesivado é encontrado.
+/// ## Usado em:
+/// - ``SettingsViewModel``
+final class SoundManager: SoundManaging {
+    // MARK: - Variables
+    /// Instância do player de áudio.
+    private var player: AVAudioPlayer?
     
-    // Essa é a instância, é static pois permite o uso sem precisar instanciar a classe antes, até por que ela também é uma instância.
-    static let manager = SoundManager()
-    var player: AVAudioPlayer?
+    // MARK: - Init
+    init() {}
     
-    // Init privado para proibir instanciação manual
-    private init() {}
-    
-    // Função de tocar som a partir de um url (.mp3 do audio)
-    func playSound() {
+    // MARK: - Functions
+    /// Reproduz o som de feedback "item-found" se o som estiver habilitado pelo usuário.
+    /// - Parameter isEnabled: Indica se o som está habilitado nas configurações.
+    func playSound(isEnabled: Bool) {
+        guard isEnabled else { return }
+        
         guard let url = Bundle.main.url(forResource: "item-found", withExtension: "mp3") else { return }
         
         do {
@@ -28,7 +36,12 @@ class SoundManager {
             player?.setVolume(10, fadeDuration: 3)
             player?.play()
         } catch {
-            print("Error iniciating AVAudioPlayer: \(error.localizedDescription)")
+            print("Error initiating AVAudioPlayer: \(error.localizedDescription)")
         }
+    }
+    
+    /// Restaura o manager para o estado padrão, liberando o player de áudio.
+    func reset() {
+        player = nil
     }
 }

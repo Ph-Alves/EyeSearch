@@ -1,86 +1,95 @@
 //
 //  CameraManager.swift
-//  [NOME APP]
+//  EyeSearch
 //
 //  Created by Manoel Pedro Prado Sa Teles on 13/04/26.
 //
 
 import AVFoundation
 import Foundation
-import CoreML
 
-@Observable
-class CameraManager: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
+// MARK: - Manager
+/// # Manager - CameraManager
+/// Gerencia a câmera traseira do dispositivo utilizando `AVFoundation`.
+/// Configura a sessão de captura, verifica autorização e delega os frames capturados.
+/// ## Usado em:
+/// - ``SearchObjectViewModel``
+final class CameraManager: NSObject, CameraManaging, AVCaptureVideoDataOutputSampleBufferDelegate {
     
-    //MARK: Variables
-    var isAuthorized = false
+    // MARK: - Variables
+    /// Indica se o usuário autorizou o acesso à câmera.
+    private(set) var isAuthorized = false
+    /// Sessão de captura de vídeo do AVFoundation.
     private(set) var session = AVCaptureSession()
+    /// Delegate que recebe os frames capturados.
+    weak var delegate: CameraManagerDelegate?
+    // Saída de vídeo que processa os frames da câmera.
     private let videoOutput = AVCaptureVideoDataOutput()
     
-    let model = try? StickerDetector1(configuration: .init())
-    var prediction: StickerDetector1Output?
-    
-    //MARK: Functions
+    // MARK: - Functions
+    /// Verifica e solicita permissão de acesso à câmera. Se autorizado, configura a sessão.
     @MainActor
     func checkAuthorization() async {
-        
         switch AVCaptureDevice.authorizationStatus(for: .video) {
-            
         case .authorized:
             isAuthorized = true
             setupSession()
-            
         case .notDetermined:
             isAuthorized = await AVCaptureDevice.requestAccess(for: .video)
             if isAuthorized {
                 setupSession()
             }
-            
         default:
             isAuthorized = false
         }
     }
     
+    /// Para a captura de vídeo em background.
+    func stop() {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            self?.session.stopRunning()
+        }
+    }
     
+    /// Callback do AVFoundation chamado a cada frame capturado. Delega o buffer ao ``CameraManagerDelegate``.
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        delegate?.cameraManager(self, didCapture: sampleBuffer)
+    }
+    
+    // MARK: - Helpers
     private func setupSession() {
-        
-        //Uses the main rear lens of the iPhone
+        // Usa a lente traseira principal do iPhone
         guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
         else { return }
         
+        // Cria o input a partir do dispositivo de câmera
         guard let input = try? AVCaptureDeviceInput(device: device)
         else { return }
         
+        // Cria fila dedicada para processar os frames sem bloquear a main thread
         let processingQueue = DispatchQueue(label: "videoProcessing")
         videoOutput.setSampleBufferDelegate(self, queue: processingQueue)
         
-        
+        // Configura a sessão: define qualidade e conecta input/output
         session.beginConfiguration()
         session.sessionPreset = .high
         
         if session.canAddInput(input) {
             session.addInput(input)
         }
-        
         if session.canAddOutput(videoOutput) {
             session.addOutput(videoOutput)
         }
         
         session.commitConfiguration()
         
+        // Inicia a captura em background para não travar a UI
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             self?.session.startRunning()
         }
     }
     
-    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
-        else { return }
-        
-        self.prediction = try? model?.prediction(image: pixelBuffer, iouThreshold: 0.25, confidenceThreshold: 0.25)
+    deinit {
+        session.stopRunning()
     }
-    
-    
-    
 }
-
