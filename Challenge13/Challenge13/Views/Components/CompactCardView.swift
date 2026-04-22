@@ -7,10 +7,16 @@
 
 import SwiftUI
 
-// Card compacto usado com o dinamic type do xSmall ao xxLarge
+// MARK: - Component
+/// # Component - CompactCardView
+/// Card de navegação com layout horizontal (ícone à esquerda, título à direita).
+/// Usado na `HomeView` quando o Dynamic Type é menor que `xxxLarge`.
 struct CompactCardView: View {
+    /// Título exibido no card.
     let title: String
+    /// Nome do SF Symbol exibido no card.
     let icon: String
+    /// Cor de fundo do card.
     let color: Color
 
     var body: some View {

@@ -7,8 +7,10 @@
 
 import SwiftUI
 
-// MARK: - ChatView
-
+// MARK: - View
+/// # View - ChatView
+/// Tela do chatbot de acessibilidade visual.
+/// Permite ao usuário conversar com o assistente inteligente sobre dúvidas de acessibilidade.
 struct ChatView: View {
 
     @Environment(Coordinator.self) private var coordinator
@@ -392,7 +394,7 @@ struct ErrorBannerView: View {
 // MARK: - Preview
 
 #Preview {
-    let coordinator = Coordinator()
+    let coordinator = Coordinator(dependencyContainer: DependencyContainer())
     CoordinatedNavigationStack {
         ChatView(coordinator: coordinator)
     }

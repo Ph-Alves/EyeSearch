@@ -9,54 +9,66 @@ import PDFKit
 import Combine
 import SwiftUI
 
-// Para permitir reatividade
+// MARK: - ViewModel
+/// # ViewModel - StickerViewModel
+/// ViewModel da tela de geração e preview de adesivos em PDF.
+/// Coordena o `PDFManager` para gerar, visualizar e exportar documentos PDF.
+/// ## Usado em:
+/// - ``StickerView``
+/// - ``PrintStickerView``
 @Observable
 class StickerViewModel {
-    
     // MARK: - Variables
-    
-    // Dados do pdf
+    /// Manager responsável pela geração do PDF.
+    private let pdfManager: PDFManaging
+    /// Dados binários do PDF gerado.
     private var pdfData: Data?
-    // Documento gerado
+    /// Documento PDF para exibição no preview.
     private var pdfDocument: PDFDocument?
-    // Preview do doc
+    /// View de preview do PDF.
     private var pdfView: PDFKitView?
     
     // MARK: - Init
-    init() {  }
+    /// Inicializa com o manager de PDF injetado.
+    /// - Parameter pdfManager: Manager que conforma com `PDFManaging`.
+    init(pdfManager: PDFManaging) {
+        self.pdfManager = pdfManager
+    }
     
     // MARK: - Functions
-    
-    // Função para gerar o pdf com a quantidade de adesivos
+    /// Gera o PDF com a quantidade especificada de adesivos.
+    /// - Parameter stickerQuantity: Número de adesivos a incluir no PDF.
     func generatePDF(stickerQuantity: Int) {
-        self.pdfData = PDFManager.generatePDF(quantity: stickerQuantity)
+        self.pdfData = pdfManager.generatePDF(quantity: stickerQuantity)
         defineDocument()
     }
     
-    // Função para pegar o doc personalizado
+    /// Retorna o documento PDF encapsulado para exportação via `ShareLink`.
+    /// - Returns: Instância de `CustomPDFDoc`, ou `nil` se o PDF não foi gerado.
     func getDoc() -> CustomPDFDoc? {
         guard let pdfData = self.pdfData else { return nil }
         return CustomPDFDoc(data: pdfData)
     }
     
-    // Função para pegar a view de como está o estado do documento
+    /// Retorna a view de preview do PDF gerado.
+    /// - Returns: Instância de `PDFKitView`, ou `nil` se o documento não existe.
     func getView() -> PDFKitView? {
         guard let document = self.pdfDocument else { return nil }
         self.pdfView = PDFKitView(pdfDocument: document)
         return pdfView
     }
     
-    // Helper para definir o documento da viewModel assim que o pdf for criado.
+    /// Converte os dados binários do PDF em um `PDFDocument` para exibição.
     private func defineDocument() {
         guard let pdfData = self.pdfData else { return }
         self.pdfDocument = PDFDocument(data: pdfData)
     }
 }
 
-// Estrutura de conversão da UIView de
+/// Wrapper SwiftUI para exibir um `PDFDocument` usando `PDFView` via `UIViewRepresentable`.
 struct PDFKitView: UIViewRepresentable {
-    
-    var pdfDocument: PDFDocument
+    /// Documento PDF a ser exibido.
+    let pdfDocument: PDFDocument
     
     func makeUIView(context: Context) -> PDFView {
         let pdfView = PDFView()
@@ -68,3 +80,4 @@ struct PDFKitView: UIViewRepresentable {
         pdfView.document = pdfDocument
     }
 }
+

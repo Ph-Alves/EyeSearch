@@ -19,10 +19,10 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EF69E8A32F87CFDD00FD9AE7"
-               BuildableName = "Challenge13UITests.xctest"
-               BlueprintName = "Challenge13UITests"
-               ReferencedContainer = "container:Challenge13.xcodeproj">
+               BlueprintIdentifier = "EF69E8992F87CFDD00FD9AE7"
+               BuildableName = "EyeSearchTests.xctest"
+               BlueprintName = "EyeSearchTests"
+               ReferencedContainer = "container:EyeSearch.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -37,16 +37,6 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EF69E88A2F87CFDB00FD9AE7"
-            BuildableName = "Challenge13.app"
-            BlueprintName = "Challenge13"
-            ReferencedContainer = "container:Challenge13.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -54,15 +44,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EF69E88A2F87CFDB00FD9AE7"
-            BuildableName = "Challenge13.app"
-            BlueprintName = "Challenge13"
-            ReferencedContainer = "container:Challenge13.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

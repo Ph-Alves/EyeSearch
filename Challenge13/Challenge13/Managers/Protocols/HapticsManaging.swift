@@ -7,9 +7,18 @@
 
 import UIKit
 
-//qualquer um que assinar esse protocolo, precisa implementar essas funções 
+// MARK: - Protocol
+/// # Protocol - HapticsManaging
+/// Interface para gerenciamento de feedback tátil (haptics) no app.
+/// ## Implementado por:
+/// - ``HapticsManager``
 protocol HapticsManaging {
-    func trigger()
-    func setEnabled()
+    /// Dispara uma vibração tátil se estiver habilitado.
+    /// - Parameter isEnabled: Indica se o haptic está habilitado pelo usuário.
+    func trigger(isEnabled: Bool)
+    /// Define o estado de habilitação dos haptics.
+    /// - Parameter enabled: `true` para habilitar, `false` para desabilitar.
+    func setEnabled(_ enabled: Bool)
+    /// Restaura os haptics para o estado padrão (habilitado).
     func reset()
 }

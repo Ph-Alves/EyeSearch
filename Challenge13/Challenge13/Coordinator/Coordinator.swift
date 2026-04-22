@@ -8,58 +8,91 @@
 import Foundation
 import SwiftUI
 
-// O enum define os pontos de navegação
+// MARK: - Enum
+/// # Enum - HomeDestination
+/// Define os destinos de navegação disponíveis a partir da tela principal.
+/// Cada case representa uma tela do app acessível via ``Coordinator``.
 enum HomeDestination: Hashable {
+    /// Tela de busca de objetos adesivados com câmera.
     case searchObject
-    case sticker
+    /// Tela de configuração para geração de adesivos (selecionar quantidade).
+    case stickerConfig
+    /// Tela de preview e exportação do PDF de adesivos.
+    case stickerPreview
+    /// Tela de dicas de acessibilidade.
     case hints
+    /// Tela de configurações do app (haptics, som).
     case settings
     case chat
 }
 
-// Coordinator observável, para manter a view reativa
+// MARK: - Coordinator
+/// # Coordinator
+/// Gerencia a navegação do app usando `NavigationPath`.
+/// Usa `Observable` para manter a view reativa às mudanças de navegação.
+/// ## Usado em:
+/// - ``Challenge13App``
+/// - Todas as views (via `@Environment`)
 @Observable
 class Coordinator {
-    // Caminho de navegação
+    // MARK: - Variables
+    /// Pilha de navegação do app.
     var path = NavigationPath()
+    /// Container de dependências com as ViewModels pré-configuradas.
+    var dependencyContainer: DependencyContainer
     
-    // Adiciona a pilha de navegação o enum do destination
+    // MARK: - Init
+    /// Inicializa o coordinator com o container de dependências.
+    /// - Parameter dependencyContainer: Container com as ViewModels injetadas.
+    init(dependencyContainer: DependencyContainer) {
+        self.dependencyContainer = dependencyContainer
+    }
+    
+    // MARK: - Functions
+    /// Navega para o destino especificado, adicionando-o à pilha de navegação.
+    /// - Parameter destination: O destino de navegação, usando o enum ``HomeDestination`` de base.
     func navigate(to destination: HomeDestination) {
         path.append(destination)
     }
     
-    // Retira do topo da pilha (view mais recente)
+    /// Retira a view do topo da pilha (volta uma tela).
     func pop() {
         guard !path.isEmpty else { return }
         path.removeLast()
     }
     
-    // Retira tudo da pilha, indo para a home
+    /// Remove todas as views da pilha, retornando à tela principal (home).
     func popToRoot() {
         path.removeLast(path.count)
     }
     
-    // Isso garante que vai sempre retornar uma estrutura que conforma com o protocolo View
-    // Sem isso o compilador reclama falando que são "tipos diferentes"
-    // some View é um tipo opaco que fala -> o que vai retornar aqui é qualquer estrutura que conforma com View§
+    /// Resolve o destino de navegação retornando a view correspondente.
+    /// - Parameter destination: O destino a ser resolvido.
+    /// - Returns: A view correspondente ao destino.
     @ViewBuilder
     func destination(for destination: HomeDestination) -> some View {
         switch destination {
-        case .searchObject : SearchObjectView()
-        case .sticker : StickerView()
+        case .searchObject : SearchObjectView(SearchObjectVM: dependencyContainer.searchViewModel)
+        case .stickerConfig : StickerView(stickerVM: dependencyContainer.stickerViewModel)
+        case .stickerPreview : PrintStickerView(stickerVM: dependencyContainer.stickerViewModel)
         case .hints : HintsView()
-        case .settings : SettingsView()
+        case .settings : SettingsView(settingsVM: dependencyContainer.settingsViewModel)
         case .chat : ChatView(coordinator: self)
         }
     }
 }
 
-// Isso é uma view genérica, ou seja possui um valor genérico que deve ser recebido,
-// onde o <Content: View> define que aceita qualquer View como conteúdo
-// o @ViewBuilder var content é o conteúdo de view que vai ser usado e que vai dentro do navigationStack
-// Usamos o mesmo método para montar modificadores de fonte personalizados
+// MARK: - CoordinatedNavigationStack
+/// # View - CoordinatedNavigationStack
+/// View genérica que encapsula um `NavigationStack` gerenciado pelo ``Coordinator``.
+/// Aceita qualquer conteúdo `View` e configura automaticamente os destinos de navegação.
+/// ## Usado em:
+/// - ``Challenge13App``
+/// - Previews de todas as views
 struct CoordinatedNavigationStack<Content: View>: View {
+    /// Coordinator injetado via Environment.
     @Environment(Coordinator.self) private var coordinator
+    /// Conteúdo da view raiz do NavigationStack.
     @ViewBuilder var content: Content
 
     var body: some View {

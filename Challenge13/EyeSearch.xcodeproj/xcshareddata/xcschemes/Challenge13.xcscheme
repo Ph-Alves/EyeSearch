@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EF69E88A2F87CFDB00FD9AE7"
-               BuildableName = "Challenge13.app"
-               BlueprintName = "Challenge13"
-               ReferencedContainer = "container:Challenge13.xcodeproj">
+               BuildableName = "EyeSearch.app"
+               BlueprintName = "EyeSearch"
+               ReferencedContainer = "container:EyeSearch.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -27,8 +27,13 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      shouldAutocreateTestPlan = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES">
+      <TestPlans>
+         <TestPlanReference
+            reference = "container:Challenge13.xctestplan"
+            default = "YES">
+         </TestPlanReference>
+      </TestPlans>
       <Testables>
          <TestableReference
             skipped = "NO"
@@ -36,9 +41,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EF69E8992F87CFDD00FD9AE7"
-               BuildableName = "Challenge13Tests.xctest"
-               BlueprintName = "Challenge13Tests"
-               ReferencedContainer = "container:Challenge13.xcodeproj">
+               BuildableName = "EyeSearchTests.xctest"
+               BlueprintName = "EyeSearchTests"
+               ReferencedContainer = "container:EyeSearch.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -47,9 +52,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EF69E8A32F87CFDD00FD9AE7"
-               BuildableName = "Challenge13UITests.xctest"
-               BlueprintName = "Challenge13UITests"
-               ReferencedContainer = "container:Challenge13.xcodeproj">
+               BuildableName = "EyeSearchUITests.xctest"
+               BlueprintName = "EyeSearchUITests"
+               ReferencedContainer = "container:EyeSearch.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -69,9 +74,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EF69E88A2F87CFDB00FD9AE7"
-            BuildableName = "Challenge13.app"
-            BlueprintName = "Challenge13"
-            ReferencedContainer = "container:Challenge13.xcodeproj">
+            BuildableName = "EyeSearch.app"
+            BlueprintName = "EyeSearch"
+            ReferencedContainer = "container:EyeSearch.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -86,9 +91,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EF69E88A2F87CFDB00FD9AE7"
-            BuildableName = "Challenge13.app"
-            BlueprintName = "Challenge13"
-            ReferencedContainer = "container:Challenge13.xcodeproj">
+            BuildableName = "EyeSearch.app"
+            BlueprintName = "EyeSearch"
+            ReferencedContainer = "container:EyeSearch.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

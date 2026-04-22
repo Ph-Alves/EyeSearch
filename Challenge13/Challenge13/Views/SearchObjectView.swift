@@ -8,11 +8,15 @@
 import SwiftUI
 import AVFoundation
 
+// MARK: - View
+/// # View - SearchObjectView
+/// Tela de busca de objetos adesivados utilizando a câmera do dispositivo.
+/// Exibe o preview da câmera e solicita permissão de acesso ao iniciar.
 struct SearchObjectView: View {
     // MARK: - Variables
     @Environment(Coordinator.self) private var coordinator
     
-    @State private var objectDetection = SearchObjectViewModel()
+    var SearchObjectVM: SearchObjectViewModel
     
     // MARK: - Body View
     var body: some View {
@@ -20,12 +24,14 @@ struct SearchObjectView: View {
             ReturnButton(action: {
                 coordinator.pop()
             })
-            objectDetection.getCameraPreview()
+            // Preview ao vivo da câmera
+            SearchObjectVM.getCameraPreview()
                 .ignoresSafeArea()
         }
         .padding()
         .task {
-            await objectDetection.getPermission()
+            // Solicita permissão de câmera ao aparecer
+            await SearchObjectVM.getPermission()
         }
         .navigationBarBackButtonHidden(true)
     }
@@ -34,7 +40,7 @@ struct SearchObjectView: View {
 // MARK: - Preview
 #Preview{
     CoordinatedNavigationStack {
-        SearchObjectView()
+        SearchObjectView(SearchObjectVM: SearchObjectViewModel())
     }
-    .environment(Coordinator())
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
 }

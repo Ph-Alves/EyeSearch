@@ -8,13 +8,17 @@
 import SwiftUI
 import PDFKit
 
+// MARK: - View
+/// # View - StickerView
+/// Tela de configuração para geração de adesivos em PDF.
+/// Permite selecionar a quantidade de adesivos e navegar para o preview do PDF.
 struct StickerView: View {
     // MARK: - Variables
     @Environment(Coordinator.self) private var coordinator
     
+    // Quantidade de adesivos selecionada pelo usuário (1 a 20)
     @State var quantity: Int = 1
-    
-    private var viewModel = StickerViewModel()
+    var stickerVM: StickerViewModel
     
     // MARK: - Body View
     var body: some View {
@@ -33,7 +37,9 @@ struct StickerView: View {
             .padding()
             
             Button(action: {
-                viewModel.generatePDF(stickerQuantity: quantity)
+                // Gera o PDF e navega para a tela de preview
+                stickerVM.generatePDF(stickerQuantity: quantity)
+                coordinator.navigate(to: .stickerPreview)
             }) {
                 Text("Gerar PDF")
                     .frame(maxWidth: .infinity)
@@ -41,23 +47,6 @@ struct StickerView: View {
                     .background(Color.blue)
                     .foregroundColor(.white)
                     .cornerRadius(10)
-            }
-                            
-            
-            viewModel.getView()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
-            if let document = viewModel.getDoc() {
-                ShareLink(
-                    item: document,
-                    preview: SharePreview("Adesivos.pdf", image: Image("sticker"))
-                ) {
-                    Label("Exportar PDF", systemImage: "square.and.arrow.up")
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundStyle(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                }
             }
         }
         .padding()
@@ -67,9 +56,10 @@ struct StickerView: View {
 }
 
 // MARK: - Preview
+// Se tentarem visualizar pelo preview, a visualização de pdf não vai funcionar.
 #Preview {
     CoordinatedNavigationStack {
-        StickerView()
+        StickerView(stickerVM: StickerViewModel(pdfManager: PDFManager()))
     }
-    .environment(Coordinator())
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
 }

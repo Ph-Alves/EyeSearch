@@ -5,44 +5,39 @@
 //  Created by Raquel Souza on 15/04/26.
 //
 
-//Para ser usado na sua ViewModel, você precisa injetar HapticsManaging na ViewModel via init e utilize trigger() para executar o haptic.
-//Exemplo:
-/*
- private let haptics: HapticsManaging
- 
- init(haptics:  HapticsManaging) {
-     self.haptics = haptics
- }
- 
- */
-
 import UIKit
 
-//criando a classe e assinando o protocolo
-class HapticsManager: HapticsManaging {
-    
-    //var interna que controla o estado de ON/OFF
+// MARK: - Manager
+/// # Manager - HapticsManager
+/// Gerencia o feedback tátil (haptics) do app utilizando `UIImpactFeedbackGenerator`.
+/// Permite disparar vibrações, habilitar/desabilitar e restaurar configurações padrão.
+/// ## Usado em:
+/// - ``SettingsViewModel``
+final class HapticsManager: HapticsManaging {
+    // MARK: - Variables
+    // Estado atual de habilitação dos haptics.
     private var isEnabled: Bool = true
+
+    // MARK: - Init
+    init() { }
     
-    //função que executa o haptic
-    func trigger() {
-        //Se estiver desativado, saia da função
+    // MARK: - Functions
+    /// Dispara uma vibração tátil com intensidade média.
+    /// - Parameter isEnabled: Indica se o haptic está habilitado pelo usuário.
+    func trigger(isEnabled: Bool) {
         guard isEnabled else { return }
-        
-        //Cria o gerador de haptic com o estilo no medium
         let generator = UIImpactFeedbackGenerator(style: .medium)
-        //Dispara a vibração
         generator.impactOccurred()
     }
     
-    //função para ligar ou desligar,
-    func setEnabled() {
-        //Atualiza o estado interno
-        self.isEnabled.toggle()
+    /// Define o estado de habilitação dos haptics.
+    /// - Parameter enabled: `true` para habilitar, `false` para desabilitar.
+    func setEnabled(_ enabled: Bool) {
+        self.isEnabled = enabled
     }
     
-    // Função de reset para as configs normais
+    /// Restaura os haptics para o estado padrão (habilitado).
     func reset() {
-        self.isEnabled = true
+        isEnabled = true
     }
 }

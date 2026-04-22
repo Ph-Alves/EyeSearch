@@ -10,20 +10,32 @@ import UIKit
 import SwiftUI
 import UniformTypeIdentifiers
 
- struct PDFManager {
-     static func generatePDF(quantity: Int) -> Data {
-        //MARK: Configuração do adesivo
+// MARK: - Manager
+/// # Manager - PDFManager
+/// Gerencia a geração de documentos PDF contendo adesivos para recorte.
+/// Distribui os adesivos em folhas A4 com espaçamento uniforme e paginação automática.
+/// ## Usado em:
+/// - ``StickerViewModel``
+final class PDFManager: PDFManaging {
+    // MARK: - Init
+    init() { }
+    
+    // MARK: - Functions
+    /// Gera um PDF com a quantidade especificada de adesivos distribuídos em folha A4.
+    /// - Parameter quantity: Número de adesivos a incluir no PDF.
+    /// - Returns: Os dados binários do PDF, ou `nil` se a imagem do adesivo não for encontrada no bundle.
+    func generatePDF(quantity: Int) -> Data? {
         
+        //Configuração do adesivo
         //imagem do STICKER que será utilizada em todas as impressões, caso o sistema não carregue a imagem, return data.
         guard let sticker = UIImage(named: "sticker") else {
-            return Data()
+            return nil
         }
         //Tamanho do Sticker e espaçamento entre eles
         let stickerSize = CGSize(width: 200, height: 200)
         let spacing: CGFloat = 20
         
-        //MARK: Configuração do tamanho da folha do PDF
-        
+        //Configuração do tamanho da folha do PDF
         // Tamanho da folha A4
         let pageWidth: CGFloat = 595.2
         let pageHeight: CGFloat = 841.8
@@ -31,7 +43,7 @@ import UniformTypeIdentifiers
         //renderizando a página do PDF.
         let pdfRenderer = UIGraphicsPDFRenderer(bounds: CGRect(x: 0, y: 0, width: pageWidth, height: pageHeight)) // A4
         
-        //MARK: Criação do conteúdo do PDF
+        //Criação do conteúdo do PDF
         let data = pdfRenderer.pdfData { context in
             
             //criação da página no PDF
@@ -52,7 +64,7 @@ import UniformTypeIdentifiers
                 x += stickerSize.width + spacing
                 
                 // quebra de linha
-                if x + stickerSize.width > 595 {
+                if x + stickerSize.width > pageWidth {
                     //o X volta ao seu valor inicial
                     x = margin
                     //atualizando o Y para iniciar uma nova linha
@@ -60,7 +72,7 @@ import UniformTypeIdentifiers
                 }
                 
                 // nova página, x e y voltam ao seu valor inicial
-                if y + stickerSize.height > 842 {
+                if y + stickerSize.height > pageHeight {
                     context.beginPage()
                     x = margin
                     y = margin
@@ -72,9 +84,11 @@ import UniformTypeIdentifiers
 }
 
 // MARK: - CUSTOM PDF
-// Struct para permitir exportar o doc pronto
-
+/// # Model - CustomPDFDoc
+/// Estrutura que encapsula os dados de um PDF gerado, permitindo exportação via `ShareLink`.
+/// Conforma com `Transferable` para integração com o sistema de compartilhamento do iOS.
 struct CustomPDFDoc: Transferable {
+    /// Dados binários do PDF gerado.
     let data: Data
     
     static var transferRepresentation: some TransferRepresentation {
