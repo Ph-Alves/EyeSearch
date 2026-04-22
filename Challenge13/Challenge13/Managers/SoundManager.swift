@@ -17,7 +17,7 @@ import AVFoundation
 final class SoundManager: SoundManaging {
     // MARK: - Variables
     /// Instância do player de áudio.
-    private(set)var player: AVAudioPlayer?
+    private(set) var player: AVAudioPlayer?
     
     // MARK: - Init
     init() {}
