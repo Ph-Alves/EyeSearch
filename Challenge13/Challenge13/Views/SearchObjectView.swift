@@ -17,16 +17,41 @@ struct SearchObjectView: View {
     @Environment(Coordinator.self) private var coordinator
     
     var SearchObjectVM: SearchObjectViewModel
+    @State var flashLight: Bool = true
     
     // MARK: - Body View
     var body: some View {
         VStack {
-            ReturnButton(action: {
-                coordinator.pop()
-            })
-            // Preview ao vivo da câmera
-            SearchObjectVM.getCameraPreview()
-                .ignoresSafeArea()
+            HStack {
+                ReturnButton(action: {
+                    coordinator.pop()
+                })
+                Spacer()
+                Button() {
+                    flashLight.toggle()
+                    SearchObjectVM.setFlashlight(on: flashLight)
+                } label: {
+                    Image(systemName: flashLight ? "flashlight.on.fill" : "flashlight.slash")
+                }
+            }
+            .padding()
+            
+            ZStack {
+                // Preview ao vivo da câmera
+                SearchObjectVM.getCameraPreview()
+                
+                GeometryReader { geo in
+                    ForEach(SearchObjectVM.stickerOverlays) { overlay in
+                        let rect = SearchObjectVM.convertBoundingBox(overlay.boundingBox, in: geo.size)
+                        Rectangle()
+                            .stroke(Color.green, lineWidth: 2)
+                            .frame(width: rect.width, height: rect.height)
+                            .position(x: rect.midX, y: rect.midY)
+                    }
+                }
+                .zIndex(2)
+            }
+            Text("\(SearchObjectVM.stickerCount) adesivos encontrados")
         }
         .padding()
         .task {
@@ -34,6 +59,7 @@ struct SearchObjectView: View {
             await SearchObjectVM.getPermission()
         }
         .navigationBarBackButtonHidden(true)
+        .background(Color.primary)
     }
 }
 

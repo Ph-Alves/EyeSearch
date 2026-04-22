@@ -22,11 +22,22 @@ class SearchObjectViewModel: CameraManagerDelegate {
     // MARK: - Variables
     /// Lista de detecções combinadas (adesivo + objeto) do frame atual.
     private(set) var detections: [CombinedDetection] = []
+    /// Lista de retângulos de adesivos encontrados, filtrados somente em confiança a 50%
+    var stickerOverlays: [StickerOverlay] {
+        detections
+            .filter({ $0.sticker.confidence > 0.6 })
+            .map { StickerOverlay(boundingBox: $0.sticker.boundingBox, confidence: $0.sticker.confidence) }
+    }
+    /// Quantidade de adesivos encontrados
+    var stickerCount: Int {
+        stickerOverlays.count
+    }
     /// Indica se os modelos de ML foram carregados com sucesso.
     var isModelLoaded: Bool { mlManager.isLoaded }
     /// Mensagem de erro do carregamento dos modelos, se houver.
     var modelError: String? { mlManager.error }
-
+    /// Referência ao preview layer para conversão de coordenadas
+    private var previewLayer: AVCaptureVideoPreviewLayer?
     /// Manager da câmera.
     private var camera = CameraManager()
     /// Manager dos modelos de ML.
@@ -49,6 +60,29 @@ class SearchObjectViewModel: CameraManagerDelegate {
     /// - Returns: Uma `CameraPreview` conectada à sessão de captura.
     func getCameraPreview() -> some View {
         CameraPreview(session: camera.session)
+    }
+        
+    /// Altera a lanterna conforme o recebido pela view
+    /// - Parameter on: Valor booleano para definir se a lanterna deve desligar ou ligar
+    func setFlashlight(on: Bool) {
+        camera.setTorch(on: on)
+    }
+    
+    /// Função para definir o previewLayer da viewModel
+    /// - Parameter layer: Recebe um AVCaptureViewPreviewLayer para permitir a conversão de coordenadas corretas
+    func setPreviewLayer(_ layer: AVCaptureVideoPreviewLayer) {
+        self.previewLayer = layer
+    }
+    
+    /// Converte boundingBox para coordenadas swiftUI
+    /// - Returns: Um CGRect normalizado para uma view SwiftUI
+    func convertBoundingBox(_ box: CGRect, in viewSize: CGSize) -> CGRect {
+        CGRect (
+            x: box.origin.x * viewSize.width,
+            y: (1 - box.origin.y - box.height) * viewSize.height,
+            width: box.width * viewSize.width,
+            height: box.height * viewSize.height
+        )
     }
 
     /// Para a captura de vídeo e desconecta o delegate.
@@ -103,6 +137,8 @@ class PreviewView: UIView {
 struct CameraPreview: UIViewRepresentable {
     /// Sessão de captura de vídeo a ser exibida.
     let session: AVCaptureSession
+    /// Referência ao preview layer para conversão de coordenadas corretas
+    var onLayerReady: ((AVCaptureVideoPreviewLayer) -> Void)?
     
     init(session: AVCaptureSession) {
         self.session = session
@@ -115,5 +151,9 @@ struct CameraPreview: UIViewRepresentable {
         return view
     }
     
-    func updateUIView(_ uiView: PreviewView, context: Context) {}
+    func updateUIView(_ uiView: PreviewView, context: Context) {
+        DispatchQueue.main.async {
+            onLayerReady?(uiView.previewLayer)
+        }
+    }
 }
