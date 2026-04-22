@@ -6,20 +6,26 @@
 //
 
 import Foundation
-import Combine
 
-@MainActor
-final class ChatViewModel: ObservableObject {
+@Observable
+final class ChatViewModel {
 
-    @Published var displayedMessages: [ChatMessage] = []
-    @Published var inputText: String = ""
-    @Published var isLoading: Bool = false
-    @Published var errorBanner: String? = nil
-    @Published var showClearConfirmation: Bool = false
+    var inputText: String = ""
+    var errorBanner: String? = nil
+    var showClearConfirmation: Bool = false
 
     private let manager: FoundationsManager
     private let coordinator: Coordinator
-    private var cancellables = Set<AnyCancellable>()
+
+    /// Mensagens vindas diretamente do manager (fonte única de verdade).
+    var displayedMessages: [ChatMessage] {
+        manager.messages
+    }
+
+    /// Estado de loading vindo diretamente do manager.
+    var isLoading: Bool {
+        manager.isLoading
+    }
 
     /// Indica se o botão de envio deve estar habilitado.
     var canSend: Bool {
@@ -31,46 +37,9 @@ final class ChatViewModel: ObservableObject {
         isLoading ? "Assistente está digitando, aguarde." : ""
     }
 
-    /// Init padrão: cria o manager internamente.
-    /// Usado pelo @StateObject na ChatView.
-    init(coordinator: Coordinator) {
-        self.manager = FoundationsManager()
-        self.coordinator = coordinator
-        bindManager()
-    }
-
-    /// Init com injeção de dependência
     init(manager: FoundationsManager, coordinator: Coordinator) {
         self.manager = manager
         self.coordinator = coordinator
-        bindManager()
-    }
-
-    // MARK: - Binding com o Manager
-
-    /// Observa as propriedades publicadas do manager e repassa para a View.
-    private func bindManager() {
-        manager.$messages
-            .receive(on: RunLoop.main)
-            .assign(to: &$displayedMessages)
-
-        manager.$isLoading
-            .receive(on: RunLoop.main)
-            .assign(to: &$isLoading)
-
-        manager.$errorMessage
-            .receive(on: RunLoop.main)
-            .sink { [weak self] error in
-                self?.errorBanner = error
-                // Auto-dismiss após 6 segundos
-                if error != nil {
-                    Task { @MainActor in
-                        try? await Task.sleep(for: .seconds(6))
-                        self?.errorBanner = nil
-                    }
-                }
-            }
-            .store(in: &cancellables)
     }
 
     // MARK: - Intenções da View
@@ -82,6 +51,12 @@ final class ChatViewModel: ObservableObject {
         inputText = ""
         Task {
             await manager.sendMessage(text)
+            // Auto-dismiss do erro após 6 segundos
+            if let error = manager.errorMessage {
+                errorBanner = error
+                try? await Task.sleep(for: .seconds(6))
+                errorBanner = nil
+            }
         }
     }
 

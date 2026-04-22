@@ -36,10 +36,11 @@ struct ChatMessage: Identifiable {
         case system
     }
 
-    init(role: MessageRole, text: String, isFiltered: Bool = false) {
+    init(role: MessageRole, text: String, timestamp: Date, isFiltered: Bool = false) {
         self.id = UUID()
         self.role = role
         self.text = text
+        self.timestamp = timestamp
         self.isFiltered = isFiltered
     }
 }

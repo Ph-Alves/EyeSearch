@@ -14,14 +14,11 @@ import SwiftUI
 struct ChatView: View {
 
     @Environment(Coordinator.self) private var coordinator
-    @StateObject private var viewModel: ChatViewModel
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @AccessibilityFocusState private var focusOnLastMessage: Bool
-
-    init(coordinator: Coordinator) {
-        _viewModel = StateObject(wrappedValue: ChatViewModel(coordinator: coordinator))
-    }
+    
+    @State var viewModel: ChatViewModel
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -210,7 +207,9 @@ struct ChatView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarTrailing) {
-            Button(action: viewModel.navigateToSettings) {
+            Button(action: {
+                coordinator.navigate(to: .settings)
+            }) {
                 Image(systemName: "gearshape")
                     .accessibilityLabel("Configurações")
             }
@@ -394,9 +393,10 @@ struct ErrorBannerView: View {
 // MARK: - Preview
 
 #Preview {
-    let coordinator = Coordinator(dependencyContainer: DependencyContainer())
+    let container = DependencyContainer()
+    let coordinator = Coordinator(dependencyContainer: container)
     CoordinatedNavigationStack {
-        ChatView(coordinator: coordinator)
+        ChatView(viewModel: ChatViewModel(manager: container.foundationsManager, coordinator: coordinator))
     }
     .environment(coordinator)
 }

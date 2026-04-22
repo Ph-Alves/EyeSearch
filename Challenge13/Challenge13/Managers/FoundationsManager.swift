@@ -14,6 +14,7 @@ import FoundationModels
 /// Filtra mensagens fora do escopo e mantém o histórico da conversa.
 /// ## Usado em:
 /// - ``ChatView`` (via ViewModel)
+@Observable
 final class FoundationsManager: FoundationsManaging {
     // MARK: - Errors
     private enum ChatbotError: LocalizedError {
@@ -38,13 +39,13 @@ final class FoundationsManager: FoundationsManaging {
     
     // MARK: - Variables
     // Histórico de mensagens da conversa.
-    private var messages: [ChatMessage] = []
+    private(set) var messages: [ChatMessage] = []
     // Indica se uma resposta está sendo processada.
-    private var isLoading: Bool = false
+    private(set) var isLoading: Bool = false
     // Mensagem de erro atual, se houver.
-    private var errorMessage: String? = nil
+    private(set) var errorMessage: String? = nil
     // Sessão do modelo de linguagem Apple Intelligence.
-    private var session: LanguageModelSession?
+    private(set) var session: LanguageModelSession?
     
     // MARK: - System Prompt
     
@@ -69,26 +70,7 @@ final class FoundationsManager: FoundationsManaging {
     
     /// Palavras relacionadas ao domínio do app.
     /// Usadas apenas como filtro secundário de segurança.
-    private let inScopeKeywords: [String] = [
-        //        // Baixa visão e condições
-        //        "visão", "visual", "olho", "olhos", "oftalmol", "catarata", "glaucoma",
-        //        "retina", "retinopatia", "macular", "miopia", "hipermetropia", "astigmatismo",
-        //        "cegueira", "deficiência visual", "baixa visão", "daltonismo", "nistagmo",
-        //
-        //        // Acessibilidade iOS
-        //        "voiceover", "zoom", "lupa", "contraste", "acessibilidade", "fonte",
-        //        "tamanho de texto", "brilho", "leitor de tela", "talkback", "siri",
-        //        "aumentar", "ampliar", "magnificar", "cursor", "foco", "descrição por voz",
-        //        "leitura", "alto contraste", "modo escuro",
-        //
-        //        // App
-        //        "app", "aplicativo", "visionassist", "funcionalidade", "recurso",
-        //        "configuração", "tela", "botão", "navegar", "menu",
-        //
-        //        // Ajuda e orientação
-        //        "como usar", "como ativar", "ajuda", "suporte", "dica", "passo",
-        //        "tutorial", "guia", "orientação", "recurso", "serviço"
-    ]
+    private let inScopeKeywords: [String] = []
     
     /// Palavras que sinalizam claramente que a pergunta está fora do escopo.
     private let outOfScopeKeywords: [String] = [
@@ -115,7 +97,7 @@ final class FoundationsManager: FoundationsManaging {
         guard !trimmed.isEmpty else { return }
         
         // Adiciona mensagem do usuário
-        let userMessage = ChatMessage(role: .user, text: trimmed)
+        let userMessage = ChatMessage(role: .user, text: trimmed, timestamp: Date())
         messages.append(userMessage)
         isLoading = true
         errorMessage = nil
@@ -123,21 +105,21 @@ final class FoundationsManager: FoundationsManaging {
         // Etapa 1: filtro local rápido antes de chamar o modelo
         do {
             if let localDenial = localScopeCheck(for: trimmed) {
-                let filtered = ChatMessage(role: .assistant, text: localDenial, isFiltered: true)
+                let filtered = ChatMessage(role: .assistant, text: localDenial, timestamp: Date(), isFiltered: true)
                 messages.append(filtered)
                 isLoading = false
                 return
             }
             
-            // Etapa 2: chama o modelo Foundation
+            // Etapa 2: chama o modelo Foundation com o texto do usuário
             guard let session else { throw ChatbotError.modelUnavailable }
-            let response = try await session.respond(to: "Me envie uma mensagem de oi")
+            let response = try await session.respond(to: trimmed)
             
             // Etapa 3: verifica se o modelo sinalizou fora do escopo
             let rawText = response.content.trimmingCharacters(in: .whitespacesAndNewlines)
             let finalText = try processModelResponse(rawText)
             
-            let assistantMessage = ChatMessage(role: .assistant, text: finalText)
+            let assistantMessage = ChatMessage(role: .assistant, text: finalText, timestamp: Date())
             messages.append(assistantMessage)
             
         } catch let error as ChatbotError {
@@ -145,6 +127,7 @@ final class FoundationsManager: FoundationsManaging {
             let errorMsg = ChatMessage(
                 role: .assistant,
                 text: error.errorDescription ?? "Erro desconhecido.",
+                timestamp: Date(),
                 isFiltered: true
             )
             messages.append(errorMsg)
@@ -180,9 +163,6 @@ final class FoundationsManager: FoundationsManaging {
     
     /// Filtro local (Etapa 1): verifica palavras-chave antes de chamar o modelo.
     /// Retorna uma mensagem de negação se fora do escopo, ou nil se parecer válido.
-    // Se a mensagem for muito curta (saudação, etc.) -> deixa passar
-    // Verifica localmente se a mensagem do usuário está dentro do escopo do chatbot.
-    // Retorna uma mensagem de negação se estiver fora, ou nil se estiver dentro do escopo.
     private func localScopeCheck(for input: String) -> String? {
         let lower = input.lowercased()
         
@@ -199,7 +179,6 @@ final class FoundationsManager: FoundationsManaging {
         }
         
         // Se não contém nenhuma palavra do escopo em mensagens mais longas -> deixa o modelo decidir
-        // Para mensagens maiores, verifica se contém pelo menos uma palavra do escopo
         let hasInScopeWord = inScopeKeywords.contains { lower.contains($0) }
         if !hasInScopeWord {
             return nil
@@ -210,7 +189,6 @@ final class FoundationsManager: FoundationsManaging {
     
     /// Processa a resposta do modelo (Etapa 3).
     /// Verifica o marcador FORA_DO_ESCOPO e sanitiza o conteúdo.
-    /// Processa e limpa a resposta bruta do modelo, verificando se ele se recusou a responder.
     private func processModelResponse(_ raw: String) throws -> String {
         guard !raw.isEmpty else { throw ChatbotError.emptyResponse }
         
