@@ -64,10 +64,10 @@ final class SoundManagerTests: XCTestCase {
         // Arrange — chama playSound primeiro para garantir que player não é nil antes do reset
         sut.playSound(isEnabled: true)
 
-        // Act & Assert
-        XCTAssertNoThrow(
-            sut.reset(),
-            "reset() não deve crashar."
-        )
+        // Act
+        sut.reset()
+          
+        // Assert
+        XCTAssertNil(sut.player)
     }
 }
