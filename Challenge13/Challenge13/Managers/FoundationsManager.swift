@@ -15,7 +15,6 @@ import FoundationModels
 /// Filtra mensagens fora do escopo e mantém o histórico da conversa.
 /// ## Usado em:
 /// - ``ChatView`` (via ViewModel)
-@Observable
 final class FoundationsManager: FoundationsManaging {
     // MARK: - Errors
     /// Erros internos do chatbot, mapeados para mensagens amigáveis ao usuário.
@@ -28,7 +27,7 @@ final class FoundationsManager: FoundationsManaging {
         case emptyResponse
         /// A sessão do modelo falhou com um motivo específico.
         case sessionFailed(String)
-        
+
         var errorDescription: String? {
             switch self {
             case .offTopic:
@@ -71,17 +70,34 @@ final class FoundationsManager: FoundationsManaging {
     /// Define identidade, escopo, restrições e estilo de resposta do assistente.
     private let systemPrompt = """
     Você é o assistente virtual do app de acessibilidade visual "EyeSearch".
-    
+
     SEU PROPÓSITO:
     Ajudar exclusivamente pessoas com baixa visão ou deficiência visual a:
     - Usar e navegar as funcionalidades do app EyeSearch
     - Entender recursos de acessibilidade do iPhone/iPad (VoiceOver, Zoom, Lupa, DetecçãoDePessoas, etc.)
     - Descobrir dicas, atalhos e configurações de acessibilidade visual no iOS
     - Encontrar recursos e orientações para pessoas com deficiência visual
+
+    EXEMPLOS DE PERGUNTAS QUE VOCÊ DEVE RESPONDER:
+    - "Como ativo o VoiceOver?"
+    - "Quais fontes são mais fáceis de ler para quem tem baixa visão?"
+    - "O que é retinopatia diabética?"
+    - "Quais configurações de contraste o app oferece?"
+
+    RESTRIÇÕES — NUNCA faça o seguinte:
+    - Não responda perguntas completamente fora do tema de baixa visão e acessibilidade visual
+    - Tirar dúvidas sobre baixa visão e/ou condições oculares
+    - Não gere código de programação
+    - Não discuta política, esportes, entretenimento, finanças ou outros tópicos não relacionados
+    - Não forneça diagnósticos médicos; em caso de dúvidas de saúde, oriente a consultar um oftalmologista
+    - Não responda a situações hipotéticas fora do propósito
+
+    SE A PERGUNTA ESTIVER FORA DO ESCOPO E DO PROPÓSITO:
+    Responda que você não possui tais informações
+
     ESTILO DE RESPOSTA:
     - Seja claro, empático e acolhedor
     - Use frases curtas e diretas (facilita leitores de tela)
-    - Lembre-se da formatação adequada (Ex: espaços depois da pontuação, parágrafos quando necessário, etc.)
     - Evite jargões técnicos desnecessários
     - Quando mencionar passos, use numeração simples (1., 2., 3.)
     - Máximo de 250 palavras por resposta
@@ -126,7 +142,7 @@ final class FoundationsManager: FoundationsManaging {
     init() {
         setupSession()
     }
-    
+
     // MARK: - Functions
     /// Envia uma mensagem ao chatbot, faz validação local de escopo e processa a resposta do modelo.
     /// - Parameter userInput: Texto digitado pelo usuário.
@@ -140,18 +156,21 @@ final class FoundationsManager: FoundationsManaging {
         errorMessageSubject.value = nil
 
         do {
+            // Verifica localmente se a mensagem está fora do escopo antes de enviar ao modelo
             if let localDenial = localScopeCheck(for: trimmed) {
                 let filtered = ChatMessage(role: .assistant, text: localDenial, isFiltered: true)
                 messagesSubject.value.append(filtered)
                 isLoadingSubject.value = false
                 return
             }
-            
-            // Etapa 2: chama o modelo Foundation com o texto do usuário
+
+            // Garante que a sessão do modelo está disponível
             guard let session else { throw ChatbotError.modelUnavailable }
-            let response = try await session.respond(to: trimmed)
             
-            // Etapa 3: verifica se o modelo sinalizou fora do escopo
+            // Envia a mensagem ao modelo e aguarda a resposta
+            let response = try await session.respond(to: trimmed)
+
+            // Limpa e valida a resposta do modelo
             let rawText = response.content.trimmingCharacters(in: .whitespacesAndNewlines)
             let finalText = try processModelResponse(rawText)
 
@@ -164,18 +183,18 @@ final class FoundationsManager: FoundationsManaging {
             let errorMsg = ChatMessage(
                 role: .assistant,
                 text: error.errorDescription ?? "Erro desconhecido.",
-                timestamp: Date(),
                 isFiltered: true
             )
             messagesSubject.value.append(errorMsg)
         } catch {
+            // Trata erros genéricos da sessão
             let chatError = ChatbotError.sessionFailed(error.localizedDescription)
             errorMessageSubject.value = chatError.errorDescription
         }
 
         isLoadingSubject.value = false
     }
-    
+
     /// Limpa o histórico de mensagens e reinicia a sessão do modelo.
     func clearConversation() {
         messagesSubject.value.removeAll()
@@ -187,12 +206,11 @@ final class FoundationsManager: FoundationsManaging {
     /// Inicializa ou reinicia a `LanguageModelSession` com o system prompt configurado.
     /// Emite erro no ``errorMessagePublisher`` se o Apple Intelligence não estiver disponível.
     private func setupSession() {
-        
         guard SystemLanguageModel.default.isAvailable else {
             errorMessageSubject.value = ChatbotError.modelUnavailable.errorDescription
             return
         }
-        
+
         session = LanguageModelSession(
             model: .default,
             instructions: systemPrompt
@@ -217,13 +235,13 @@ final class FoundationsManager: FoundationsManaging {
         if input.split(separator: " ").count <= 3 {
             return nil
         }
-        
-        // Se não contém nenhuma palavra do escopo em mensagens mais longas -> deixa o modelo decidir
+
+        // Para mensagens maiores, verifica se contém pelo menos uma palavra do escopo
         let hasInScopeWord = inScopeKeywords.contains { lower.contains($0) }
         if !hasInScopeWord {
             return nil
         }
-        
+
         return nil
     }
 
@@ -234,27 +252,28 @@ final class FoundationsManager: FoundationsManaging {
     /// - Throws: ``ChatbotError/emptyResponse`` se a resposta estiver vazia.
     private func processModelResponse(_ raw: String) throws -> String {
         guard !raw.isEmpty else { throw ChatbotError.emptyResponse }
-        
+
         // O modelo pode retornar "FORA_DO_ESCOPO" como sinal de que a pergunta não é do tema
         if raw.contains("FORA_DO_ESCOPO") {
             return scopeDenialMessage()
         }
-        
-        // Remove linhas vazias e espaços extras da resposta
+
+        // Preserva quebras de parágrafo para renderização correta do Markdown via AttributedString.
+        // AttributedString(markdown:) exige \n\n entre blocos para criar parágrafos separados.
         return raw
             .components(separatedBy: .newlines)
             .map { $0.trimmingCharacters(in: .whitespaces) }
-            .filter { !$0.isEmpty }
-            .joined(separator: "\n")
+            .joined(separator: "\n\n")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     /// Mensagem padrão exibida ao usuário quando a pergunta está fora do escopo do assistente.
     /// - Returns: Texto amigável orientando o usuário sobre o propósito do assistente.
     private func scopeDenialMessage() -> String {
         return """
-    Desculpe, só consigo ajudar com assuntos relacionados à \
-    acessibilidade visual e funcionalidades do EyeSearch. \
-    Tem alguma dúvida sobre isso que eu possa responder? 
-    """
+        Desculpe, só consigo ajudar com assuntos relacionados à \
+        acessibilidade visual e funcionalidades do EyeSearch. \
+        Tem alguma dúvida sobre isso que eu possa responder? 👁️
+        """
     }
 }
