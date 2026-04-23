@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		EFAB54EA2F96C95A00A009CE /* EyeSearchDoc.docc in Sources */ = {isa = PBXBuildFile; fileRef = EFAB54E92F96C95A00A009CE /* EyeSearchDoc.docc */; };
+		EFE2E59E2F9A9F2B00413ED1 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFE2E59D2F9A9F2B00413ED1 /* WidgetKit.framework */; };
+		EFE2E5A02F9A9F2B00413ED1 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFE2E59F2F9A9F2B00413ED1 /* SwiftUI.framework */; };
+		EFE2E5AF2F9A9F2D00413ED1 /* EyeSearchWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = EFE2E59B2F9A9F2B00413ED1 /* EyeSearchWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,7 +28,28 @@
 			remoteGlobalIDString = EF69E88A2F87CFDB00FD9AE7;
 			remoteInfo = Challenge13;
 		};
+		EFE2E5AD2F9A9F2D00413ED1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EF69E8832F87CFDB00FD9AE7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EFE2E59A2F9A9F2B00413ED1;
+			remoteInfo = EyeSearchWidgetsExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		EFE2E5B42F9A9F2D00413ED1 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				EFE2E5AF2F9A9F2D00413ED1 /* EyeSearchWidgetsExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		EF69E88B2F87CFDB00FD9AE7 /* EyeSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EyeSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -33,7 +57,28 @@
 		EF69E8A42F87CFDD00FD9AE7 /* EyeSearchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EyeSearchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFAB54E92F96C95A00A009CE /* EyeSearchDoc.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = EyeSearchDoc.docc; sourceTree = "<group>"; };
 		EFE2E23A2F9903D100413ED1 /* Challenge13.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Challenge13.xctestplan; sourceTree = "<group>"; };
+		EFE2E5962F9A9EA000413ED1 /* EyeSearch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EyeSearch.entitlements; sourceTree = "<group>"; };
+		EFE2E59B2F9A9F2B00413ED1 /* EyeSearchWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = EyeSearchWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		EFE2E59D2F9A9F2B00413ED1 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		EFE2E59F2F9A9F2B00413ED1 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		EFE2E5B02F9A9F2D00413ED1 /* Exceptions for "EyeSearchWidgets" folder in "EyeSearchWidgetsExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = EFE2E59A2F9A9F2B00413ED1 /* EyeSearchWidgetsExtension */;
+		};
+		EFE2E68C2F9AB47F00413ED1 /* Exceptions for "EyeSearchWidgets" folder in "EyeSearch" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				OpenSearchObjectIntent.swift,
+			);
+			target = EF69E88A2F87CFDB00FD9AE7 /* EyeSearch */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		EF69E88D2F87CFDB00FD9AE7 /* Challenge13 */ = {
@@ -49,6 +94,15 @@
 		EF69E8A72F87CFDD00FD9AE7 /* Challenge13UITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Challenge13UITests;
+			sourceTree = "<group>";
+		};
+		EFE2E5A12F9A9F2B00413ED1 /* EyeSearchWidgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				EFE2E68C2F9AB47F00413ED1 /* Exceptions for "EyeSearchWidgets" folder in "EyeSearch" target */,
+				EFE2E5B02F9A9F2D00413ED1 /* Exceptions for "EyeSearchWidgets" folder in "EyeSearchWidgetsExtension" target */,
+			);
+			path = EyeSearchWidgets;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,17 +129,29 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EFE2E5982F9A9F2B00413ED1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EFE2E5A02F9A9F2B00413ED1 /* SwiftUI.framework in Frameworks */,
+				EFE2E59E2F9A9F2B00413ED1 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		EF69E8822F87CFDB00FD9AE7 = {
 			isa = PBXGroup;
 			children = (
+				EFE2E5962F9A9EA000413ED1 /* EyeSearch.entitlements */,
 				EFE2E23A2F9903D100413ED1 /* Challenge13.xctestplan */,
 				EFAB54E92F96C95A00A009CE /* EyeSearchDoc.docc */,
 				EF69E88D2F87CFDB00FD9AE7 /* Challenge13 */,
 				EF69E89D2F87CFDD00FD9AE7 /* Challenge13Tests */,
 				EF69E8A72F87CFDD00FD9AE7 /* Challenge13UITests */,
+				EFE2E5A12F9A9F2B00413ED1 /* EyeSearchWidgets */,
+				EFE2E59C2F9A9F2B00413ED1 /* Frameworks */,
 				EF69E88C2F87CFDB00FD9AE7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -96,8 +162,18 @@
 				EF69E88B2F87CFDB00FD9AE7 /* EyeSearch.app */,
 				EF69E89A2F87CFDD00FD9AE7 /* EyeSearchTests.xctest */,
 				EF69E8A42F87CFDD00FD9AE7 /* EyeSearchUITests.xctest */,
+				EFE2E59B2F9A9F2B00413ED1 /* EyeSearchWidgetsExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		EFE2E59C2F9A9F2B00413ED1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EFE2E59D2F9A9F2B00413ED1 /* WidgetKit.framework */,
+				EFE2E59F2F9A9F2B00413ED1 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -110,10 +186,12 @@
 				EF69E8872F87CFDB00FD9AE7 /* Sources */,
 				EF69E8882F87CFDB00FD9AE7 /* Frameworks */,
 				EF69E8892F87CFDB00FD9AE7 /* Resources */,
+				EFE2E5B42F9A9F2D00413ED1 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				EFE2E5AE2F9A9F2D00413ED1 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				EF69E88D2F87CFDB00FD9AE7 /* Challenge13 */,
@@ -171,6 +249,28 @@
 			productReference = EF69E8A42F87CFDD00FD9AE7 /* EyeSearchUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		EFE2E59A2F9A9F2B00413ED1 /* EyeSearchWidgetsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EFE2E5B12F9A9F2D00413ED1 /* Build configuration list for PBXNativeTarget "EyeSearchWidgetsExtension" */;
+			buildPhases = (
+				EFE2E5972F9A9F2B00413ED1 /* Sources */,
+				EFE2E5982F9A9F2B00413ED1 /* Frameworks */,
+				EFE2E5992F9A9F2B00413ED1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				EFE2E5A12F9A9F2B00413ED1 /* EyeSearchWidgets */,
+			);
+			name = EyeSearchWidgetsExtension;
+			packageProductDependencies = (
+			);
+			productName = EyeSearchWidgetsExtension;
+			productReference = EFE2E59B2F9A9F2B00413ED1 /* EyeSearchWidgetsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -193,6 +293,9 @@
 						CreatedOnToolsVersion = 26.3;
 						TestTargetID = EF69E88A2F87CFDB00FD9AE7;
 					};
+					EFE2E59A2F9A9F2B00413ED1 = {
+						CreatedOnToolsVersion = 26.3;
+					};
 				};
 			};
 			buildConfigurationList = EF69E8862F87CFDB00FD9AE7 /* Build configuration list for PBXProject "EyeSearch" */;
@@ -212,6 +315,7 @@
 				EF69E88A2F87CFDB00FD9AE7 /* EyeSearch */,
 				EF69E8992F87CFDD00FD9AE7 /* EyeSearchTests */,
 				EF69E8A32F87CFDD00FD9AE7 /* EyeSearchUITests */,
+				EFE2E59A2F9A9F2B00413ED1 /* EyeSearchWidgetsExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -232,6 +336,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		EF69E8A22F87CFDD00FD9AE7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EFE2E5992F9A9F2B00413ED1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -263,6 +374,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EFE2E5972F9A9F2B00413ED1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -275,6 +393,11 @@
 			isa = PBXTargetDependency;
 			target = EF69E88A2F87CFDB00FD9AE7 /* EyeSearch */;
 			targetProxy = EF69E8A52F87CFDD00FD9AE7 /* PBXContainerItemProxy */;
+		};
+		EFE2E5AE2F9A9F2D00413ED1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EFE2E59A2F9A9F2B00413ED1 /* EyeSearchWidgetsExtension */;
+			targetProxy = EFE2E5AD2F9A9F2D00413ED1 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -407,9 +530,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = EyeSearch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 446CS4MA3A;
+				DEVELOPMENT_TEAM = 29HC4SA3R9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = EyeSearch;
@@ -426,7 +550,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = br.com.paulo.Challenge13;
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.paulo.eyeSearch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -447,9 +571,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = EyeSearch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 446CS4MA3A;
+				DEVELOPMENT_TEAM = 29HC4SA3R9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = EyeSearch;
@@ -466,7 +591,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = br.com.paulo.Challenge13;
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.paulo.eyeSearch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -489,7 +614,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 446CS4MA3A;
+				DEVELOPMENT_TEAM = 29HC4SA3R9;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
@@ -517,7 +642,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 446CS4MA3A;
+				DEVELOPMENT_TEAM = 29HC4SA3R9;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
@@ -542,7 +667,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 446CS4MA3A;
+				DEVELOPMENT_TEAM = 29HC4SA3R9;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
@@ -567,7 +692,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 446CS4MA3A;
+				DEVELOPMENT_TEAM = 29HC4SA3R9;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
@@ -584,6 +709,68 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_TARGET_NAME = Challenge13;
+			};
+			name = Release;
+		};
+		EFE2E5B22F9A9F2D00413ED1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 29HC4SA3R9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EyeSearchWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = EyeSearchWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.paulo.eyeSearch.EyeSearchWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited) WIDGET_EXTENSION";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		EFE2E5B32F9A9F2D00413ED1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 29HC4SA3R9;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EyeSearchWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = EyeSearchWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.paulo.eyeSearch.EyeSearchWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = WIDGET_EXTENSION;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -622,6 +809,15 @@
 			buildConfigurations = (
 				EF69E8B52F87CFDD00FD9AE7 /* Debug */,
 				EF69E8B62F87CFDD00FD9AE7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EFE2E5B12F9A9F2D00413ED1 /* Build configuration list for PBXNativeTarget "EyeSearchWidgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EFE2E5B22F9A9F2D00413ED1 /* Debug */,
+				EFE2E5B32F9A9F2D00413ED1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

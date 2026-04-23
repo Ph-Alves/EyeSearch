@@ -39,25 +39,6 @@ final class IntentsManager: IntentsManaging {
     }
 }
 
-// MARK: - App Intent
-/// # Manager - App Intent
-/// Intent exposta à Siri e ao app Atalhos para abrir a tela de busca de objetos.
-struct OpenSearchObjectIntent: AppIntent {
-    static var title: LocalizedStringResource = "Buscar objeto"
-    static var description = IntentDescription("Abre a tela de busca de objetos pela câmera.")
-
-    /// Garante que o app seja trazido para o primeiro plano ao executar a intent.
-    static var openAppWhenRun: Bool = true
-
-    /// Define a ação do intents definido
-    /// - Returns: um `IntentResult` que é o resultado de uma ação performada
-    @MainActor
-    func perform() async -> some IntentResult {
-        IntentsManager.shared.openSearchObject()
-        return .result()
-    }
-}
-
 // MARK: - App Shortcuts Provider
 /// # Manager - App Shortcuts
 /// Prepara um shortcuts a partir do intent customizado recebido,
