@@ -242,6 +242,7 @@ struct ChatView: View {
 /// # View - MessageBubbleView
 /// Balão de mensagem individual exibido na lista do chat.
 /// Adapta visual e alinhamento conforme o papel do remetente (usuário ou assistente).
+/// Mensagens do assistente renderizam Markdown nativo via `AttributedString`.
 /// Mensagens filtradas pelo escopo são destacadas com borda laranja e ícone de aviso.
 /// ## Usado em:
 /// - ``ChatView``
@@ -253,6 +254,12 @@ struct MessageBubbleView: View {
     @Environment(\.colorScheme) private var colorScheme
 
     private var isUser: Bool { message.role == .user }
+
+    /// Converte o texto Markdown da mensagem em `AttributedString` para renderização nativa.
+    /// Utilizado apenas nas mensagens do assistente. Em caso de falha na conversão, retorna o texto puro.
+    private var formattedText: AttributedString {
+        (try? AttributedString(markdown: message.text)) ?? AttributedString(message.text)
+    }
 
     var body: some View {
         HStack(alignment: .bottom, spacing: 6) {
@@ -267,22 +274,28 @@ struct MessageBubbleView: View {
             }
 
             VStack(alignment: isUser ? .trailing : .leading, spacing: 4) {
-                // Balão
-                Text(message.text)
-                    .font(.body)
-                    .foregroundStyle(isUser ? .white : .primary)
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 10)
-                    .background(bubbleBackground)
-                    .clipShape(bubbleShape)
-                    // Borda extra para mensagens filtradas (fora do escopo)
-                    .overlay(
-                        bubbleShape
-                            .strokeBorder(
-                                message.isFiltered ? Color.orange.opacity(0.6) : .clear,
-                                lineWidth: 1.5
-                            )
-                    )
+                // Balão — mensagens do usuário usam Text simples; do assistente renderizam Markdown
+                Group {
+                    if isUser {
+                        Text(message.text)
+                    } else {
+                        Text(formattedText)
+                    }
+                }
+                .font(.body)
+                .foregroundStyle(isUser ? .white : .primary)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 10)
+                .background(bubbleBackground)
+                .clipShape(bubbleShape)
+                // Borda extra para mensagens filtradas (fora do escopo)
+                .overlay(
+                    bubbleShape
+                        .strokeBorder(
+                            message.isFiltered ? Color.orange.opacity(0.6) : .clear,
+                            lineWidth: 1.5
+                        )
+                )
 
                 // Flag de filtrado
                 if message.isFiltered {
