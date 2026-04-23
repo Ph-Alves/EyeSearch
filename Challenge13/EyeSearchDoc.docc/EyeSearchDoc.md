@@ -46,6 +46,7 @@ O projeto é feito seguindo a arquitetura MVVM-C, se aproveitando ao máximo de 
 - ``StickerViewModel``
 - ``HintsViewModel``
 - ``SettingsViewModel``
+- ``ChatViewModel``
 
 ### Protocols (Protocolos de managers)
 - ``CameraManaging``
