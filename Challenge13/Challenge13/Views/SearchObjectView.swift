@@ -71,8 +71,13 @@ struct SearchObjectView: View {
             HStack {
                 Spacer()
                 VStack {
-                    Text("\(SearchObjectVM.stickerCount) adesivos encontrados")
-                        .foregroundStyle(Color.white)
+                    if SearchObjectVM.stickerCount > 0 {
+                        Text("\(SearchObjectVM.stickerCount) adesivos encontrados")
+                            .foregroundStyle(Color.white)
+                    } else {
+                        Text("Procurando...")
+                            .foregroundStyle(Color.white)
+                    }
                 }
                 Spacer()
             }

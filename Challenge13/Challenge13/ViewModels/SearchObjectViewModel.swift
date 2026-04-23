@@ -48,8 +48,6 @@ class SearchObjectViewModel: CameraManagerDelegate {
     private var lastSoundTime: Date = .distantPast
     /// Data antiga de quando o haptics foi ativado
     private var lastHapticsTime: Date = .distantPast
-    /// O que foi falado anteriormente (Yolo)
-    private var lastSpokenLabel: String = ""
     /// Data do que foi falado anteriormente (Yolo)
     private var lastSpeechTime: Date = .distantPast
     /// Manager da câmera.
@@ -86,18 +84,6 @@ class SearchObjectViewModel: CameraManagerDelegate {
     func getCameraPreview() -> some View {
         CameraPreview(session: camera.session)
     }
-    
-    /// Executa uma fala a partir do label recebido
-    /// - Parameter label: Um valor de string recebido do Yolo para ser falado
-    func speakDetection(label: String) {
-        let now = Date()
-        guard now.timeIntervalSince(lastSoundTime) > 3.0 else { return }
-        lastSoundTime = now
-        lastSpokenLabel = label
-        
-        let soundEnabled = settingsManager.load().isSoundEnabled
-        self.sound.speakLabel(isEnabled: soundEnabled,label: label)
-    }
         
     /// Altera a lanterna conforme o recebido pela view
     /// - Parameter on: Valor booleano para definir se a lanterna deve desligar ou ligar
@@ -106,18 +92,24 @@ class SearchObjectViewModel: CameraManagerDelegate {
     }
     
     /// Toca o som baseando-se nas configurações do usuário
-    /// para quando um adesivo for encontrado
-    func playSoundIfEnabled() {
-        guard Date().timeIntervalSince(lastSoundTime) > 2.0 else { return }
-        lastSoundTime = Date()
+    /// para quando um adesivo for encontrado e executa uma fala a partir do label recebido pelo Yolo
+    /// - Parameter label: Um valor de string recebido do Yolo para ser falado
+    func playSoundIfEnabled(label: String) {
+        let now = Date()
+        guard now.timeIntervalSince(lastSoundTime) > 1.0 else { return }
+        guard now.timeIntervalSince(lastSoundTime) > 1.0 else { return }
+        lastSpeechTime = now
+        lastSoundTime = now
+        
         let settings = settingsManager.load()
-        sound.playSound(isEnabled: settings.isSoundEnabled)
+        self.sound.speakLabel(isEnabled: settings.isSoundEnabled,label: label)
+        self.sound.playSound(isEnabled: settings.isSoundEnabled)
     }
     
     /// Ativa os haptics baseando-se nas configurações do usuário
     /// para quando um adesivo for encontrado
     func activeHapticsIfEnabled() {
-        guard Date().timeIntervalSince(lastHapticsTime) > 2.0 else { return }
+        guard Date().timeIntervalSince(lastHapticsTime) > 3.0 else { return }
         lastHapticsTime = Date()
         let settings = settingsManager.load()
         haptics.trigger(isEnabled: settings.isHapticsEnabled)
@@ -164,11 +156,10 @@ extension SearchObjectViewModel {
                 self.detections = results
                 
                 if self.stickerCount > self.previousStickerCount {
-                    playSoundIfEnabled()
-                    activeHapticsIfEnabled()
                     if let firstLabel = self.objectsLabels.first {
-                        speakDetection(label: firstLabel)
+                        playSoundIfEnabled(label: firstLabel)
                     }
+                    activeHapticsIfEnabled()
                 }
                 self.previousStickerCount = self.stickerCount
             }

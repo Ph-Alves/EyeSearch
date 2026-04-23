@@ -29,7 +29,7 @@ final class MLModelManager: MLModelManaging {
     /// Modelo CoreML YOLOv3 para detecção de objetos.
     private(set) var yoloModel: MLModel?
     /// Limiar mínimo de confiança para considerar uma detecção válida.
-    private(set) var confidenceThreshold: Float = 0.6
+    private(set) var confidenceThreshold: Float = 0.65
     /// Request do Vision para o modelo de adesivos (cache, reutilizado a cada frame).
     private var stickerRequest: VNCoreMLRequest?
     /// Request do Vision para o modelo YOLO (cache, reutilizado a cada frame).
