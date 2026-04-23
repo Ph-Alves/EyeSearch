@@ -17,7 +17,7 @@ import AVFoundation
 final class SoundManager: SoundManaging {
     // MARK: - Variables
     /// Instância do player de áudio.
-    private var player: AVAudioPlayer?
+    private(set) var player: AVAudioPlayer?
     /// Sintetizador para falar o que receber de label
     private let synthesizer = AVSpeechSynthesizer()
     
