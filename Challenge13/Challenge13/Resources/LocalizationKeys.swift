@@ -45,6 +45,12 @@ enum L10n {
             static let title = "settings.screen.title"
         }
     }
+    
+    enum SearchObject {
+        enum Screen {
+            static let searchInformation = "searchObject.screen.searchInformation"
+        }
+    }
 
     enum Sticker {
         enum Screen {
