@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 import FoundationModels
 
 // MARK: - Manager
@@ -16,10 +17,15 @@ import FoundationModels
 /// - ``ChatView`` (via ViewModel)
 final class FoundationsManager: FoundationsManaging {
     // MARK: - Errors
+    /// Erros internos do chatbot, mapeados para mensagens amigáveis ao usuário.
     private enum ChatbotError: LocalizedError {
+        /// A pergunta está fora do escopo do assistente.
         case offTopic
+        /// O Apple Intelligence não está disponível no dispositivo.
         case modelUnavailable
+        /// O modelo retornou uma resposta vazia.
         case emptyResponse
+        /// A sessão do modelo falhou com um motivo específico.
         case sessionFailed(String)
 
         var errorDescription: String? {
@@ -37,15 +43,31 @@ final class FoundationsManager: FoundationsManaging {
     }
     
     // MARK: - Variables
-    // Histórico de mensagens da conversa.
-    private var messages: [ChatMessage] = []
-    // Indica se uma resposta está sendo processada.
-    private var isLoading: Bool = false
-    // Mensagem de erro atual, se houver.
-    private var errorMessage: String? = nil
-    // Sessão do modelo de linguagem Apple Intelligence.
+    /// Histórico de mensagens da conversa.
+    private let messagesSubject = CurrentValueSubject<[ChatMessage], Never>([])
+    /// Indica se uma resposta está sendo processada.
+    private let isLoadingSubject = CurrentValueSubject<Bool, Never>(false)
+    /// Mensagem de erro atual, se houver.
+    private let errorMessageSubject = CurrentValueSubject<String?, Never>(nil)
+    /// Sessão do modelo de linguagem Apple Intelligence.
     private var session: LanguageModelSession?
 
+    // MARK: - FoundationsManaging
+    /// Publisher do histórico de mensagens, observável pela ViewModel.
+    var messagesPublisher: AnyPublisher<[ChatMessage], Never> {
+        messagesSubject.eraseToAnyPublisher()
+    }
+    /// Publisher do estado de carregamento, observável pela ViewModel.
+    var isLoadingPublisher: AnyPublisher<Bool, Never> {
+        isLoadingSubject.eraseToAnyPublisher()
+    }
+    /// Publisher de erros, observável pela ViewModel.
+    var errorMessagePublisher: AnyPublisher<String?, Never> {
+        errorMessageSubject.eraseToAnyPublisher()
+    }
+
+    /// Instruções de sistema enviadas ao modelo na inicialização da sessão.
+    /// Define identidade, escopo, restrições e estilo de resposta do assistente.
     private let systemPrompt = """
     Você é o assistente virtual do app de acessibilidade visual "EyeSearch".
 
@@ -60,7 +82,6 @@ final class FoundationsManager: FoundationsManaging {
     - "Como ativo o VoiceOver?"
     - "Quais fontes são mais fáceis de ler para quem tem baixa visão?"
     - "O que é retinopatia diabética?"
-    - "Como usar o recurso de leitura de documentos do app?"
     - "Quais configurações de contraste o app oferece?"
 
     RESTRIÇÕES — NUNCA faça o seguinte:
@@ -82,6 +103,8 @@ final class FoundationsManager: FoundationsManaging {
     - Máximo de 250 palavras por resposta
     """
 
+    /// Palavras-chave do domínio do app usadas na validação local de escopo.
+    /// Mensagens longas sem nenhuma dessas palavras são delegadas ao modelo para decisão.
     private let inScopeKeywords: [String] = [
         // Baixa visão e condições
         "visão", "visual", "olho", "olhos", "oftalmol", "catarata", "glaucoma",
@@ -103,18 +126,19 @@ final class FoundationsManager: FoundationsManaging {
         "tutorial", "guia", "orientação", "recurso", "serviço"
     ]
 
-    private let outOfScopeKeywords: [String] = [
-        "futebol", "basquete", "esporte", "jogo", "placar", "campeonato",
-        "receita culinária", "cozinhar", "ingrediente",
-        "investimento", "ação", "bolsa de valores", "bitcoin", "criptomoeda",
-        "política", "presidente", "eleição", "governo", "partido",
-        "série", "filme", "novela", "netflix", "streaming",
-        "música", "banda", "show", "concerto",
-        "viagem", "hotel", "passagem", "destino turístico",
-        "código", "programar", "python", "javascript", "html"
-    ]
+//    private let outOfScopeKeywords: [String] = [
+//        "futebol", "basquete", "esporte", "jogo", "placar", "campeonato",
+//        "receita culinária", "cozinhar", "ingrediente",
+//        "investimento", "ação", "bolsa de valores", "bitcoin", "criptomoeda",
+//        "política", "presidente", "eleição", "governo", "partido",
+//        "série", "filme", "novela", "netflix", "streaming",
+//        "música", "banda", "show", "concerto",
+//        "viagem", "hotel", "passagem", "destino turístico",
+//        "código", "programar", "python", "javascript", "html"
+//    ]
 
     // MARK: - Init
+    /// Inicializa o manager e configura a sessão do modelo de linguagem.
     init() {
         setupSession()
     }
@@ -127,16 +151,16 @@ final class FoundationsManager: FoundationsManaging {
         guard !trimmed.isEmpty else { return }
 
         let userMessage = ChatMessage(role: .user, text: trimmed)
-        messages.append(userMessage)
-        isLoading = true
-        errorMessage = nil
+        messagesSubject.value.append(userMessage)
+        isLoadingSubject.value = true
+        errorMessageSubject.value = nil
 
         do {
             // Verifica localmente se a mensagem está fora do escopo antes de enviar ao modelo
             if let localDenial = localScopeCheck(for: trimmed) {
                 let filtered = ChatMessage(role: .assistant, text: localDenial, isFiltered: true)
-                messages.append(filtered)
-                isLoading = false
+                messagesSubject.value.append(filtered)
+                isLoadingSubject.value = false
                 return
             }
 
@@ -151,37 +175,39 @@ final class FoundationsManager: FoundationsManaging {
             let finalText = try processModelResponse(rawText)
 
             let assistantMessage = ChatMessage(role: .assistant, text: finalText)
-            messages.append(assistantMessage)
+            messagesSubject.value.append(assistantMessage)
 
         } catch let error as ChatbotError {
             // Trata erros específicos do chatbot (off-topic, modelo indisponível, etc.)
-            errorMessage = error.errorDescription
+            errorMessageSubject.value = error.errorDescription
             let errorMsg = ChatMessage(
                 role: .assistant,
                 text: error.errorDescription ?? "Erro desconhecido.",
                 isFiltered: true
             )
-            messages.append(errorMsg)
+            messagesSubject.value.append(errorMsg)
         } catch {
             // Trata erros genéricos da sessão
             let chatError = ChatbotError.sessionFailed(error.localizedDescription)
-            errorMessage = chatError.errorDescription
+            errorMessageSubject.value = chatError.errorDescription
         }
 
-        isLoading = false
+        isLoadingSubject.value = false
     }
 
     /// Limpa o histórico de mensagens e reinicia a sessão do modelo.
     func clearConversation() {
-        messages.removeAll()
-        errorMessage = nil
+        messagesSubject.value.removeAll()
+        errorMessageSubject.value = nil
         setupSession()
     }
     
     // MARK: - Helpers
+    /// Inicializa ou reinicia a `LanguageModelSession` com o system prompt configurado.
+    /// Emite erro no ``errorMessagePublisher`` se o Apple Intelligence não estiver disponível.
     private func setupSession() {
         guard SystemLanguageModel.default.isAvailable else {
-            errorMessage = ChatbotError.modelUnavailable.errorDescription
+            errorMessageSubject.value = ChatbotError.modelUnavailable.errorDescription
             return
         }
 
@@ -191,17 +217,19 @@ final class FoundationsManager: FoundationsManaging {
         )
     }
 
-    // Verifica localmente se a mensagem do usuário está dentro do escopo do chatbot.
-    // Retorna uma mensagem de negação se estiver fora, ou nil se estiver dentro do escopo.
+    /// Verifica localmente se a mensagem do usuário está dentro do escopo do chatbot.
+    /// Mensagens com até 3 palavras passam direto. Mensagens maiores são validadas contra ``inScopeKeywords``.
+    /// - Parameter input: Texto digitado pelo usuário.
+    /// - Returns: Mensagem de negação se fora do escopo, ou `nil` para deixar o modelo decidir.
     private func localScopeCheck(for input: String) -> String? {
         let lower = input.lowercased()
 
-        // Se contém palavras explicitamente fora do escopo, rejeita imediatamente
-        for keyword in outOfScopeKeywords {
-            if lower.contains(keyword) {
-                return scopeDenialMessage()
-            }
-        }
+//        // Se contém palavras explicitamente fora do escopo, rejeita imediatamente
+//        for keyword in outOfScopeKeywords {
+//            if lower.contains(keyword) {
+//                return scopeDenialMessage()
+//            }
+//        }
 
         // Mensagens curtas (até 3 palavras) passam direto — podem ser saudações ou comandos simples
         if input.split(separator: " ").count <= 3 {
@@ -217,7 +245,11 @@ final class FoundationsManager: FoundationsManaging {
         return nil
     }
 
-    // Processa e limpa a resposta bruta do modelo, verificando se ele se recusou a responder.
+    /// Processa e sanitiza a resposta bruta do modelo.
+    /// Detecta o marcador `FORA_DO_ESCOPO` e remove linhas vazias e espaços extras.
+    /// - Parameter raw: Texto bruto retornado pelo modelo.
+    /// - Returns: Texto final pronto para exibição.
+    /// - Throws: ``ChatbotError/emptyResponse`` se a resposta estiver vazia.
     private func processModelResponse(_ raw: String) throws -> String {
         guard !raw.isEmpty else { throw ChatbotError.emptyResponse }
 
@@ -234,6 +266,8 @@ final class FoundationsManager: FoundationsManaging {
             .joined(separator: "\n")
     }
 
+    /// Mensagem padrão exibida ao usuário quando a pergunta está fora do escopo do assistente.
+    /// - Returns: Texto amigável orientando o usuário sobre o propósito do assistente.
     private func scopeDenialMessage() -> String {
         return """
         Desculpe, só consigo ajudar com assuntos relacionados à \
