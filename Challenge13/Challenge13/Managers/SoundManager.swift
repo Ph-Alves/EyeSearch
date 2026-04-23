@@ -23,7 +23,7 @@ final class SoundManager: SoundManaging {
     
     // MARK: - Init
     init() {
-        setupAudioSession()
+        setupAudio()
     }
     
     // MARK: - Functions
@@ -31,17 +31,7 @@ final class SoundManager: SoundManaging {
     /// - Parameter isEnabled: Indica se o som está habilitado nas configurações.
     func playSound(isEnabled: Bool) {
         guard isEnabled else { return }
-        
-        guard let url = Bundle.main.url(forResource: "item-found", withExtension: "mp3") else { return }
-        
-        do {
-            // instância do objeto audioPlayer
-            player = try AVAudioPlayer(contentsOf: url)
-            player?.setVolume(1.0, fadeDuration: 0)
-            player?.play()
-        } catch {
-            print("Error initiating AVAudioPlayer: \(error.localizedDescription)")
-        }
+        player?.play()
     }
     
     /// Executa uma fala a partir do label recebido
@@ -72,14 +62,18 @@ final class SoundManager: SoundManaging {
     // MARK: - Private Functions
     
     /// Inicializa a sessão e prepara o audio
-    private func setupAudioSession() {
+    private func setupAudio() {
         do {
+            guard let url = Bundle.main.url(forResource: "ObjectFound", withExtension: "mp3") else { return }
+            player = try AVAudioPlayer(contentsOf: url)
+            player?.setVolume(0.2, fadeDuration: 0)
             try AVAudioSession.sharedInstance().setCategory(
                 .playback,
                 mode: .voicePrompt,
                 options: [.mixWithOthers, .duckOthers]
             )
             try AVAudioSession.sharedInstance().setActive(true)
+            
         } catch {
             print("Falha ao configurar Audio Session: \(error)")
         }

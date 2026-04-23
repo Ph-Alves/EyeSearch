@@ -90,6 +90,9 @@ struct SearchObjectView: View {
         }
         .navigationBarBackButtonHidden(true)
         .background(Color.primary)
+        .onDisappear() {
+            SearchObjectVM.stop()
+        }
     }
 }
 

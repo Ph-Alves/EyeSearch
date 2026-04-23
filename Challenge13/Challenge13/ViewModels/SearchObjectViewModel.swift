@@ -48,8 +48,6 @@ class SearchObjectViewModel: CameraManagerDelegate {
     private var lastSoundTime: Date = .distantPast
     /// Data antiga de quando o haptics foi ativado
     private var lastHapticsTime: Date = .distantPast
-    /// Data do que foi falado anteriormente (Yolo)
-    private var lastSpeechTime: Date = .distantPast
     /// Manager da câmera.
     private var camera: CameraManaging
     /// Manager do som
@@ -62,6 +60,8 @@ class SearchObjectViewModel: CameraManagerDelegate {
     private let settingsManager: SettingsManager
     /// Flag para evitar processamento concorrente de frames.
     private var isProcessing = false
+    /// Indica que detectou sticker mas ainda não conseguiu falar o label do YOLO
+    private var hasPendingSpeech = false
 
     // MARK: - Init
     init(camera: CameraManager, sound: SoundManager, haptics: HapticsManager, mlManager: MLModelManager, settingsManager: SettingsManager) {
@@ -94,16 +94,15 @@ class SearchObjectViewModel: CameraManagerDelegate {
     /// Toca o som baseando-se nas configurações do usuário
     /// para quando um adesivo for encontrado e executa uma fala a partir do label recebido pelo Yolo
     /// - Parameter label: Um valor de string recebido do Yolo para ser falado
-    func playSoundIfEnabled(label: String) {
+    func playSoundIfEnabled(label: String?) {
         let now = Date()
-        guard now.timeIntervalSince(lastSoundTime) > 1.0 else { return }
-        guard now.timeIntervalSince(lastSoundTime) > 1.0 else { return }
-        lastSpeechTime = now
+        guard now.timeIntervalSince(lastSoundTime) > 1.5 else { return }
         lastSoundTime = now
         
         let settings = settingsManager.load()
-        self.sound.speakLabel(isEnabled: settings.isSoundEnabled,label: label)
         self.sound.playSound(isEnabled: settings.isSoundEnabled)
+        guard let notNilLabel = label else { return }
+        self.sound.speakLabel(isEnabled: settings.isSoundEnabled,label: notNilLabel)
     }
     
     /// Ativa os haptics baseando-se nas configurações do usuário
@@ -156,10 +155,29 @@ extension SearchObjectViewModel {
                 self.detections = results
                 
                 if self.stickerCount > self.previousStickerCount {
-                    if let firstLabel = self.objectsLabels.first {
-                        playSoundIfEnabled(label: firstLabel)
-                    }
+                    // Sticker novo: toca som e haptics imediatamente
                     activeHapticsIfEnabled()
+                    
+                    if let firstLabel = self.objectsLabels.first {
+                        // YOLO já classificou — fala o label
+                        playSoundIfEnabled(label: firstLabel)
+                        self.hasPendingSpeech = false
+                    } else {
+                        // YOLO não retornou label — toca som e tenta falar nos próximos frames
+                        playSoundIfEnabled(label: nil)
+                        self.hasPendingSpeech = true
+                    }
+                } else if self.hasPendingSpeech, self.stickerCount > 0, let firstLabel = self.objectsLabels.first {
+                    // Frames seguintes: sticker ainda visível e YOLO retornou label
+                    self.sound.speakLabel(
+                        isEnabled: self.settingsManager.load().isSoundEnabled,
+                        label: firstLabel
+                    )
+                    self.hasPendingSpeech = false
+                }
+                
+                if self.stickerCount == 0 {
+                    self.hasPendingSpeech = false
                 }
                 self.previousStickerCount = self.stickerCount
             }
