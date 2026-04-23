@@ -48,20 +48,18 @@ class SearchObjectViewModel: CameraManagerDelegate {
     private var lastSoundTime: Date = .distantPast
     /// Data antiga de quando o haptics foi ativado
     private var lastHapticsTime: Date = .distantPast
-    /// Sintetizador para falar o que receber de label (Yolo)
-    private let synthesizer = AVSpeechSynthesizer()
     /// O que foi falado anteriormente (Yolo)
     private var lastSpokenLabel: String = ""
     /// Data do que foi falado anteriormente (Yolo)
     private var lastSpeechTime: Date = .distantPast
     /// Manager da câmera.
-    private var camera: CameraManager
+    private var camera: CameraManaging
     /// Manager do som
-    private var sound: SoundManager
+    private var sound: SoundManaging
     /// Manager dos haptics
-    private var haptics: HapticsManager
+    private var haptics: HapticsManaging
     /// Manager dos modelos de ML.
-    private let mlManager: MLModelManager
+    private let mlManager: MLModelManaging
     /// Manager das configs
     private let settingsManager: SettingsManager
     /// Flag para evitar processamento concorrente de frames.
@@ -97,10 +95,8 @@ class SearchObjectViewModel: CameraManagerDelegate {
         lastSoundTime = now
         lastSpokenLabel = label
         
-        let utterance = AVSpeechUtterance(string: label)
-        utterance.voice = AVSpeechSynthesisVoice(language: "pt-BR")
-        utterance.rate = 0.5
-        synthesizer.speak(utterance)
+        let soundEnabled = settingsManager.load().isSoundEnabled
+        self.sound.speakLabel(isEnabled: soundEnabled,label: label)
     }
         
     /// Altera a lanterna conforme o recebido pela view
@@ -170,6 +166,9 @@ extension SearchObjectViewModel {
                 if self.stickerCount > self.previousStickerCount {
                     playSoundIfEnabled()
                     activeHapticsIfEnabled()
+                    if let firstLabel = self.objectsLabels.first {
+                        speakDetection(label: firstLabel)
+                    }
                 }
                 self.previousStickerCount = self.stickerCount
             }

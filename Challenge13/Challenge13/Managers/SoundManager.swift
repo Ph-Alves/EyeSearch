@@ -18,9 +18,13 @@ final class SoundManager: SoundManaging {
     // MARK: - Variables
     /// Instância do player de áudio.
     private var player: AVAudioPlayer?
+    /// Sintetizador para falar o que receber de label
+    private let synthesizer = AVSpeechSynthesizer()
     
     // MARK: - Init
-    init() {}
+    init() {
+        setupAudioSession()
+    }
     
     // MARK: - Functions
     /// Reproduz o som de feedback "item-found" se o som estiver habilitado pelo usuário.
@@ -33,15 +37,51 @@ final class SoundManager: SoundManaging {
         do {
             // instância do objeto audioPlayer
             player = try AVAudioPlayer(contentsOf: url)
-            player?.setVolume(10, fadeDuration: 3)
+            player?.setVolume(1.0, fadeDuration: 0)
             player?.play()
         } catch {
             print("Error initiating AVAudioPlayer: \(error.localizedDescription)")
         }
     }
     
+    /// Executa uma fala a partir do label recebido
+    /// - Parameter label: Um valor de string recebido do Yolo para ser falado
+    func speakLabel(isEnabled: Bool, label: String) {
+        guard isEnabled else { return }
+        let cleanLabel = label.trimmingCharacters(in: .whitespaces)
+        
+        guard let translation = YoloTranslations(rawValue: cleanLabel) else { return }
+        let textToSpeak = translation.localizedString
+        
+        let utterance = AVSpeechUtterance(string: textToSpeak)
+        utterance.voice = AVSpeechSynthesisVoice(language: "pt-BR")
+        utterance.rate = 0.53
+        
+        if synthesizer.isSpeaking {
+            synthesizer.stopSpeaking(at: .immediate)
+        }
+        
+        synthesizer.speak(utterance)
+    }
+    
     /// Restaura o manager para o estado padrão, liberando o player de áudio.
     func reset() {
         player = nil
+    }
+    
+    // MARK: - Private Functions
+    
+    /// Inicializa a sessão e prepara o audio
+    private func setupAudioSession() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(
+                .playback,
+                mode: .voicePrompt,
+                options: [.mixWithOthers, .duckOthers]
+            )
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("Falha ao configurar Audio Session: \(error)")
+        }
     }
 }
