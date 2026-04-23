@@ -26,10 +26,16 @@ class SearchObjectViewModel: CameraManagerDelegate {
     var isModelLoaded: Bool { mlManager.isLoaded }
     /// Mensagem de erro do carregamento dos modelos, se houver.
     var modelError: String? { mlManager.error }
+    var objectsLabels: [String] {
+        detections
+            .compactMap { detection -> String? in
+                guard let object = detection.object else { return nil }
+                return object.label
+            }
+    }
     /// Lista de retângulos de adesivos encontrados, filtrados somente em confiança a 50%
     var stickerOverlays: [StickerOverlay] {
         detections
-            .filter({ $0.sticker.confidence > 0.7 })
             .map { StickerOverlay(boundingBox: $0.sticker.boundingBox, confidence: $0.sticker.confidence) }
     }
     /// Quantidade de adesivos encontrados
@@ -42,6 +48,12 @@ class SearchObjectViewModel: CameraManagerDelegate {
     private var lastSoundTime: Date = .distantPast
     /// Data antiga de quando o haptics foi ativado
     private var lastHapticsTime: Date = .distantPast
+    /// Sintetizador para falar o que receber de label (Yolo)
+    private let synthesizer = AVSpeechSynthesizer()
+    /// O que foi falado anteriormente (Yolo)
+    private var lastSpokenLabel: String = ""
+    /// Data do que foi falado anteriormente (Yolo)
+    private var lastSpeechTime: Date = .distantPast
     /// Manager da câmera.
     private var camera: CameraManager
     /// Manager do som
@@ -75,6 +87,20 @@ class SearchObjectViewModel: CameraManagerDelegate {
     /// - Returns: Uma `CameraPreview` conectada à sessão de captura.
     func getCameraPreview() -> some View {
         CameraPreview(session: camera.session)
+    }
+    
+    /// Executa uma fala a partir do label recebido
+    /// - Parameter label: Um valor de string recebido do Yolo para ser falado
+    func speakDetection(label: String) {
+        let now = Date()
+        guard now.timeIntervalSince(lastSoundTime) > 3.0 else { return }
+        lastSoundTime = now
+        lastSpokenLabel = label
+        
+        let utterance = AVSpeechUtterance(string: label)
+        utterance.voice = AVSpeechSynthesisVoice(language: "pt-BR")
+        utterance.rate = 0.5
+        synthesizer.speak(utterance)
     }
         
     /// Altera a lanterna conforme o recebido pela view
