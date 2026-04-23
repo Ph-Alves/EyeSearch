@@ -21,6 +21,8 @@ final class CameraManager: NSObject, CameraManaging, AVCaptureVideoDataOutputSam
     private(set) var isAuthorized = false
     /// Sessão de captura de vídeo do AVFoundation.
     private(set) var session = AVCaptureSession()
+    /// Salva o device para permitir ligar a lanterna em camadas posteriores
+    private(set) var device: AVCaptureDevice?
     /// Delegate que recebe os frames capturados.
     weak var delegate: CameraManagerDelegate?
     // Saída de vídeo que processa os frames da câmera.
@@ -44,6 +46,19 @@ final class CameraManager: NSObject, CameraManaging, AVCaptureVideoDataOutputSam
         }
     }
     
+    /// Para ligar/desligar a lanterna ao utilizar a câmera
+    ///  - Parameter on: Parâmetro booleano que define se liga ou desliga a lanterna, usando tochMode
+    func setTorch(on: Bool) {
+        guard let device, device.hasTorch else { return }
+        do {
+            try device.lockForConfiguration()
+            device.torchMode = on ? .on : .off
+            device.unlockForConfiguration()
+        } catch {
+            print("Erro ao tentar ligar lanterna")
+        }
+    }
+    
     /// Para a captura de vídeo em background.
     func stop() {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
@@ -61,6 +76,7 @@ final class CameraManager: NSObject, CameraManaging, AVCaptureVideoDataOutputSam
         // Usa a lente traseira principal do iPhone
         guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
         else { return }
+        self.device = device
         
         // Cria o input a partir do dispositivo de câmera
         guard let input = try? AVCaptureDeviceInput(device: device)
@@ -86,6 +102,7 @@ final class CameraManager: NSObject, CameraManaging, AVCaptureVideoDataOutputSam
         // Inicia a captura em background para não travar a UI
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             self?.session.startRunning()
+            self?.setTorch(on: true)
         }
     }
     

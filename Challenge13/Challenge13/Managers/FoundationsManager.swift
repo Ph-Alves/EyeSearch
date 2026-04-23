@@ -15,6 +15,7 @@ import FoundationModels
 /// Filtra mensagens fora do escopo e mantém o histórico da conversa.
 /// ## Usado em:
 /// - ``ChatView`` (via ViewModel)
+@Observable
 final class FoundationsManager: FoundationsManaging {
     // MARK: - Errors
     /// Erros internos do chatbot, mapeados para mensagens amigáveis ao usuário.
@@ -27,7 +28,7 @@ final class FoundationsManager: FoundationsManaging {
         case emptyResponse
         /// A sessão do modelo falhou com um motivo específico.
         case sessionFailed(String)
-
+        
         var errorDescription: String? {
             switch self {
             case .offTopic:
@@ -70,14 +71,13 @@ final class FoundationsManager: FoundationsManaging {
     /// Define identidade, escopo, restrições e estilo de resposta do assistente.
     private let systemPrompt = """
     Você é o assistente virtual do app de acessibilidade visual "EyeSearch".
-
+    
     SEU PROPÓSITO:
     Ajudar exclusivamente pessoas com baixa visão ou deficiência visual a:
     - Usar e navegar as funcionalidades do app EyeSearch
     - Entender recursos de acessibilidade do iPhone/iPad (VoiceOver, Zoom, Lupa, DetecçãoDePessoas, etc.)
     - Descobrir dicas, atalhos e configurações de acessibilidade visual no iOS
     - Encontrar recursos e orientações para pessoas com deficiência visual
-
     ESTILO DE RESPOSTA:
     - Seja claro, empático e acolhedor
     - Use frases curtas e diretas (facilita leitores de tela)
@@ -126,7 +126,7 @@ final class FoundationsManager: FoundationsManaging {
     init() {
         setupSession()
     }
-
+    
     // MARK: - Functions
     /// Envia uma mensagem ao chatbot, faz validação local de escopo e processa a resposta do modelo.
     /// - Parameter userInput: Texto digitado pelo usuário.
@@ -140,21 +140,18 @@ final class FoundationsManager: FoundationsManaging {
         errorMessageSubject.value = nil
 
         do {
-            // Verifica localmente se a mensagem está fora do escopo antes de enviar ao modelo
             if let localDenial = localScopeCheck(for: trimmed) {
                 let filtered = ChatMessage(role: .assistant, text: localDenial, isFiltered: true)
                 messagesSubject.value.append(filtered)
                 isLoadingSubject.value = false
                 return
             }
-
-            // Garante que a sessão do modelo está disponível
-            guard let session else { throw ChatbotError.modelUnavailable }
             
-            // Envia a mensagem ao modelo e aguarda a resposta
+            // Etapa 2: chama o modelo Foundation com o texto do usuário
+            guard let session else { throw ChatbotError.modelUnavailable }
             let response = try await session.respond(to: trimmed)
-
-            // Limpa e valida a resposta do modelo
+            
+            // Etapa 3: verifica se o modelo sinalizou fora do escopo
             let rawText = response.content.trimmingCharacters(in: .whitespacesAndNewlines)
             let finalText = try processModelResponse(rawText)
 
@@ -167,18 +164,18 @@ final class FoundationsManager: FoundationsManaging {
             let errorMsg = ChatMessage(
                 role: .assistant,
                 text: error.errorDescription ?? "Erro desconhecido.",
+                timestamp: Date(),
                 isFiltered: true
             )
             messagesSubject.value.append(errorMsg)
         } catch {
-            // Trata erros genéricos da sessão
             let chatError = ChatbotError.sessionFailed(error.localizedDescription)
             errorMessageSubject.value = chatError.errorDescription
         }
 
         isLoadingSubject.value = false
     }
-
+    
     /// Limpa o histórico de mensagens e reinicia a sessão do modelo.
     func clearConversation() {
         messagesSubject.value.removeAll()
@@ -190,11 +187,12 @@ final class FoundationsManager: FoundationsManaging {
     /// Inicializa ou reinicia a `LanguageModelSession` com o system prompt configurado.
     /// Emite erro no ``errorMessagePublisher`` se o Apple Intelligence não estiver disponível.
     private func setupSession() {
+        
         guard SystemLanguageModel.default.isAvailable else {
             errorMessageSubject.value = ChatbotError.modelUnavailable.errorDescription
             return
         }
-
+        
         session = LanguageModelSession(
             model: .default,
             instructions: systemPrompt
@@ -219,13 +217,13 @@ final class FoundationsManager: FoundationsManaging {
         if input.split(separator: " ").count <= 3 {
             return nil
         }
-
-        // Para mensagens maiores, verifica se contém pelo menos uma palavra do escopo
+        
+        // Se não contém nenhuma palavra do escopo em mensagens mais longas -> deixa o modelo decidir
         let hasInScopeWord = inScopeKeywords.contains { lower.contains($0) }
         if !hasInScopeWord {
             return nil
         }
-
+        
         return nil
     }
 
@@ -236,12 +234,12 @@ final class FoundationsManager: FoundationsManaging {
     /// - Throws: ``ChatbotError/emptyResponse`` se a resposta estiver vazia.
     private func processModelResponse(_ raw: String) throws -> String {
         guard !raw.isEmpty else { throw ChatbotError.emptyResponse }
-
+        
         // O modelo pode retornar "FORA_DO_ESCOPO" como sinal de que a pergunta não é do tema
         if raw.contains("FORA_DO_ESCOPO") {
             return scopeDenialMessage()
         }
-
+        
         // Remove linhas vazias e espaços extras da resposta
         return raw
             .components(separatedBy: .newlines)
@@ -254,9 +252,9 @@ final class FoundationsManager: FoundationsManaging {
     /// - Returns: Texto amigável orientando o usuário sobre o propósito do assistente.
     private func scopeDenialMessage() -> String {
         return """
-        Desculpe, só consigo ajudar com assuntos relacionados à \
-        acessibilidade visual e funcionalidades do EyeSearch. \
-        Tem alguma dúvida sobre isso que eu possa responder? 👁️
-        """
+    Desculpe, só consigo ajudar com assuntos relacionados à \
+    acessibilidade visual e funcionalidades do EyeSearch. \
+    Tem alguma dúvida sobre isso que eu possa responder? 
+    """
     }
 }

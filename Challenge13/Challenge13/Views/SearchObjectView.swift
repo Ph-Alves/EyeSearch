@@ -14,33 +14,92 @@ import AVFoundation
 /// Exibe o preview da câmera e solicita permissão de acesso ao iniciar.
 struct SearchObjectView: View {
     // MARK: - Variables
+    /// Coordinator
     @Environment(Coordinator.self) private var coordinator
-    
+    /// ViewModel
     var SearchObjectVM: SearchObjectViewModel
+    /// States
+    @State private var flashLight: Bool = true
+    /// init
+    init(SearchObjectVM: SearchObjectViewModel) {
+        self.SearchObjectVM = SearchObjectVM
+    }
+    /// View values
+    private var padding: CGFloat = 20
+    private var cameraZIndex: Double = 2
+    private var effectZIndex: Double = 3
     
     // MARK: - Body View
     var body: some View {
-        VStack {
-            ReturnButton(action: {
-                coordinator.pop()
-            })
-            // Preview ao vivo da câmera
-            SearchObjectVM.getCameraPreview()
-                .ignoresSafeArea()
+        VStack(spacing: 0) {
+            HStack(alignment: .center) {
+                ReturnButton(action: {
+                    coordinator.pop()
+                })
+                Spacer()
+                Button() {
+                    flashLight.toggle()
+                    SearchObjectVM.setFlashlight(on: flashLight)
+                } label: {
+                    Image(systemName: flashLight ? "flashlight.on.fill" : "flashlight.slash")
+                }
+            }
+            .padding(padding)
+            .background(Color.secondary)
+            
+            ZStack {
+                // Preview ao vivo da câmera
+                SearchObjectVM.getCameraPreview()
+                
+                GeometryReader { geo in
+                    ForEach(SearchObjectVM.stickerOverlays) { overlay in
+                        let rect = SearchObjectVM.convertBoundingBox(overlay.boundingBox, in: geo.size)
+                        Rectangle()
+                            .stroke(Color.green, lineWidth: 2)
+                            .frame(width: rect.width, height: rect.height)
+                            .position(x: rect.midX, y: rect.midY)
+                    }
+                }
+                .zIndex(cameraZIndex)
+                
+                if SearchObjectVM.stickerCount > 0 {
+                    WaveOverlay()
+                        .allowsHitTesting(false)
+                        .zIndex(effectZIndex)
+                }
+            }
+            HStack {
+                Spacer()
+                VStack {
+                    if SearchObjectVM.stickerCount > 0 {
+                        Text("\(SearchObjectVM.stickerCount) adesivos encontrados")
+                            .foregroundStyle(Color.white)
+                    } else {
+                        Text("Procurando...")
+                            .foregroundStyle(Color.white)
+                    }
+                }
+                Spacer()
+            }
+            .padding(padding)
+            .background(Color.secondary)
         }
-        .padding()
         .task {
             // Solicita permissão de câmera ao aparecer
             await SearchObjectVM.getPermission()
         }
         .navigationBarBackButtonHidden(true)
+        .background(Color.primary)
+        .onDisappear() {
+            SearchObjectVM.stop()
+        }
     }
 }
 
 // MARK: - Preview
 #Preview{
     CoordinatedNavigationStack {
-        SearchObjectView(SearchObjectVM: SearchObjectViewModel())
+        SearchObjectView(SearchObjectVM: SearchObjectViewModel(camera: CameraManager(), sound: SoundManager(), haptics: HapticsManager(), mlManager: MLModelManager.shared, settingsManager: SettingsManager()))
     }
     .environment(Coordinator(dependencyContainer: DependencyContainer()))
 }
