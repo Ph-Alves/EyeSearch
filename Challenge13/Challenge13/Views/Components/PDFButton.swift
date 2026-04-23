@@ -27,7 +27,7 @@ struct GeneratePDFButton: View {
                 Image(systemName: "chevron.right")
                     .font(.system(size: 16, weight: .semibold))
             }
-            .foregroundColor(.white)
+            .foregroundColor(.titleText)
             .padding(.vertical, 24)
             .padding(.horizontal, 24)
             .frame(maxWidth: .infinity)

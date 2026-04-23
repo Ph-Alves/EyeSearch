@@ -17,7 +17,7 @@ struct AIChatCardView: View {
             
             Text("AIChat")
                 .font(.title)
-                .foregroundColor(.primary)
+                .foregroundColor(.titleText)
                 .padding(16)
             
             

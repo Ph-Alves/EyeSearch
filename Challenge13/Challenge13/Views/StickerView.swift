@@ -39,7 +39,7 @@ struct StickerView: View {
                  coordinator.pop()
             })
             
-            Text("Dicas")
+            Text("Imprimir Adesivo")
                 .font(.largeTitle)
             
             Text("Lorem Ipsum Dolor Sit Amet Lorem Ipsum Dolor Sit Amet Lorem Ipsum Dolor Sit")
@@ -62,7 +62,7 @@ struct StickerView: View {
             VStack(spacing: 0) {
                 
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 36) {
+                    VStack(alignment: .leading, spacing: 32) {
                         header
                         
                         CustomStepperView(quantity: $quantity)
