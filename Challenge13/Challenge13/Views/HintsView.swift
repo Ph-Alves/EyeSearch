@@ -18,32 +18,56 @@ struct HintsView: View {
     
     // MARK: - Body View
     var body: some View {
-        VStack {
+        ZStack {
             
-            // Volta a view anterior
-            ReturnButton(action: {
-                coordinator.pop()
-            })
+            Color(.background)
+            .ignoresSafeArea()
             
-            ScrollView {
-                VStack(spacing: 12) {
+            VStack (spacing: 16){
+                // Volta a view anterior
+                ReturnButton(action: {
+                    coordinator.pop()
+                })
+                
+                // Título + subtítulo
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Dicas")
+                        .font(.largeTitle)
+                        .fontWeight(.regular)
                     
-                    ForEach(viewModel.hints) { hint in
-                        HintCardView(
-                            hint: hint,
-                            isExpanded: viewModel.selectedHintID == hint.id,
-                            action: {
-                                print("clicou no texto")
-                                viewModel.toggleHint(hint)
-                            }
-                        )
-                    }
-                    
+                    Text("Lorem Ipsum Dolor Sit Amet Dolor Sit Sit Amet Dolor Sit")
+                        .font(.body)
+                        .foregroundColor(.primary)
                 }
-                .padding()
+                .padding(.top, 8)
+                
+                AIChatCardView()
+                    .padding(.top, 28)
+                
+                Text("Tire dúvidas com a IA")
+                    .font(.default)
+                    .padding(.top, 8)
+                    
+                
+                ScrollView {
+                    VStack(spacing: 16) {
+                        
+                        ForEach(viewModel.hints) { hint in
+                            HintCardView(
+                                hint: hint,
+                                isExpanded: viewModel.selectedHintID == hint.id,
+                                action: {
+                                    viewModel.toggleHint(hint)
+                                }
+                            )
+                        }
+                        
+                    }
+                    .padding()
+                }
             }
+            .navigationBarBackButtonHidden(true)
         }
-        .navigationBarBackButtonHidden(true)
     }
 }
 
@@ -53,5 +77,5 @@ struct HintsView: View {
         HintsView()
     }
     .environment(Coordinator(dependencyContainer: DependencyContainer()))
-    .environment(\.dynamicTypeSize, .large)
+//    .environment(\.dynamicTypeSize, .large)
 }
