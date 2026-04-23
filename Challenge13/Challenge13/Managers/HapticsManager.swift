@@ -26,8 +26,8 @@ final class HapticsManager: HapticsManaging {
     /// - Parameter isEnabled: Indica se o haptic está habilitado pelo usuário.
     func trigger(isEnabled: Bool) {
         guard isEnabled else { return }
-        let generator = UIImpactFeedbackGenerator(style: .medium)
-        generator.impactOccurred()
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred(intensity: 1)
     }
     
     /// Define o estado de habilitação dos haptics.

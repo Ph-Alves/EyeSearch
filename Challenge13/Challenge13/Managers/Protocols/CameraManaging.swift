@@ -24,6 +24,9 @@ protocol CameraManaging: AnyObject {
     
     /// Verifica e solicita permissão de acesso à câmera.
     func checkAuthorization() async
+    /// Para ligar/desligar a lanterna ao utilizar a câmera
+    ///  - Parameter on: Parâmetro booleano que define se liga ou desliga a lanterna, usando tochMode
+    func setTorch(on: Bool)
     /// Para a captura de vídeo.
     func stop()
 }
