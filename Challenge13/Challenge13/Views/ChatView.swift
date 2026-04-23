@@ -11,14 +11,21 @@ import SwiftUI
 /// # View - ChatView
 /// Tela do chatbot de acessibilidade visual.
 /// Permite ao usuário conversar com o assistente inteligente sobre dúvidas de acessibilidade.
+/// ## Usado em:
+/// - ``Coordinator/destination(for:)``
 struct ChatView: View {
 
     @Environment(Coordinator.self) private var coordinator
+    @StateObject private var viewModel: ChatViewModel
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @AccessibilityFocusState private var focusOnLastMessage: Bool
-    
-    @State var viewModel: ChatViewModel
+
+    /// Inicializa a view injetando o ``Coordinator`` na ``ChatViewModel``.
+    /// - Parameter coordinator: Instância do coordinator responsável pela navegação.
+    init(coordinator: Coordinator) {
+        _viewModel = StateObject(wrappedValue: ChatViewModel(coordinator: coordinator))
+    }
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -60,11 +67,13 @@ struct ChatView: View {
         }
     }
 
+    /// Fundo sólido que preenche toda a área segura da tela.
     private var background: some View {
         Color(.systemGroupedBackground)
             .ignoresSafeArea()
     }
 
+    /// Lista rolável de mensagens com scroll automático para a última mensagem ou indicador de digitação.
     private var messageList: some View {
         ScrollViewReader { proxy in
             ScrollView {
@@ -98,6 +107,10 @@ struct ChatView: View {
         }
     }
 
+    /// Rola a lista de mensagens até o final de forma animada.
+    /// - Parameters:
+    ///   - proxy: Proxy do `ScrollViewReader` usado para controlar o scroll.
+    ///   - anchor: ID do elemento alvo. Se `nil`, rola até a última mensagem.
     private func scrollToBottom(proxy: ScrollViewProxy, anchor: String? = nil) {
         withAnimation(.easeOut(duration: 0.3)) {
             if let anchor {
@@ -110,6 +123,7 @@ struct ChatView: View {
 
     // MARK: - Estado vazio
 
+    /// Tela exibida quando não há mensagens, com ícone, descrição e sugestões de perguntas rápidas.
     private var emptyState: some View {
         VStack(spacing: 20) {
             Spacer(minLength: 60)
@@ -136,7 +150,7 @@ struct ChatView: View {
                 ForEach(quickSuggestions, id: \.self) { suggestion in
                     SuggestionChipView(text: suggestion) {
                         viewModel.inputText = suggestion
-//                        viewModel.sendMessage()
+                        viewModel.sendMessage()
                     }
                 }
             }
@@ -147,6 +161,7 @@ struct ChatView: View {
         .frame(maxWidth: .infinity)
     }
 
+    /// Perguntas pré-definidas exibidas no estado vazio para facilitar o início da conversa.
     private let quickSuggestions = [
         "Como ativar o VoiceOver?",
         "Quais fontes são melhores para baixa visão?",
@@ -155,6 +170,7 @@ struct ChatView: View {
 
     // MARK: - Barra de input
 
+    /// Barra inferior com campo de texto multilinha e botão de envio.
     private var inputBar: some View {
         HStack(alignment: .bottom, spacing: 10) {
             // Campo de texto
@@ -204,12 +220,11 @@ struct ChatView: View {
 
     // MARK: - Toolbar
 
+    /// Toolbar com atalhos de navegação para configurações e limpeza do histórico.
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarTrailing) {
-            Button(action: {
-                coordinator.navigate(to: .settings)
-            }) {
+            Button(action: viewModel.navigateToSettings) {
                 Image(systemName: "gearshape")
                     .accessibilityLabel("Configurações")
             }
@@ -224,14 +239,27 @@ struct ChatView: View {
 }
 
 // MARK: - MessageBubbleView
-
+/// # View - MessageBubbleView
+/// Balão de mensagem individual exibido na lista do chat.
+/// Adapta visual e alinhamento conforme o papel do remetente (usuário ou assistente).
+/// Mensagens do assistente renderizam Markdown nativo via `AttributedString`.
+/// Mensagens filtradas pelo escopo são destacadas com borda laranja e ícone de aviso.
+/// ## Usado em:
+/// - ``ChatView``
 struct MessageBubbleView: View {
 
+    /// Mensagem a ser exibida no balão.
     let message: ChatMessage
 
     @Environment(\.colorScheme) private var colorScheme
 
     private var isUser: Bool { message.role == .user }
+
+    /// Converte o texto Markdown da mensagem em `AttributedString` para renderização nativa.
+    /// Utilizado apenas nas mensagens do assistente. Em caso de falha na conversão, retorna o texto puro.
+    private var formattedText: AttributedString {
+        (try? AttributedString(markdown: message.text)) ?? AttributedString(message.text)
+    }
 
     var body: some View {
         HStack(alignment: .bottom, spacing: 6) {
@@ -246,22 +274,28 @@ struct MessageBubbleView: View {
             }
 
             VStack(alignment: isUser ? .trailing : .leading, spacing: 4) {
-                // Balão
-                Text(message.text)
-                    .font(.body)
-                    .foregroundStyle(isUser ? .white : .primary)
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 10)
-                    .background(bubbleBackground)
-                    .clipShape(bubbleShape)
-                    // Borda extra para mensagens filtradas (fora do escopo)
-                    .overlay(
-                        bubbleShape
-                            .strokeBorder(
-                                message.isFiltered ? Color.orange.opacity(0.6) : .clear,
-                                lineWidth: 1.5
-                            )
-                    )
+                // Balão — mensagens do usuário usam Text simples; do assistente renderizam Markdown
+                Group {
+                    if isUser {
+                        Text(message.text)
+                    } else {
+                        Text(formattedText)
+                    }
+                }
+                .font(.body)
+                .foregroundStyle(isUser ? .white : .primary)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 10)
+                .background(bubbleBackground)
+                .clipShape(bubbleShape)
+                // Borda extra para mensagens filtradas (fora do escopo)
+                .overlay(
+                    bubbleShape
+                        .strokeBorder(
+                            message.isFiltered ? Color.orange.opacity(0.6) : .clear,
+                            lineWidth: 1.5
+                        )
+                )
 
                 // Flag de filtrado
                 if message.isFiltered {
@@ -294,7 +328,11 @@ struct MessageBubbleView: View {
 }
 
 // MARK: - TypingIndicatorView
-
+/// # View - TypingIndicatorView
+/// Indicador animado exibido enquanto o assistente está processando uma resposta.
+/// Apresenta três pontos com animação sequencial de escala.
+/// ## Usado em:
+/// - ``ChatView``
 struct TypingIndicatorView: View {
 
     @State private var phase: Int = 0
@@ -336,10 +374,16 @@ struct TypingIndicatorView: View {
 }
 
 // MARK: - SuggestionChipView
-
+/// # View - SuggestionChipView
+/// Botão de sugestão rápida exibido no estado vazio do chat.
+/// Ao ser tocado, preenche o campo de texto e envia a mensagem automaticamente.
+/// ## Usado em:
+/// - ``ChatView``
 struct SuggestionChipView: View {
 
+    /// Texto da sugestão exibido no botão.
     let text: String
+    /// Ação executada ao tocar no chip.
     let action: () -> Void
 
     var body: some View {
@@ -364,9 +408,14 @@ struct SuggestionChipView: View {
 }
 
 // MARK: - ErrorBannerView
-
+/// # View - ErrorBannerView
+/// Banner vermelho exibido no topo da tela quando ocorre um erro no chatbot.
+/// Desaparece automaticamente após 4 segundos, controlado pela ``ChatViewModel``.
+/// ## Usado em:
+/// - ``ChatView``
 struct ErrorBannerView: View {
 
+    /// Texto do erro a ser exibido no banner.
     let message: String
 
     var body: some View {
@@ -393,10 +442,9 @@ struct ErrorBannerView: View {
 // MARK: - Preview
 
 #Preview {
-    let container = DependencyContainer()
-    let coordinator = Coordinator(dependencyContainer: container)
+    let coordinator = Coordinator(dependencyContainer: DependencyContainer())
     CoordinatedNavigationStack {
-        ChatView(viewModel: ChatViewModel(manager: container.foundationsManager, coordinator: coordinator))
+        ChatView(coordinator: coordinator)
     }
     .environment(coordinator)
 }
