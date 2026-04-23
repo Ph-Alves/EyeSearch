@@ -24,26 +24,33 @@ struct HintsView: View {
             ReturnButton(action: {
                 coordinator.pop()
             })
-            
-            ScrollView {
-                VStack(spacing: 12) {
-                    
-                    ForEach(viewModel.hints) { hint in
-                        HintCardView(
-                            hint: hint,
-                            isExpanded: viewModel.selectedHintID == hint.id,
-                            action: {
-                                print("clicou no texto")
-                                viewModel.toggleHint(hint)
-                            }
-                        )
+            Text("Hints View")
+            Button {
+                coordinator.navigate(to: HomeDestination.chat)
+            } label: {
+                Text("CHATBOT")
+                    .bold()
+                
+                ScrollView {
+                    VStack(spacing: 12) {
+                        
+                        ForEach(viewModel.hints) { hint in
+                            HintCardView(
+                                hint: hint,
+                                isExpanded: viewModel.selectedHintID == hint.id,
+                                action: {
+                                    print("clicou no texto")
+                                    viewModel.toggleHint(hint)
+                                }
+                            )
+                        }
+                        
                     }
-                    
+                    .padding()
                 }
-                .padding()
             }
+            .navigationBarBackButtonHidden(true)
         }
-        .navigationBarBackButtonHidden(true)
     }
 }
 
