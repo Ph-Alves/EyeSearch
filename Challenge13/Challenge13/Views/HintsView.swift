@@ -19,39 +19,37 @@ struct HintsView: View {
     // MARK: - Body View
     var body: some View {
         ZStack {
-            
             Color(.background)
-            .ignoresSafeArea()
+                .ignoresSafeArea()
             
-            VStack (spacing: 16){
-                // Volta a view anterior
-                ReturnButton(action: {
-                    coordinator.pop()
-                })
-                
-                // Título + subtítulo
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Dicas")
-                        .font(.largeTitle)
-                        .fontWeight(.regular)
+            ScrollView {
+                VStack(spacing: 16) {
                     
-                    Text("Lorem Ipsum Dolor Sit Amet Dolor Sit Sit Amet Dolor Sit")
-                        .font(.body)
-                        .foregroundColor(.primary)
-                }
-                .padding(.top, 8)
-                
-                AIChatCardView()
-                    .padding(.top, 28)
-                
-                Text("Tire dúvidas com a IA")
-                    .font(.default)
+                    // Botão voltar
+                    ReturnButton {
+                        coordinator.pop()
+                    }
+                    
+                    // Título + subtítulo
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Dicas")
+                            .font(.largeTitle)
+                        
+                        Text("Lorem Ipsum Dolor Sit Amet Dolor Sit Sit Amet Dolor Sit")
+                            .font(.body)
+                            .foregroundColor(.primary)
+                    }
                     .padding(.top, 8)
                     
-                
-                ScrollView {
+                    // Card para o AIChat, ainda não funcionando.
+                    AIChatCardView()
+                        .padding(.top, 28)
+                    
+                    Text("Tire dúvidas com a IA")
+                        .padding(.top, 8)
+                    
+                    // Lista de cards de Hints
                     VStack(spacing: 16) {
-                        
                         ForEach(viewModel.hints) { hint in
                             HintCardView(
                                 hint: hint,
@@ -61,13 +59,13 @@ struct HintsView: View {
                                 }
                             )
                         }
-                        
                     }
-                    .padding()
                 }
+                .padding(.horizontal, 20)
+                .padding(.top)
             }
-            .navigationBarBackButtonHidden(true)
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 
