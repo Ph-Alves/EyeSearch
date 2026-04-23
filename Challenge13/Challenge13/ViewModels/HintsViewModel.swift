@@ -18,9 +18,9 @@ class HintsViewModel {
     // MARK: - Variables
     /// Lista de dicas exibidas na tela.
     var hints: [Hint] = [
-        Hint(id: UUID(), title: String(localized: "hints.card.howToUse.title"),        description: String(localized: "hints.card.howToUse.description")),
-        Hint(id: UUID(), title: String(localized: "hints.card.manageEmotions.title"),  description: String(localized: "hints.card.manageEmotions.description")),
-        Hint(id: UUID(), title: String(localized: "hints.card.focusTips.title"),       description: String(localized: "hints.card.focusTips.description"))
+        Hint(id: UUID(), title: String(localized: String.LocalizationValue(L10n.Hints.Card.HowToUse.title)),        description: String(localized: String.LocalizationValue(L10n.Hints.Card.HowToUse.description))),
+        Hint(id: UUID(), title: String(localized: String.LocalizationValue(L10n.Hints.Card.ManageEmotions.title)),  description: String(localized: String.LocalizationValue(L10n.Hints.Card.ManageEmotions.description))),
+        Hint(id: UUID(), title: String(localized: String.LocalizationValue(L10n.Hints.Card.FocusTips.title)),       description: String(localized: String.LocalizationValue(L10n.Hints.Card.FocusTips.description)))
     ]
     
     /// ID da dica atualmente expandida. `nil` se nenhuma estiver aberta.

@@ -26,14 +26,12 @@ struct StickerView: View {
             coordinator.pop()
         })
         VStack(spacing: 20) {
-            Text("sticker.screen.title")
+            Text(LocalizedStringKey(L10n.Sticker.Screen.title))
                 .font(.title)
 
-            Stepper(
-                "sticker.quantity.label \(quantity)",
-                value: $quantity,
-                in: 1...20
-            )
+            Stepper(value: $quantity, in: 1...20) {
+                Text(verbatim: String(format: NSLocalizedString(L10n.Sticker.Quantity.label, comment: ""), quantity))
+            }
             .padding()
 
             Button(action: {
@@ -41,7 +39,7 @@ struct StickerView: View {
                 stickerVM.generatePDF(stickerQuantity: quantity)
                 coordinator.navigate(to: .stickerPreview)
             }) {
-                Text("sticker.button.generatePDF")
+                Text(LocalizedStringKey(L10n.Sticker.Button.generatePDF))
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color.blue)
@@ -50,7 +48,7 @@ struct StickerView: View {
             }
         }
         .padding()
-        .navigationTitle("sticker.preview.navigationTitle")
+        .navigationTitle(LocalizedStringKey(L10n.Sticker.Preview.navigationTitle))
         .navigationBarBackButtonHidden(true)
     }
 }
