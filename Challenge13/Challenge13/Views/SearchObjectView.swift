@@ -14,15 +14,25 @@ import AVFoundation
 /// Exibe o preview da câmera e solicita permissão de acesso ao iniciar.
 struct SearchObjectView: View {
     // MARK: - Variables
+    /// Coordinator
     @Environment(Coordinator.self) private var coordinator
-    
+    /// ViewModel
     var SearchObjectVM: SearchObjectViewModel
-    @State var flashLight: Bool = true
+    /// States
+    @State private var flashLight: Bool = true
+    /// init
+    init(SearchObjectVM: SearchObjectViewModel) {
+        self.SearchObjectVM = SearchObjectVM
+    }
+    /// View values
+    private var padding: CGFloat = 20
+    private var cameraZIndex: Double = 2
+    private var effectZIndex: Double = 3
     
     // MARK: - Body View
     var body: some View {
-        VStack {
-            HStack {
+        VStack(spacing: 0) {
+            HStack(alignment: .center) {
                 ReturnButton(action: {
                     coordinator.pop()
                 })
@@ -34,7 +44,8 @@ struct SearchObjectView: View {
                     Image(systemName: flashLight ? "flashlight.on.fill" : "flashlight.slash")
                 }
             }
-            .padding()
+            .padding(padding)
+            .background(Color.secondary)
             
             ZStack {
                 // Preview ao vivo da câmera
@@ -49,11 +60,25 @@ struct SearchObjectView: View {
                             .position(x: rect.midX, y: rect.midY)
                     }
                 }
-                .zIndex(2)
+                .zIndex(cameraZIndex)
+                
+                if SearchObjectVM.stickerCount > 0 {
+                    WaveOverlay()
+                        .allowsHitTesting(false)
+                        .zIndex(effectZIndex)
+                }
             }
-            Text("\(SearchObjectVM.stickerCount) adesivos encontrados")
+            HStack {
+                Spacer()
+                VStack {
+                    Text("\(SearchObjectVM.stickerCount) adesivos encontrados")
+                        .foregroundStyle(Color.white)
+                }
+                Spacer()
+            }
+            .padding(padding)
+            .background(Color.secondary)
         }
-        .padding()
         .task {
             // Solicita permissão de câmera ao aparecer
             await SearchObjectVM.getPermission()
@@ -66,7 +91,7 @@ struct SearchObjectView: View {
 // MARK: - Preview
 #Preview{
     CoordinatedNavigationStack {
-        SearchObjectView(SearchObjectVM: SearchObjectViewModel())
+        SearchObjectView(SearchObjectVM: SearchObjectViewModel(camera: CameraManager(), sound: SoundManager(), haptics: HapticsManager(), mlManager: MLModelManager.shared, settingsManager: SettingsManager()))
     }
     .environment(Coordinator(dependencyContainer: DependencyContainer()))
 }
