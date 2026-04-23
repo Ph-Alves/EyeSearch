@@ -38,7 +38,7 @@ struct HintCardView: View {
             
             // Conteúdo
             if isExpanded {
-                Text("isExpanded: \(isExpanded.description)")
+                Text(hint.description)
                     .font(.subheadline)
                     .foregroundColor(.gray)
                     .transition(.opacity.combined(with: .move(edge: .top)))

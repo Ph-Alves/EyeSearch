@@ -95,6 +95,6 @@ struct CustomPDFDoc: Transferable {
         DataRepresentation(exportedContentType: .pdf) { documento in
             documento.data
         }
-        .suggestedFileName("Adesivos.pdf")
+        .suggestedFileName(PDFConstants.fileName)
     }
 }

@@ -34,7 +34,7 @@ struct PrintStickerView: View {
             if let document = stickerVM.getDoc() {
                 ShareLink(
                     item: document,
-                    preview: SharePreview("Adesivos.pdf", image: Image("sticker"))
+                    preview: SharePreview(PDFConstants.fileName, image: Image("sticker"))
                 ) {
                     Label(LocalizedStringKey(L10n.Sticker.Button.exportPDF), systemImage: "square.and.arrow.up")
                         .padding()

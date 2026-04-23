@@ -14,6 +14,8 @@ enum L10n {
         }
     }
 
+// MARK: - Views
+    
     enum Home {
         enum Menu {
             static let search   = "home.menu.search"
@@ -66,6 +68,18 @@ enum L10n {
         enum Quantity {
             // Full key as registered in xcstrings (includes the %lld format specifier)
             static let label = "sticker.quantity.label %lld"
+        }
+    }
+    
+    //MARK: - Intents
+    
+    enum Intents {
+        enum SearchObject {
+            static let shortTitle  = "intents.searchObject.shortTitle"
+            
+            static let searchObejct = "intents.searchObject.title"
+            static let openSearch   = "intents.searchObject.openSearch"
+            static let obejctSearch  = "intents.searchObject.openSticker"
         }
     }
 }
