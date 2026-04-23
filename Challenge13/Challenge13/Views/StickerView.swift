@@ -15,9 +15,10 @@ import PDFKit
 struct StickerView: View {
     // MARK: - Variables
     @Environment(Coordinator.self) private var coordinator
+
+    var stickerVM: StickerViewModel
     
     @State var quantity: Int = 1
-    var stickerVM: StickerViewModel
     
     // Quantos adesivos cabem por folha A4
     private let adesivosPerSheet = 24
@@ -29,124 +30,57 @@ struct StickerView: View {
         return Int(ceil(Double(quantity) / Double(adesivosPerSheet)))
     }
     
+    
+    // MARK: - Header
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            
+            ReturnButton(action: {
+                 coordinator.pop()
+            })
+            
+            Text("Dicas")
+                .font(.largeTitle)
+            
+            Text("Lorem Ipsum Dolor Sit Amet Lorem Ipsum Dolor Sit Amet Lorem Ipsum Dolor Sit")
+                .font(.body)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .fixedSize(horizontal: false, vertical: true)
+            
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal)
+        .padding(.top, 12)
+    }
+    
     // MARK: - Body View
     var body: some View {
         ZStack {
             Color(.background)
                 .ignoresSafeArea()
             
-            VStack(spacing: 24) {
+            VStack(spacing: 0) {
                 
-                ReturnButton(action: {
-                    coordinator.pop()
-                })
-                
-                // Título + subtítulo
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Dicas")
-                        .font(.largeTitle)
-                    
-                    Text("Lorem Ipsum Dolor Sit Amet Dolor Sit Sit Amet Dolor Sit")
-                        .font(.body)
-                        .foregroundColor(.primary)
-                }
-                .padding(.top, 8)
-                
-                //MARK: - Stepper Customizado
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(Color(white: 0.15))
-                    .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color(.stickerPrimaryBorder), lineWidth: 4)
-                        )
-                    .overlay(
-                        VStack(spacing: 12) {
-                            Text("Quantidade de Adesivos")
-                                .font(.system(size: 14))
-                                .foregroundColor(.gray)
-
-                            HStack {
-                                // Botão –
-                                Button {
-                                    if quantity > 0 { quantity -= 1 }
-                                } label: {
-                                    Circle()
-                                        .fill(Color(white: 0.25))
-                                        .frame(width: 44, height: 44)
-                                        .overlay(
-                                            Text("−")
-                                                .font(.system(size: 22, weight: .medium))
-                                                .foregroundColor(.white)
-                                        )
-                                }
-
-                                Spacer()
-
-                                // Número
-                                Text("\(quantity)")
-                                    .font(.system(size: 72, weight: .bold, design: .rounded))
-                                    .foregroundColor(Color(red: 0.96, green: 0.92, blue: 0.82))
-                                    .contentTransition(.numericText())
-                                    .animation(.spring(duration: 0.3), value: quantity)
-
-                                Spacer()
-
-                                // Botão +
-                                Button {
-                                    quantity += 1
-                                } label: {
-                                    Circle()
-                                        .fill(Color(white: 0.25))
-                                        .frame(width: 44, height: 44)
-                                        .overlay(
-                                            Text("+")
-                                                .font(.system(size: 22, weight: .medium))
-                                                .foregroundColor(.white)
-                                        )
-                                }
-                            }
-                            .padding(.horizontal, 20)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 36) {
+                        header
+                        
+                        CustomStepperView(quantity: $quantity)
+                        A4InfoCardView(quantity: quantity, sheetsNeeded: sheetsNeeded)
+                        
+                        Spacer()
+                        
+                        GeneratePDFButton {
+                            stickerVM.generatePDF(stickerQuantity: quantity)
+                            coordinator.navigate(to: .stickerPreview)
                         }
-                        .padding(.vertical, 20)
-                    )
-                    .frame(height: 160)
-                
-                // MARK: - Retangulo para calcular a quantidade de FOLHAS A4
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(Color(white: 0.15))
-                    .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color(.stickerPrimaryBorder), lineWidth: 4)
-                    )
-                    .frame(height: 60)
-                    .overlay(
-                        HStack(spacing: 8) {
-                            Image(systemName: "doc")
-                                .foregroundColor(.gray)
-                                .font(.system(size: 32))
-                            Text("\(quantity) adesivos * \(sheetsNeeded) Folhas A4")
-                                .font(.system(size: 24))
-                                .foregroundColor(.white)
-                        }
-                    )
-                
-                //MARK: - Botão GERAR PDF
-                Button(action: {
-                    // Gera o PDF e navega para a tela de preview
-                    stickerVM.generatePDF(stickerQuantity: quantity)
-                    coordinator.navigate(to: .stickerPreview)
-                }) {
-                    Text("Gerar PDF")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
+
+                    }
+                    .padding()
                 }
             }
-            .padding()
-            .navigationBarBackButtonHidden(true)
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 

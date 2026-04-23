@@ -13,7 +13,7 @@ struct AIChatCardView: View {
         
         HStack {
             Image(systemName: "iphone.radiowaves.left.and.right")
-                .font(.largeTitle)
+                .font(.title)
             
             Text("AIChat")
                 .font(.title)

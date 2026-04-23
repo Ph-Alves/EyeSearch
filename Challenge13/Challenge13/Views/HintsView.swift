@@ -29,7 +29,6 @@ struct HintsView: View {
                     ReturnButton {
                         coordinator.pop()
                     }
-                    
                     // Título + subtítulo
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Dicas")

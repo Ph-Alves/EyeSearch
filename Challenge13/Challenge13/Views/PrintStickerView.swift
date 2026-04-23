@@ -30,7 +30,7 @@ struct PrintStickerView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             
-            // Botão de exportação via ShareLink (só aparece se o PDF foi gerado)
+            // Botão de exportação via ShareLink 
             if let document = stickerVM.getDoc() {
                 ShareLink(
                     item: document,
