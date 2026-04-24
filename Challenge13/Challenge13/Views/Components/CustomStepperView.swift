@@ -29,7 +29,7 @@ struct CustomStepperView: View {
                     HStack {
                         // Botão –
                         Button {
-                            if quantity > 0 { quantity -= 1 }
+                            if quantity > 1 { quantity -= 1 }
                         } label: {
                             Circle()
                                 .fill(Color(white: 0.25))

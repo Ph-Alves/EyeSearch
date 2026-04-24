@@ -16,7 +16,8 @@ struct A4InfoCardView: View {
         HStack(spacing: 8) {
             Image(systemName: "doc")
                 .foregroundColor(.gray)
-            Text("\(quantity) adesivos - \(sheetsNeeded) Folhas A4")
+            //operador ternário para colocar no singular ou no plural a palavra adesivo
+            Text("\(quantity) \(quantity == 1 ? "adesivo" : "adesivos") - \(sheetsNeeded) Folhas A4")
                 .foregroundColor(.white)
         }
         .font(.body)
