@@ -2,6 +2,8 @@
 //  OnboardingStepView.swift
 //  Challenge13
 //
+//  Created by Manoel Pedro Prado Sa Teles on 24/04/26.
+//
 
 import SwiftUI
 
@@ -49,7 +51,7 @@ struct OnboardingStepView: View {
                 .clipped()
                 .overlay(
                     Rectangle()
-                        .strokeBorder(Color.white, lineWidth: 6)
+                        .strokeBorder(Color("titleText"), lineWidth: 6)
                 )
         case .plain(let name):
             Image(name)
@@ -87,11 +89,9 @@ private struct OnboardingMP1Image: View {
 #Preview("Step 1") {
     OnboardingStepView(page: OnboardingPage.all[0])
         .background(Color("background"))
-        .preferredColorScheme(.dark)
 }
 
 #Preview("Step 4 (no image)") {
     OnboardingStepView(page: OnboardingPage.all[3])
         .background(Color("background"))
-        .preferredColorScheme(.dark)
 }

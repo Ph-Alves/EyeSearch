@@ -2,6 +2,8 @@
 //  OnboardingView.swift
 //  Challenge13
 //
+//  Created by Manoel Pedro Prado Sa Teles on 24/04/26.
+//
 
 import SwiftUI
 
@@ -34,7 +36,6 @@ struct OnboardingView: View {
                 .padding(.bottom, 32)
             }
         }
-        .preferredColorScheme(.dark)
     }
 
     private func advance() {

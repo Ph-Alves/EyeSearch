@@ -2,10 +2,13 @@
 //  OnboardingProgressBar.swift
 //  Challenge13
 //
+//  Created by Manoel Pedro Prado Sa Teles on 24/04/26.
+//
 
 import SwiftUI
 
 struct OnboardingProgressBar: View {
+
     let currentIndex: Int
     let totalSteps: Int
 
@@ -13,7 +16,7 @@ struct OnboardingProgressBar: View {
         HStack(spacing: 2) {
             ForEach(0..<totalSteps, id: \.self) { index in
                 RoundedRectangle(cornerRadius: 4, style: .continuous)
-                    .fill(index <= currentIndex ? Color.white : Color("onboardingProgressInactive"))
+                    .fill(index <= currentIndex ? Color("titleText") : Color("onboardingProgressInactive"))
                     .frame(maxWidth: .infinity)
                     .frame(height: 8)
             }
@@ -30,6 +33,5 @@ struct OnboardingProgressBar: View {
     }
     .padding(.horizontal, 22)
     .padding(.vertical, 32)
-    .background(Color.black)
-    .preferredColorScheme(.dark)
+    .background(Color("background"))
 }

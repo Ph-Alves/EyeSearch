@@ -2,6 +2,8 @@
 //  OnboardingPage.swift
 //  Challenge13
 //
+//  Created by Manoel Pedro Prado Sa Teles on 24/04/26.
+//
 
 import Foundation
 
