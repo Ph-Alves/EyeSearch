@@ -16,10 +16,7 @@ struct CustomStepperView: View {
         //MARK: - Stepper Customizado
         RoundedRectangle(cornerRadius: 20)
             .fill(Color(white: 0.15))
-            .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color(.stickerPrimaryBorder), lineWidth: 4)
-                )
+            .stroke(Color(.stickerPrimaryBorder), lineWidth: 4)
             .overlay(
                 VStack(spacing: 12) {
                     Text("Quantidade de Adesivos")

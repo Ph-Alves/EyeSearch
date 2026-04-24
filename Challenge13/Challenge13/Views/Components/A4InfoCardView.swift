@@ -27,11 +27,12 @@ struct A4InfoCardView: View {
         .background(
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color(white: 0.15))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(Color(.stickerPrimaryBorder), lineWidth: 4)
-            )
+                .stroke(Color(.stickerPrimaryBorder), lineWidth: 4)
         )
     }
+}
+
+#Preview {
+    A4InfoCardView(quantity: 4, sheetsNeeded: 4)
 }
 
