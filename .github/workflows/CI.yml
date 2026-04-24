@@ -1,29 +1,22 @@
 name: CI
-
 on:
   pull_request:
     branches:
       - main
       - develop
-
 jobs:
   build-and-test:
-    runs-on: self-hosted
-
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v4
         with:
           lfs: true
-
-      - name: Pull LFS files
-        run: git lfs pull
-      
       - name: Build
         run: |
           xcodebuild build \
             -project Challenge13/EyeSearch.xcodeproj \
             -scheme Challenge13 \
-            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.0' \
+            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.1' \
             CODE_SIGNING_ALLOWED=NO
 
       - name: Run Tests
@@ -31,5 +24,5 @@ jobs:
           xcodebuild test \
             -project Challenge13/EyeSearch.xcodeproj \
             -scheme Challenge13 \
-            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.0' \
+            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.1' \
             CODE_SIGNING_ALLOWED=NO
