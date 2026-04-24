@@ -14,17 +14,9 @@ jobs:
       - name: Pull LFS files
         run: git lfs pull
 
-      - name: Build
+      - name: Build and Test
         run: |
-          xcodebuild build \
-            -project Challenge13/EyeSearch.xcodeproj \
-            -scheme Challenge13 \
-            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.1' \
-            CODE_SIGNING_ALLOWED=NO
-
-      - name: Run Tests
-        run: |
-          xcodebuild test \
+          xcodebuild build test \
             -project Challenge13/EyeSearch.xcodeproj \
             -scheme Challenge13 \
             -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.1' \
