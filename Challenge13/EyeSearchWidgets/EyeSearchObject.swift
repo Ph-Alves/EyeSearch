@@ -35,10 +35,11 @@ struct EyeSearchObject: Widget {
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
-            Button(intent: OpenSearchObjectIntent()) {
-                Image(systemName: "plus")
+            Button(intent: OpenSearchObjectWidgetIntent()) {
+                Image(systemName: "magnifyingglass")
                     .padding()
-                    .background(Color.red)
+                    .background(Color.secondary)
+                    .containerBackground(.fill.quaternary, for: .widget)
                     .clipShape(Circle())
             }
             .buttonStyle(.plain)

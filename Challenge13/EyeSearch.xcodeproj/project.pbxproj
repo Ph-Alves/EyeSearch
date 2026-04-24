@@ -61,6 +61,7 @@
 		EFE2E59B2F9A9F2B00413ED1 /* EyeSearchWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = EyeSearchWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFE2E59D2F9A9F2B00413ED1 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		EFE2E59F2F9A9F2B00413ED1 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		EFE2E7232F9AE38E00413ED1 /* EyeSearch-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "EyeSearch-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -70,13 +71,6 @@
 				Info.plist,
 			);
 			target = EFE2E59A2F9A9F2B00413ED1 /* EyeSearchWidgetsExtension */;
-		};
-		EFE2E68C2F9AB47F00413ED1 /* Exceptions for "EyeSearchWidgets" folder in "EyeSearch" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				OpenSearchObjectIntent.swift,
-			);
-			target = EF69E88A2F87CFDB00FD9AE7 /* EyeSearch */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -99,7 +93,6 @@
 		EFE2E5A12F9A9F2B00413ED1 /* EyeSearchWidgets */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				EFE2E68C2F9AB47F00413ED1 /* Exceptions for "EyeSearchWidgets" folder in "EyeSearch" target */,
 				EFE2E5B02F9A9F2D00413ED1 /* Exceptions for "EyeSearchWidgets" folder in "EyeSearchWidgetsExtension" target */,
 			);
 			path = EyeSearchWidgets;
@@ -144,6 +137,7 @@
 		EF69E8822F87CFDB00FD9AE7 = {
 			isa = PBXGroup;
 			children = (
+				EFE2E7232F9AE38E00413ED1 /* EyeSearch-Info.plist */,
 				EFE2E5962F9A9EA000413ED1 /* EyeSearch.entitlements */,
 				EFE2E23A2F9903D100413ED1 /* Challenge13.xctestplan */,
 				EFAB54E92F96C95A00A009CE /* EyeSearchDoc.docc */,
@@ -536,6 +530,7 @@
 				DEVELOPMENT_TEAM = 29HC4SA3R9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "EyeSearch-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = EyeSearch;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera access to detect and identify stickers on objects in real time.";
@@ -577,6 +572,7 @@
 				DEVELOPMENT_TEAM = 29HC4SA3R9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "EyeSearch-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = EyeSearch;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera access to detect and identify stickers on objects in real time.";
@@ -734,7 +730,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited) WIDGET_EXTENSION";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
@@ -765,7 +761,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = WIDGET_EXTENSION;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;

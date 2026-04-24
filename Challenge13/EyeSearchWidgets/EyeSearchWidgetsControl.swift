@@ -14,7 +14,7 @@ struct EyeSearchSearchControl: ControlWidget {
         StaticControlConfiguration(
             kind: "br.com.paulo.eyeSearch.EyeSearchWidgets",
         ) {
-            ControlWidgetButton(action: OpenSearchObjectIntent()) {
+            ControlWidgetButton(action: OpenSearchObjectWidgetIntent()) {
                 Label("Procurar Objeto", systemImage: "magnifyingglass")
             }
         }

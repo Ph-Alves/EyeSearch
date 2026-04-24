@@ -24,6 +24,11 @@ struct Challenge13App: App {
             CoordinatedNavigationStack {
                 HomeView(homeVM: coordinator.dependencyContainer.homeViewModel)
             }
+            .onOpenURL { url in
+                if url.scheme == "eyesearch" && url.host == "searchObject" {
+                    IntentsManager.shared.openSearchObject()
+                }
+            }
             // Coordinator injetado como variável de ambiente
             .environment(coordinator)
             // Expõe o coordinator ao IntentsManager para que os AppIntents (Siri)
