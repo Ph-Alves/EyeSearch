@@ -23,7 +23,7 @@ struct HomeView: View {
     
     var homeVM: HomeViewModel
     
-    private let screenTitle = "Nome do app"
+    private let screenTitle = "EyeSearch"
     // Decide se usa cards grandes (quando acessibilidade de texto grande está ativa)
     private var usesLargeCard: Bool {
         dynamicTypeSize >= .xxxLarge
