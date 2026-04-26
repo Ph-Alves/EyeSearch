@@ -74,5 +74,4 @@ struct HintsView: View {
         HintsView()
     }
     .environment(Coordinator(dependencyContainer: DependencyContainer()))
-//    .environment(\.dynamicTypeSize, .large)
 }
