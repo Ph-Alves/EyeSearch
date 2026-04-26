@@ -35,9 +35,23 @@
 		EFE2E23A2F9903D100413ED1 /* Challenge13.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Challenge13.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		CE5DD8B12F9DC30200FDAD09 /* Exceptions for "Challenge13" folder in "EyeSearchTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				MLModels/StickerDetector1.mlmodel,
+				MLModels/YOLOv3.mlmodel,
+			);
+			target = EF69E8992F87CFDD00FD9AE7 /* EyeSearchTests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		EF69E88D2F87CFDB00FD9AE7 /* Challenge13 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CE5DD8B12F9DC30200FDAD09 /* Exceptions for "Challenge13" folder in "EyeSearchTests" target */,
+			);
 			path = Challenge13;
 			sourceTree = "<group>";
 		};
