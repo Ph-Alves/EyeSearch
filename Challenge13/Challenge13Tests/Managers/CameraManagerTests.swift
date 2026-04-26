@@ -41,6 +41,15 @@ final class CameraManagerTests: XCTestCase {
     //
     // T14 RN17 — Reconhecimento em até 3 segundos sem travar
     //   Performance/UI test: exige hardware real, câmera ativa e medição ponta a ponta.
+    //
+    // T_Denied — Testar o caminho .denied / .restricted de checkAuthorization
+    //   AVCaptureDevice.authorizationStatus não é injetável sem refactor do CameraManager.
+    //   Proposta: extrair um closure `authorizationStatusProvider: () -> AVAuthorizationStatus`
+    //   no init para permitir stubbing e cobrir os ramos isDenied = true / isAuthorized = false.
+    //
+    // T_HappyPath — Testar isAuthorized = true / isDenied = false
+    //   O simulador nega o acesso à câmera automaticamente no ambiente de testes.
+    //   Os ramos .authorized e .notDetermined → granted não são atingíveis sem DI ou dispositivo real.
 
     // MARK: - Propriedades
 
@@ -60,21 +69,24 @@ final class CameraManagerTests: XCTestCase {
 
     // MARK: - checkAuthorization
 
-//    func test_CheckAuthorization_SetsIsAuthorizedTrue() async {
-//        // No simulador, authorizationStatus retorna .authorized ou .notDetermined.
-//        // Em ambos os casos o resultado final é isAuthorized = true:
-//        //   .authorized      → atribuição direta
-//        //   .notDetermined   → requestAccess retorna true automaticamente (sem diálogo em testes)
-//
-//        // Act
-//        await sut.checkAuthorization()
-//
-//        // Assert
-//        XCTAssertTrue(
-//            sut.isAuthorized,
-//            "checkAuthorization deve definir isAuthorized como true no simulador."
-//        )
-//    }
+    func test_CheckAuthorization_WhenDenied_SetsStateCorrectly() async {
+        // O ambiente de testes do simulador nega o acesso à câmera automaticamente
+        // (authorizationStatus retorna .denied). Este teste verifica que checkAuthorization
+        // define o estado de negação de forma consistente.
+
+        // Act
+        await sut.checkAuthorization()
+
+        // Assert
+        XCTAssertFalse(
+            sut.isAuthorized,
+            "isAuthorized deve ser false quando a câmera é negada no simulador."
+        )
+        XCTAssertTrue(
+            sut.isDenied,
+            "isDenied deve ser true quando a câmera é negada no simulador."
+        )
+    }
 
     func test_CheckAuthorization_SessionRemainsEmpty() async {
         // Arrange — setupSession é chamado internamente após autorização, mas
@@ -95,49 +107,69 @@ final class CameraManagerTests: XCTestCase {
         )
     }
 
-//    func test_CheckAuthorization_CalledTwice_DoesNotCrash() async {
-//        // Segunda chamada com status já .authorized não deve produzir estado inconsistente.
-//        await sut.checkAuthorization()
-//
-//        await sut.checkAuthorization()
-//
-//        XCTAssertTrue(
-//            sut.isAuthorized,
-//            "isAuthorized deve permanecer true após segunda chamada a checkAuthorization."
-//        )
-//    }
+    func test_CheckAuthorization_CalledTwice_DoesNotCrash() async {
+        // Segunda chamada com status já .denied não deve produzir estado inconsistente.
+        await sut.checkAuthorization()
+
+        await sut.checkAuthorization()
+
+        XCTAssertFalse(
+            sut.isAuthorized,
+            "isAuthorized deve permanecer false após segunda chamada a checkAuthorization."
+        )
+        XCTAssertTrue(
+            sut.isDenied,
+            "isDenied deve permanecer true após segunda chamada a checkAuthorization no simulador."
+        )
+    }
+
+    func test_CheckAuthorization_WhenDenied_SetsIsDeniedTrue() async {
+        // O simulador nega o acesso à câmera no ambiente de testes (ver T_HappyPath em Inviáveis).
+        // Verifica que isDenied é true e isAuthorized é false no estado de negação.
+
+        // Act
+        await sut.checkAuthorization()
+
+        // Assert
+        XCTAssertTrue(
+            sut.isDenied,
+            "isDenied deve ser true quando o acesso à câmera é negado no simulador."
+        )
+        XCTAssertFalse(
+            sut.isAuthorized,
+            "isAuthorized deve ser false quando o acesso à câmera é negado no simulador."
+        )
+    }
 
     // MARK: - Additional coverage
 
     func test_IsAuthorized_InitiallyFalse() {
         // Arrange — CameraManager recém-criado, checkAuthorization não chamado
-
-        let isAuthorized = MainActor.assumeIsolated { sut.isAuthorized }
-
         // Act — (nenhuma ação; apenas leitura do estado inicial)
-
-        // Assert
         XCTAssertFalse(
-            isAuthorized,
+            sut.isAuthorized,
             "isAuthorized deve ser false antes de qualquer chamada a checkAuthorization."
+        )
+    }
+
+    func test_IsDenied_InitiallyFalse() {
+        // Arrange — CameraManager recém-criado, checkAuthorization não chamado
+        // Act — (nenhuma ação; apenas leitura do estado inicial)
+        XCTAssertFalse(
+            sut.isDenied,
+            "isDenied deve ser false antes de qualquer chamada a checkAuthorization."
         )
     }
 
     func test_Session_InitiallyEmpty() {
         // Arrange — CameraManager recém-criado, setupSession não chamado
-
-        let inputsEmpty = MainActor.assumeIsolated { sut.session.inputs.isEmpty }
-        let outputsEmpty = MainActor.assumeIsolated { sut.session.outputs.isEmpty }
-
         // Act — (nenhuma ação; apenas leitura do estado inicial)
-
-        // Assert
         XCTAssertTrue(
-            inputsEmpty,
+            sut.session.inputs.isEmpty,
             "session não deve ter inputs antes de setupSession ser chamado."
         )
         XCTAssertTrue(
-            outputsEmpty,
+            sut.session.outputs.isEmpty,
             "session não deve ter outputs antes de setupSession ser chamado."
         )
     }

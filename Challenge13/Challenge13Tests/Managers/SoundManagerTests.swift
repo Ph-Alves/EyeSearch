@@ -14,10 +14,13 @@ final class SoundManagerTests: XCTestCase {
 
     // MARK: Inviáveis — do documento
     //
-    // T04 RN05 — Som ao reconhecer objeto
-    //   Débito de funcionalidade: SearchObjectViewModel não chama soundManager.playSound
-    //   em nenhum ponto do fluxo de detecção. O acoplamento entre detecção e feedback
-    //   sonoro não existe no código atual.
+    // T04 RN05 — Som ao reconhecer objeto (integração ViewModel ↔ SoundManager)
+    //   Funcionalidade implementada: SearchObjectViewModel.playSoundIfEnabled chama
+    //   sound.playSound e sound.speakLabel dentro do fluxo de detecção.
+    //   Bloqueio de teste: SearchObjectViewModel.init recebe SoundManager (concreto)
+    //   em vez de SoundManaging (protocolo), impedindo injeção de spy.
+    //   Proposta: mudar o init para aceitar SoundManaging e mover o teste para
+    //   SearchObjectViewModelTests com um SoundManagerSpy.
 
     // MARK: - Propriedades
 
