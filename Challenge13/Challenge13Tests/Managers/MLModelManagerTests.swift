@@ -21,6 +21,21 @@ final class MLModelManagerTests: XCTestCase {
         XCTAssertTrue(instance1 === instance2, "MLModelManager.manager deve retornar a mesma instância sempre.")
     }
     
+    // MARK: - Additional coverage
+
+    func test_ConfidenceThreshold_DefaultValue() {
+        // Arrange
+        let manager = MLModelManager.shared
+
+        // Act — (nenhuma ação; apenas leitura do valor padrão)
+
+        // Assert
+        XCTAssertEqual(
+            manager.confidenceThreshold, 0.80, accuracy: 0.001,
+            "confidenceThreshold deve ser 0.80 por padrão."
+        )
+    }
+
     // MARK: - T30 — Verificar se os modelos ML carregam corretamente
     
     func test_Models_LoadSuccessfully() {

@@ -50,8 +50,8 @@ final class SoundManagerTests: XCTestCase {
     // MARK: - Additional coverage
 
     func test_PlaySound_WhenEnabled_DoesNotCrash() {
-        // Arrange — smoke test; asset item-found.mp3 deve estar no bundle do host
-        // Se não estiver, playSound retorna silenciosamente (guard let url, linha 31)
+        // Arrange — smoke test; asset ObjectFound.mp3 deve estar no bundle do host
+        // Se não estiver, playSound retorna silenciosamente (player é nil)
 
         // Act & Assert
         XCTAssertNoThrow(
@@ -66,8 +66,31 @@ final class SoundManagerTests: XCTestCase {
 
         // Act
         sut.reset()
-          
+
         // Assert
         XCTAssertNil(sut.player)
+    }
+
+    // MARK: - Additional coverage — speakLabel
+
+    func test_SpeakLabel_WhenDisabled_DoesNothing() {
+        // Arrange — guard isEnabled (linha 40 do SoundManager) deve retornar imediatamente
+
+        // Act & Assert
+        XCTAssertNoThrow(
+            sut.speakLabel(isEnabled: false, label: "person"),
+            "speakLabel(isEnabled: false) não deve crashar."
+        )
+    }
+
+    func test_SpeakLabel_WithUnknownLabel_DoesNothing() {
+        // Arrange — label fora do enum YoloTranslations: guard YoloTranslations(rawValue:)
+        // retorna nil e o método encerra sem falar nada (linha 43 do SoundManager).
+
+        // Act & Assert
+        XCTAssertNoThrow(
+            sut.speakLabel(isEnabled: true, label: "labelInexistente_XYZ"),
+            "speakLabel com label desconhecido não deve crashar."
+        )
     }
 }

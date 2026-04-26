@@ -87,6 +87,36 @@ final class CameraManagerTests: XCTestCase {
         )
     }
 
+    func test_Stop_DoesNotCrash() {
+        // Arrange — session não iniciada (simulador não tem câmera real)
+
+        // Act & Assert — session.stopRunning() em sessão não configurada deve ser noop seguro
+        XCTAssertNoThrow(sut.stop(), "stop() antes de setupSession não deve crashar.")
+    }
+
+    func test_Stop_CalledMultipleTimes_DoesNotCrash() {
+        // Arrange — primeira chamada coloca o estado em "parado"
+        sut.stop()
+
+        // Act & Assert — segunda chamada em sessão já parada é noop seguro
+        XCTAssertNoThrow(sut.stop(), "stop() chamado múltiplas vezes não deve crashar.")
+    }
+
+    func test_SetTorch_WithoutDevice_DoesNotCrash() {
+        // Arrange — device é nil antes de setupSession (não há hardware no simulador)
+        // guard let device, device.hasTorch (linha 52) deve retornar silenciosamente
+
+        // Act & Assert
+        XCTAssertNoThrow(
+            sut.setTorch(on: true),
+            "setTorch antes de setupSession não deve crashar quando device é nil."
+        )
+        XCTAssertNoThrow(
+            sut.setTorch(on: false),
+            "setTorch(on: false) antes de setupSession não deve crashar."
+        )
+    }
+
     func test_CaptureOutput_ForwardsBufferToDelegate() throws {
         // Arrange
         let spy = CameraManagerDelegateSpy()
