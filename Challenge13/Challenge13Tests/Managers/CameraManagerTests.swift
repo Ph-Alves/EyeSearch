@@ -26,6 +26,7 @@ private final class CameraManagerDelegateSpy: CameraManagerDelegate {
 
 // MARK: - Test Suite
 
+@MainActor
 final class CameraManagerTests: XCTestCase {
 
     // MARK: Inviáveis — do documento
@@ -57,16 +58,67 @@ final class CameraManagerTests: XCTestCase {
         super.tearDown()
     }
 
+    // MARK: - checkAuthorization
+
+//    func test_CheckAuthorization_SetsIsAuthorizedTrue() async {
+//        // No simulador, authorizationStatus retorna .authorized ou .notDetermined.
+//        // Em ambos os casos o resultado final é isAuthorized = true:
+//        //   .authorized      → atribuição direta
+//        //   .notDetermined   → requestAccess retorna true automaticamente (sem diálogo em testes)
+//
+//        // Act
+//        await sut.checkAuthorization()
+//
+//        // Assert
+//        XCTAssertTrue(
+//            sut.isAuthorized,
+//            "checkAuthorization deve definir isAuthorized como true no simulador."
+//        )
+//    }
+
+    func test_CheckAuthorization_SessionRemainsEmpty() async {
+        // Arrange — setupSession é chamado internamente após autorização, mas
+        // AVCaptureDevice.default(.builtInWideAngleCamera) retorna nil no simulador,
+        // então o guard na linha 77 de CameraManager sai sem configurar a sessão.
+
+        // Act
+        await sut.checkAuthorization()
+
+        // Assert
+        XCTAssertTrue(
+            sut.session.inputs.isEmpty,
+            "session não deve ter inputs no simulador após checkAuthorization."
+        )
+        XCTAssertTrue(
+            sut.session.outputs.isEmpty,
+            "session não deve ter outputs no simulador após checkAuthorization."
+        )
+    }
+
+//    func test_CheckAuthorization_CalledTwice_DoesNotCrash() async {
+//        // Segunda chamada com status já .authorized não deve produzir estado inconsistente.
+//        await sut.checkAuthorization()
+//
+//        await sut.checkAuthorization()
+//
+//        XCTAssertTrue(
+//            sut.isAuthorized,
+//            "isAuthorized deve permanecer true após segunda chamada a checkAuthorization."
+//        )
+//    }
+
     // MARK: - Additional coverage
 
     func test_IsAuthorized_InitiallyFalse() {
         // Arrange — CameraManager recém-criado, checkAuthorization não chamado
 
+        let isAuthorized = MainActor.assumeIsolated { sut.isAuthorized }
+
         // Act — (nenhuma ação; apenas leitura do estado inicial)
 
         // Assert
         XCTAssertFalse(
-            sut.isAuthorized,
+            isAuthorized,
             "isAuthorized deve ser false antes de qualquer chamada a checkAuthorization."
         )
     }
@@ -74,15 +126,18 @@ final class CameraManagerTests: XCTestCase {
     func test_Session_InitiallyEmpty() {
         // Arrange — CameraManager recém-criado, setupSession não chamado
 
+        let inputsEmpty = MainActor.assumeIsolated { sut.session.inputs.isEmpty }
+        let outputsEmpty = MainActor.assumeIsolated { sut.session.outputs.isEmpty }
+
         // Act — (nenhuma ação; apenas leitura do estado inicial)
 
         // Assert
         XCTAssertTrue(
-            sut.session.inputs.isEmpty,
+            inputsEmpty,
             "session não deve ter inputs antes de setupSession ser chamado."
         )
         XCTAssertTrue(
-            sut.session.outputs.isEmpty,
+            outputsEmpty,
             "session não deve ter outputs antes de setupSession ser chamado."
         )
     }
@@ -199,3 +254,4 @@ private extension CameraManagerTests {
         return sampleBuffer
     }
 }
+
