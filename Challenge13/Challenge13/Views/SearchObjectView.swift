@@ -20,6 +20,8 @@ struct SearchObjectView: View {
     var SearchObjectVM: SearchObjectViewModel
     /// States
     @State private var flashLight: Bool = true
+    @State private var isRotating = false
+
     /// init
     init(SearchObjectVM: SearchObjectViewModel) {
         self.SearchObjectVM = SearchObjectVM
@@ -31,22 +33,32 @@ struct SearchObjectView: View {
     
     // MARK: - Body View
     var body: some View {
+        
+        // MARK: - Parte Superior
         VStack(spacing: 0) {
+            
             HStack(alignment: .center) {
                 ReturnButton(action: {
                     coordinator.pop()
                 })
+                
                 Spacer()
+                
                 Button() {
                     flashLight.toggle()
                     SearchObjectVM.setFlashlight(on: flashLight)
                 } label: {
-                    Image(systemName: flashLight ? "flashlight.on.fill" : "flashlight.slash")
+                    Image(systemName: flashLight ? "bolt.fill" : "bolt.slash.fill")
+                        .font(.title)
+                        .foregroundColor(.primary)
+                        
                 }
+                
             }
             .padding(padding)
-            .background(Color.secondary)
+            .background(Color.onboardingProgressInactive)
             
+            // MARK: - Meio da camera
             ZStack {
                 // Preview ao vivo da câmera
                 SearchObjectVM.getCameraPreview()
@@ -68,26 +80,50 @@ struct SearchObjectView: View {
                         .zIndex(effectZIndex)
                 }
             }
+            
+            // MARK: - Parte Inferior
             HStack {
                 Spacer()
                 VStack {
                     if SearchObjectVM.stickerCount > 0 {
-                        Text("\(SearchObjectVM.stickerCount) adesivos encontrados")
-                            .foregroundStyle(Color.white)
+                        
+                        HStack(spacing: 15) {
+                            Image(systemName: "checkmark")
+                                .font(.title)
+                                .foregroundColor(.primary)
+                                
+                            
+                            Text("\(SearchObjectVM.stickerCount) adesivos encontrados")
+                                .font(.title)
+                                .foregroundColor(.primary)
+                        }
+                        
+                        
                     } else {
-                        Text(LocalizedStringKey(L10n.SearchObject.Screen.searchInformation))
-                            .foregroundStyle(Color.white)
+                        
+                        HStack(spacing: 15) {
+                            Image(systemName: "progress.indicator")
+                                .font(.title)
+                                .foregroundColor(.primary)
+                                .symbolEffect(.rotate)
+                                .onAppear { isRotating = true }
+                            
+                            Text("Procurando adesivo...")
+                                .font(.title)
+                                .foregroundColor(.primary)
+                        }
                     }
                 }
                 Spacer()
             }
             .padding(padding)
-            .background(Color.secondary)
+            .background(Color.onboardingProgressInactive)
         }
         .task {
             // Solicita permissão de câmera ao aparecer
             await SearchObjectVM.getPermission()
         }
+        .preferredColorScheme(.dark)
         .navigationBarBackButtonHidden(true)
         .background(Color.primary)
         .onDisappear() {
