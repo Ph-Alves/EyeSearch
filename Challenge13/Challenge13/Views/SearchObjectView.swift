@@ -43,6 +43,7 @@ struct SearchObjectView: View {
                 } label: {
                     Image(systemName: flashLight ? "flashlight.on.fill" : "flashlight.slash")
                 }
+                .accessibilityLabel(flashLight ? "Lanterna ligada" : "Lanterna desligada")
             }
             .padding(padding)
             .background(Color.secondary)
