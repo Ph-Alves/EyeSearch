@@ -14,45 +14,52 @@ import SwiftUI
 struct SettingsView: View {
     // MARK: - Variables
     @Environment(Coordinator.self) private var coordinator
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    
     @State var settingsVM: SettingsViewModel
     
+    // Flag de primeira execução: enquanto false, exibe o onboarding em vez da Home.
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding: Bool = false
+    
     // MARK: - Header
+    ///Esse header engloba o botão voltar e o título da página.
     private var header: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            
+        VStack {
+            //botão de voltar a tela
             ReturnButton(action: {
-                 coordinator.pop()
+                coordinator.pop()
             })
             
-            Text("Ajustes")
-                .font(.largeTitle)
-            
+            VStack(alignment: .leading, spacing: 12){
+                //título da tela
+                Text("Ajustes")
+                    .fontWeight(.bold)
+                    .font(.largeTitle)
+                
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.top, 12)
+            .padding(.bottom, 24)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal)
-        .padding(.top, 12)
-        .padding(.bottom, 24)
     }
-
-    
-    // MARK: - Body View
-    var body: some View {
-        ZStack {
-            Color(.background)
-                .ignoresSafeArea()
-
-            ScrollView{
+        
+        //MARK: - Conteúdo da Settings View
+         private var content: some View {
+            ZStack {
+                Color(.background)
+                    .ignoresSafeArea()
+                
                 VStack(alignment: .leading, spacing: 12) {
-
-                    // MARK: Botão Voltar
+                    
+                    // MARK: - Botão Voltar e Título da Página
                     header
-
+                    
                     VStack(spacing: 40) {
-                        // MARK: Vibração
+                        // MARK: - Toggle Vibração
                         SettingsToggleRow(
                             icon: "iphone.radiowaves.left.and.right",
                             titulo: "Vibração",
-                            descricao: "Lorem Ipsum Dolor Sit Amet",
+                            descricao: "Vibrará sempre que identificar adesivos ",
                             isOn: Binding(
                                 //ele lê o valor atual
                                 get: { settingsVM.settings.isHapticsEnabled },
@@ -60,35 +67,35 @@ struct SettingsView: View {
                                 set: { settingsVM.toggleHaptics($0) }
                             )
                         )
-
-                        // MARK: Som
+                        
+                        // MARK: - Toggle Som
                         SettingsToggleRow(
                             icon: "speaker.wave.2.fill",
                             titulo: "Som",
-                            descricao: "Lorem Ipsum Dolor Sit Amet",
+                            descricao: "Emitirá som sempre que identificar adesivos",
                             isOn: Binding(
                                 get: { settingsVM.settings.isSoundEnabled },
                                 set: { settingsVM.toggleSound($0) }
                             )
                         )
                         
-                        //MARK: - Botão Resetar
+                        //MARK: - Botão Refazer Onboarding
                         Button(action: {
-                            settingsVM.resetConfiguration()
-                            print("Resetar clicado")
+                            //                            settingsVM.resetConfiguration()
+                            hasCompletedOnboarding = false
                         }) {
                             HStack(spacing: 14) {
-                                Image(systemName: "arrow.clockwise")
+                                Image(systemName: "rectangle.portrait.and.arrow.right")
                                     .font(.title3)
                                     .foregroundStyle(.titleText)
-
+                                
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text("Resetar")
+                                    Text("Passo a passo")
                                         .font(.title2)
                                         .fontWeight(.bold)
                                         .foregroundStyle(.titleText)
                                 }
-
+                                
                                 Spacer()
                             }
                             .padding(.horizontal, 20)
@@ -101,9 +108,9 @@ struct SettingsView: View {
                         }
                         .buttonStyle(.plain)
                     }
-                    Text("Descrição")
-                        .font(.subheadline)
-                        .foregroundStyle(.titleText.opacity(0.75))
+                    Text("Revisite a instruções iniciais de como utilizar as funcionalidades do app")
+                        .font(.body)
+                        .foregroundStyle(.titleText)
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.leading, 4)
                     
@@ -112,10 +119,28 @@ struct SettingsView: View {
                 .padding(.horizontal, 24)
             }
         }
-        .navigationBarHidden(true)
-    }
+        // MARK: - Body View
+        var body: some View {
+            ZStack {
+                Color(.background)
+                    .ignoresSafeArea()
+                
+                //Esse IF verifica se o dynamic type do Iphone da pessoa é maior que AX1
+                if dynamicTypeSize >= .accessibility2 {
+                    // se for, o conteúdo da tela fica dentro de uma scrollView
+                    ScrollView {
+                        content
+                    }
+                } else {
+                    // se não for, o conteúdo da tela aparece normal
+                    content
+                }
+            }
+            .navigationBarHidden(true)
+        }
 }
 
+        
 #Preview {
     CoordinatedNavigationStack {
         SettingsView(settingsVM: SettingsViewModel(haptics: HapticsManager(), soundManager: SoundManager(), settingsManager: SettingsManager())
@@ -123,3 +148,10 @@ struct SettingsView: View {
     }
     .environment(Coordinator(dependencyContainer: DependencyContainer()))
 }
+
+/*
+ 
+
+ 
+ 
+ */

@@ -75,7 +75,7 @@ struct SearchObjectView: View {
                         Text("\(SearchObjectVM.stickerCount) adesivos encontrados")
                             .foregroundStyle(Color.white)
                     } else {
-                        Text("Procurando...")
+                        Text(LocalizedStringKey(L10n.SearchObject.Screen.searchInformation))
                             .foregroundStyle(Color.white)
                     }
                 }
