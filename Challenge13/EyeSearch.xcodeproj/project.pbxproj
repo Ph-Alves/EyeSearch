@@ -11,14 +11,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		EF69E89B2F87CFDD00FD9AE7 /* PBXContainerItemProxy */ = {
+		9E775B8A2F9E465E00EFFE99 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EF69E8832F87CFDB00FD9AE7 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = EF69E88A2F87CFDB00FD9AE7;
-			remoteInfo = Challenge13;
+			remoteInfo = EyeSearch;
 		};
-		EF69E8A52F87CFDD00FD9AE7 /* PBXContainerItemProxy */ = {
+		EF69E89B2F87CFDD00FD9AE7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EF69E8832F87CFDB00FD9AE7 /* Project object */;
 			proxyType = 1;
@@ -28,9 +28,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9E775B842F9E465E00EFFE99 /* EyeSearchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EyeSearchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF69E88B2F87CFDB00FD9AE7 /* EyeSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EyeSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF69E89A2F87CFDD00FD9AE7 /* EyeSearchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EyeSearchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		EF69E8A42F87CFDD00FD9AE7 /* EyeSearchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EyeSearchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFAB54E92F96C95A00A009CE /* EyeSearchDoc.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = EyeSearchDoc.docc; sourceTree = "<group>"; };
 		EFE2E23A2F9903D100413ED1 /* Challenge13.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Challenge13.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -47,6 +47,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		9E775B852F9E465E00EFFE99 /* Challenge13UITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Challenge13UITests;
+			sourceTree = "<group>";
+		};
 		EF69E88D2F87CFDB00FD9AE7 /* Challenge13 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -60,14 +65,16 @@
 			path = Challenge13Tests;
 			sourceTree = "<group>";
 		};
-		EF69E8A72F87CFDD00FD9AE7 /* Challenge13UITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Challenge13UITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		9E775B812F9E465E00EFFE99 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EF69E8882F87CFDB00FD9AE7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -76,13 +83,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		EF69E8972F87CFDD00FD9AE7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		EF69E8A12F87CFDD00FD9AE7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -99,7 +99,7 @@
 				EFAB54E92F96C95A00A009CE /* EyeSearchDoc.docc */,
 				EF69E88D2F87CFDB00FD9AE7 /* Challenge13 */,
 				EF69E89D2F87CFDD00FD9AE7 /* Challenge13Tests */,
-				EF69E8A72F87CFDD00FD9AE7 /* Challenge13UITests */,
+				9E775B852F9E465E00EFFE99 /* Challenge13UITests */,
 				EF69E88C2F87CFDB00FD9AE7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -109,7 +109,7 @@
 			children = (
 				EF69E88B2F87CFDB00FD9AE7 /* EyeSearch.app */,
 				EF69E89A2F87CFDD00FD9AE7 /* EyeSearchTests.xctest */,
-				EF69E8A42F87CFDD00FD9AE7 /* EyeSearchUITests.xctest */,
+				9E775B842F9E465E00EFFE99 /* EyeSearchUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -117,6 +117,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		9E775B832F9E465E00EFFE99 /* EyeSearchUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9E775B8C2F9E465E00EFFE99 /* Build configuration list for PBXNativeTarget "EyeSearchUITests" */;
+			buildPhases = (
+				9E775B802F9E465E00EFFE99 /* Sources */,
+				9E775B812F9E465E00EFFE99 /* Frameworks */,
+				9E775B822F9E465E00EFFE99 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9E775B8B2F9E465E00EFFE99 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				9E775B852F9E465E00EFFE99 /* Challenge13UITests */,
+			);
+			name = EyeSearchUITests;
+			packageProductDependencies = (
+			);
+			productName = EyeSearchUITests;
+			productReference = 9E775B842F9E465E00EFFE99 /* EyeSearchUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		EF69E88A2F87CFDB00FD9AE7 /* EyeSearch */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = EF69E8AE2F87CFDD00FD9AE7 /* Build configuration list for PBXNativeTarget "EyeSearch" */;
@@ -162,29 +185,6 @@
 			productReference = EF69E89A2F87CFDD00FD9AE7 /* EyeSearchTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		EF69E8A32F87CFDD00FD9AE7 /* EyeSearchUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = EF69E8B42F87CFDD00FD9AE7 /* Build configuration list for PBXNativeTarget "EyeSearchUITests" */;
-			buildPhases = (
-				EF69E8A02F87CFDD00FD9AE7 /* Sources */,
-				EF69E8A12F87CFDD00FD9AE7 /* Frameworks */,
-				EF69E8A22F87CFDD00FD9AE7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				EF69E8A62F87CFDD00FD9AE7 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				EF69E8A72F87CFDD00FD9AE7 /* Challenge13UITests */,
-			);
-			name = EyeSearchUITests;
-			packageProductDependencies = (
-			);
-			productName = Challenge13UITests;
-			productReference = EF69E8A42F87CFDD00FD9AE7 /* EyeSearchUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -192,19 +192,19 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2630;
+				LastSwiftUpdateCheck = 2640;
 				LastUpgradeCheck = 2630;
 				TargetAttributes = {
+					9E775B832F9E465E00EFFE99 = {
+						CreatedOnToolsVersion = 26.4;
+						TestTargetID = EF69E88A2F87CFDB00FD9AE7;
+					};
 					EF69E88A2F87CFDB00FD9AE7 = {
 						CreatedOnToolsVersion = 26.3;
 					};
 					EF69E8992F87CFDD00FD9AE7 = {
 						CreatedOnToolsVersion = 26.3;
 						LastSwiftMigration = 2630;
-						TestTargetID = EF69E88A2F87CFDB00FD9AE7;
-					};
-					EF69E8A32F87CFDD00FD9AE7 = {
-						CreatedOnToolsVersion = 26.3;
 						TestTargetID = EF69E88A2F87CFDB00FD9AE7;
 					};
 				};
@@ -225,12 +225,19 @@
 			targets = (
 				EF69E88A2F87CFDB00FD9AE7 /* EyeSearch */,
 				EF69E8992F87CFDD00FD9AE7 /* EyeSearchTests */,
-				EF69E8A32F87CFDD00FD9AE7 /* EyeSearchUITests */,
+				9E775B832F9E465E00EFFE99 /* EyeSearchUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		9E775B822F9E465E00EFFE99 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EF69E8892F87CFDB00FD9AE7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -245,16 +252,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		EF69E8A22F87CFDD00FD9AE7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9E775B802F9E465E00EFFE99 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-/* End PBXResourcesBuildPhase section */
-
-/* Begin PBXSourcesBuildPhase section */
 		EF69E8872F87CFDB00FD9AE7 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -270,29 +277,64 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		EF69E8A02F87CFDD00FD9AE7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		9E775B8B2F9E465E00EFFE99 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EF69E88A2F87CFDB00FD9AE7 /* EyeSearch */;
+			targetProxy = 9E775B8A2F9E465E00EFFE99 /* PBXContainerItemProxy */;
+		};
 		EF69E89C2F87CFDD00FD9AE7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = EF69E88A2F87CFDB00FD9AE7 /* EyeSearch */;
 			targetProxy = EF69E89B2F87CFDD00FD9AE7 /* PBXContainerItemProxy */;
 		};
-		EF69E8A62F87CFDD00FD9AE7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = EF69E88A2F87CFDB00FD9AE7 /* EyeSearch */;
-			targetProxy = EF69E8A52F87CFDD00FD9AE7 /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		9E775B8D2F9E465E00EFFE99 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8VV7AV4HJU;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.danielaCarvalho.EyeSearchUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = EyeSearch;
+			};
+			name = Debug;
+		};
+		9E775B8E2F9E465E00EFFE99 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8VV7AV4HJU;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.danielaCarvalho.EyeSearchUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = EyeSearch;
+			};
+			name = Release;
+		};
 		EF69E8AC2F87CFDD00FD9AE7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -567,67 +609,18 @@
 			};
 			name = Release;
 		};
-		EF69E8B52F87CFDD00FD9AE7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = R2L5WD5D2K;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = br.com.victoria.Challenge13;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = EyeSearch_Team_Profile;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
-				TEST_TARGET_NAME = Challenge13;
-			};
-			name = Debug;
-		};
-		EF69E8B62F87CFDD00FD9AE7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = R2L5WD5D2K;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = br.com.victoria.Challenge13;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = EyeSearch_Team_Profile;
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
-				TEST_TARGET_NAME = Challenge13;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		9E775B8C2F9E465E00EFFE99 /* Build configuration list for PBXNativeTarget "EyeSearchUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9E775B8D2F9E465E00EFFE99 /* Debug */,
+				9E775B8E2F9E465E00EFFE99 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		EF69E8862F87CFDB00FD9AE7 /* Build configuration list for PBXProject "EyeSearch" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -651,15 +644,6 @@
 			buildConfigurations = (
 				EF69E8B22F87CFDD00FD9AE7 /* Debug */,
 				EF69E8B32F87CFDD00FD9AE7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		EF69E8B42F87CFDD00FD9AE7 /* Build configuration list for PBXNativeTarget "EyeSearchUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				EF69E8B52F87CFDD00FD9AE7 /* Debug */,
-				EF69E8B62F87CFDD00FD9AE7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

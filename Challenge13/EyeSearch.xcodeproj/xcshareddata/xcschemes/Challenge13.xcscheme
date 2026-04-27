@@ -57,6 +57,17 @@
                ReferencedContainer = "container:EyeSearch.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "9E775B742F9E458A00EFFE99"
+               BuildableName = "Challenge13UITests.xctest"
+               BlueprintName = "Challenge13UITests"
+               ReferencedContainer = "container:EyeSearch.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
