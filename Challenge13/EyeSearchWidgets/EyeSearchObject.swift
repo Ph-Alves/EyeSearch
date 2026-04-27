@@ -31,18 +31,16 @@ struct SimpleEntry: TimelineEntry {
 }
 
 struct EyeSearchObject: Widget {
-    let kind: String = "group.eyesearch"
+    let kind: String = "searchObject.screen"
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
-            Button(intent: OpenSearchObjectWidgetIntent()) {
-                Image(systemName: "magnifyingglass")
-                    .padding()
-                    .background(Color.secondary)
-                    .containerBackground(.fill.quaternary, for: .widget)
-                    .clipShape(Circle())
-            }
-            .buttonStyle(.plain)
+            Image(systemName: "magnifyingglass")
+                .padding()
+                .background(Color.secondary)
+                .containerBackground(.fill.quaternary, for: .widget)
+                .clipShape(Circle())
+                .widgetURL(URL(string: "eyesearch://searchObject"))
         }
         .supportedFamilies([.accessoryCircular])
         .configurationDisplayName("Procurar objeto")

@@ -21,8 +21,6 @@ struct Challenge13App: App {
     // Flag de primeira execução: enquanto false, exibe o onboarding em vez da Home.
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding: Bool = false
 
-    @Environment(\.scenePhase) private var scenePhase
-
     var body: some Scene {
         WindowGroup {
             if hasCompletedOnboarding {
@@ -32,30 +30,34 @@ struct Challenge13App: App {
                 }
                 // Coordinator injetado como variável de ambiente
                 .environment(coordinator)
+                .task {
+                    IntentsManager.shared.coordinator = coordinator
+                }
+                .onOpenURL { url in
+                    if url.scheme == "eyesearch" {
+                        IntentsManager.shared.openSearchObject()
+                    }
+                }
+            } else {
+                CoordinatedNavigationStack {
+                    OnboardingView()
+                }
+                // Coordinator injetado como variável de ambiente
+                .environment(coordinator)
+                .task {
+                    IntentsManager.shared.coordinator = coordinator
+                }
                 .onOpenURL { url in
                     if url.scheme == "eyesearch" && url.host == "searchObject" {
                         IntentsManager.shared.openSearchObject()
                     }
                 }
-                .onChange(of: scenePhase) { _, newPhase in
-                    if newPhase == .active {
-                        checkPendingNavigation()
-                    }
+                        .onOpenURL { url in
+                            if url.scheme == "eyesearch" && url.host == "searchObject" {
+                                IntentsManager.shared.openSearchObject()
+                            }
+                        }
                 }
-                .task {
-                    IntentsManager.shared.coordinator = coordinator
-                }
-            } else {
-                OnboardingView()
-            }
-        }
-    }
-
-    private func checkPendingNavigation() {
-        let defaults = UserDefaults(suiteName: "group.eyesearch")
-        if defaults?.bool(forKey: "pendingSearchObject") == true {
-            defaults?.removeObject(forKey: "pendingSearchObject")
-            IntentsManager.shared.openSearchObject()
         }
     }
 }

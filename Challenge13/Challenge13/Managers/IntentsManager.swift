@@ -56,7 +56,7 @@ final class IntentsManager: IntentsManaging {
 // MARK: - App Intent
 /// # Manager - App Intent
 /// Intent exposta à Siri e ao app Atalhos para abrir a tela de busca de objetos.
-struct OpenSearchObjectIntent: AppIntent {
+struct OpenSearchObjectSiriIntent: AppIntent {
     static var title: LocalizedStringResource = "Buscar objeto"
     static var description = IntentDescription("Abre a tela de busca de objetos pela câmera.")
 
@@ -80,7 +80,7 @@ struct Challenge13Shortcuts: AppShortcutsProvider {
     /// Define um array de shortcuts, com apenas um no momento que é o intents de abrir o app na tela de procurar objeto
     static var appShortcuts: [AppShortcut] {
         AppShortcut(
-            intent: OpenSearchObjectIntent(),
+            intent: OpenSearchObjectSiriIntent(),
             phrases: [
                 "Buscar objeto com \(.applicationName)",
                 "Abrir busca no \(.applicationName)",

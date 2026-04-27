@@ -12,6 +12,5 @@ import SwiftUI
 struct EyeSearchWidgetsBundle: WidgetBundle {
     var body: some Widget {
         EyeSearchObject()
-        EyeSearchSearchControl()
     }
 }
