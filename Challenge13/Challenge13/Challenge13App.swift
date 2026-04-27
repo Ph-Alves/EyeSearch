@@ -21,6 +21,8 @@ struct Challenge13App: App {
     // Flag de primeira execução: enquanto false, exibe o onboarding em vez da Home.
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding: Bool = false
 
+    @Environment(\.scenePhase) private var scenePhase
+
     var body: some Scene {
         WindowGroup {
             if hasCompletedOnboarding {
@@ -30,11 +32,14 @@ struct Challenge13App: App {
                 }
                 // Coordinator injetado como variável de ambiente
                 .environment(coordinator)
-                // Expõe o coordinator ao IntentsManager para que os AppIntents (Siri)
-                // possam disparar navegações seguindo o padrão do Coordinator.
                 .onOpenURL { url in
                     if url.scheme == "eyesearch" && url.host == "searchObject" {
                         IntentsManager.shared.openSearchObject()
+                    }
+                }
+                .onChange(of: scenePhase) { _, newPhase in
+                    if newPhase == .active {
+                        checkPendingNavigation()
                     }
                 }
                 .task {
@@ -43,6 +48,14 @@ struct Challenge13App: App {
             } else {
                 OnboardingView()
             }
+        }
+    }
+
+    private func checkPendingNavigation() {
+        let defaults = UserDefaults(suiteName: "group.eyesearch")
+        if defaults?.bool(forKey: "pendingSearchObject") == true {
+            defaults?.removeObject(forKey: "pendingSearchObject")
+            IntentsManager.shared.openSearchObject()
         }
     }
 }

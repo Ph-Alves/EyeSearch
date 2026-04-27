@@ -8,15 +8,9 @@
 import AppIntents
 import Foundation
 
-/// Intent usado pelos widgets para abrir o app na tela de busca de objetos.
-/// Ao ser executado, o sistema abre o app (via `openAppWhenRun`)
-/// e o `onOpenURL` no `Challenge13App` cuida da navegação.
 struct OpenSearchObjectWidgetIntent: AppIntent {
-    /// Titulo intent
     static var title: LocalizedStringResource = "Buscar objeto"
-    /// Descrição
     static var description = IntentDescription("Abre a tela de busca de objetos com a câmera.")
-    /// Variável do protocolo que abre o app antes de executar o perform
     static var openAppWhenRun: Bool = true
 
     @MainActor
