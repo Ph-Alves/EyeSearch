@@ -28,7 +28,7 @@ jobs:
           xcodebuild test \
             -project Challenge13/EyeSearch.xcodeproj \
             -scheme Challenge13 \
-            -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
+            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.1' \
             -derivedDataPath ~/Library/Developer/Xcode/DerivedData \
             -parallel-testing-enabled YES \
             -jobs $(sysctl -n hw.logicalcpu) \
