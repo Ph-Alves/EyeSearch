@@ -18,9 +18,40 @@ class HintsViewModel {
     // MARK: - Variables
     /// Lista de dicas exibidas na tela.
     var hints: [Hint] = [
-        Hint(id: UUID(), title: String(localized: String.LocalizationValue(L10n.Hints.Card.HowToUse.title)),        description: String(localized: String.LocalizationValue(L10n.Hints.Card.HowToUse.description))),
-        Hint(id: UUID(), title: String(localized: String.LocalizationValue(L10n.Hints.Card.ManageEmotions.title)),  description: String(localized: String.LocalizationValue(L10n.Hints.Card.ManageEmotions.description))),
-        Hint(id: UUID(), title: String(localized: String.LocalizationValue(L10n.Hints.Card.FocusTips.title)),       description: String(localized: String.LocalizationValue(L10n.Hints.Card.FocusTips.description)))
+        Hint(
+            id: UUID(),
+            title: .localized(L10n.Hints.Card.Stickers.title),
+            description: .localized(L10n.Hints.Card.Stickers.description),
+            icon: "printer.fill"
+        ),
+        
+        Hint(
+            id: UUID(),
+            title: .localized(L10n.Hints.Card.Siri.title),
+            description: .localized(L10n.Hints.Card.Siri.description),
+            icon: "apple.intelligence"
+        ),
+        
+        Hint(
+            id: UUID(),
+            title: .localized(L10n.Hints.Card.Text.title),
+            description: .localized(L10n.Hints.Card.Text.description),
+            icon: "textformat.size"
+        ),
+        
+        Hint(
+            id: UUID(),
+            title: .localized(L10n.Hints.Card.VoiceOver.title),
+            description: .localized(L10n.Hints.Card.VoiceOver.description),
+            icon: "voiceover"
+        ),
+        
+        Hint(
+            id: UUID(),
+            title: .localized(L10n.Hints.Card.Widgets.title),
+            description: .localized(L10n.Hints.Card.Widgets.description),
+            icon: "widget.small.badge.plus"
+        ),
     ]
     
     /// ID da dica atualmente expandida. `nil` se nenhuma estiver aberta.
