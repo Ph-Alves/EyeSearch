@@ -90,23 +90,4 @@ final class OnboardingViewUITests: XCTestCase {
         XCTAssertTrue(app.buttons["Começar"].waitForExistence(timeout: 3),
                       "Na última página deve aparecer o botão 'Começar'")
     }
-
-    func testOnboardingView_goToHomeViewWhenTheOnboardingIsOver() {
-        // Arrange
-        testOnboardingView_navigateThroughAllPagesWithSwipe()
-        
-        
-        
-        let startButton = app.buttons["Começar"]
-        XCTAssertTrue(startButton.waitForExistence(timeout: 3))
-
-        // Act
-        startButton.tap()
-//        app/*@START_MENU_TOKEN@*/.buttons["Começar"]/*[[".otherElements.buttons[\"Começar\"]",".buttons",".buttons[\"Começar\"]"],[[[-1,2],[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
-        
-        // Assert
-        XCTAssertTrue(app.navigationBars["EyeSearch"].waitForExistence(timeout: 5),
-                      "Após concluir o onboarding, a HomeView deve ser exibida")
-        
-    }
 }

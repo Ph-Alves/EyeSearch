@@ -17,9 +17,9 @@ final class HintsViewUITests: XCTestCase {
         app.launchArguments += ["-hasCompletedOnboarding", "true"]
         app.launch()
         // Navega até a HintsView
-        let cardDicas = app.buttons["Dicas"]
-        if cardDicas.waitForExistence(timeout: 5) {
-            cardDicas.tap()
+        let hintsCard = app.buttons["Dicas"]
+        if hintsCard.waitForExistence(timeout: 5) {
+            hintsCard.tap()
         }
     }
 
@@ -68,35 +68,35 @@ final class HintsViewUITests: XCTestCase {
         // Arrange
         XCTAssertTrue(app.staticTexts["Dicas"].waitForExistence(timeout: 5))
         // Pega o primeiro card de dica disponível (após "AIChat" e labels fixos)
-        let primeiroCard = app.staticTexts.element(boundBy: 3)
-        XCTAssertTrue(primeiroCard.waitForExistence(timeout: 3))
+        let firstCard = app.staticTexts.element(boundBy: 3)
+        XCTAssertTrue(firstCard.waitForExistence(timeout: 3))
 
         // Act
-        primeiroCard.tap()
+        firstCard.tap()
 
         // Assert
         // Após expandir, o número de textos visíveis deve aumentar (descrição aparece)
-        let quantidadeTextosAposExpandir = app.staticTexts.count
-        XCTAssertTrue(quantidadeTextosAposExpandir > 3,
+        let textQuantityAfterExpanding = app.staticTexts.count
+        XCTAssertTrue(textQuantityAfterExpanding > 3,
                       "Tocar em um card deve expandi-lo e exibir a descrição")
     }
 
     func testHintsView_touchExpandableCardClose() {
         // Arrange
         XCTAssertTrue(app.staticTexts["Dicas"].waitForExistence(timeout: 5))
-        let primeiroCard = app.staticTexts.element(boundBy: 3)
-        XCTAssertTrue(primeiroCard.waitForExistence(timeout: 3))
-        primeiroCard.tap() // expande
+        let firstCard = app.staticTexts.element(boundBy: 3)
+        XCTAssertTrue(firstCard.waitForExistence(timeout: 3))
+        firstCard.tap() // expande
         sleep(1)
-        let quantidadeExpandido = app.staticTexts.count
+        let openQuantity = app.staticTexts.count
 
         // Act
-        primeiroCard.tap() // recolhe
+        firstCard.tap() // recolhe
 
         // Assert
         sleep(1)
-        let quantidadeRecolhido = app.staticTexts.count
-        XCTAssertTrue(quantidadeRecolhido <= quantidadeExpandido,
+        let closedQuantity = app.staticTexts.count
+        XCTAssertTrue(closedQuantity <= openQuantity,
                       "Tocar novamente no card expandido deve recolhê-lo")
     }
 
@@ -117,11 +117,11 @@ final class HintsViewUITests: XCTestCase {
     func testHintsView_buttonOfRetornForHome() {
         // Arrange
         XCTAssertTrue(app.staticTexts["Dicas"].waitForExistence(timeout: 5))
-        let botaoVoltar = app.buttons["Voltar"]
-        XCTAssertTrue(botaoVoltar.waitForExistence(timeout: 3))
+        let returnButton = app.buttons["Voltar"]
+        XCTAssertTrue(returnButton.waitForExistence(timeout: 3))
 
         // Act
-        botaoVoltar.tap()
+        returnButton.tap()
 
         // Assert
         XCTAssertTrue(app.navigationBars["EyeSearch"].waitForExistence(timeout: 5),

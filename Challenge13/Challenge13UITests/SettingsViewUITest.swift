@@ -17,9 +17,9 @@ final class SettingsViewUITest: XCTestCase {
         app.launchArguments += ["-hasCompletedOnboarding", "true"]
         app.launch()
         // Navega até a SettingsView
-        let cardDicas = app.buttons["Configurações"]
-        if cardDicas.waitForExistence(timeout: 5) {
-            cardDicas.tap()
+        let hintsCard = app.buttons["Configurações"]
+        if hintsCard.waitForExistence(timeout: 5) {
+            hintsCard.tap()
         }
     }
 
@@ -78,32 +78,32 @@ final class SettingsViewUITest: XCTestCase {
     func testSettingsView_vibrationToggleChangeState() {
         // Arrange
         XCTAssertTrue(app.staticTexts["Vibração"].waitForExistence(timeout: 5))
-        let togglesVisiveis = app.switches.allElementsBoundByIndex
-        XCTAssertTrue(togglesVisiveis.count >= 1, "Deve haver ao menos um toggle visível")
-        let toggleVibracao = app.switches.element(boundBy: 0)
-        let estadoInicial = toggleVibracao.value as? String
+        let visibleToggles = app.switches.allElementsBoundByIndex
+        XCTAssertTrue(visibleToggles.count >= 1, "Deve haver ao menos um toggle visível")
+        let vibrationToggle = app.switches.element(boundBy: 0)
+        let initialState = vibrationToggle.value as? String
 
         // Act
-        toggleVibracao.tap()
+        vibrationToggle.tap()
 
         // Assert
-        let estadoFinal = toggleVibracao.value as? String
-        XCTAssertNotEqual(estadoInicial, estadoFinal,
+        let endState = vibrationToggle.value as? String
+        XCTAssertNotEqual(initialState, endState,
                           "O toggle de 'Vibração' deve alternar de estado ao ser tocado")
     }
 
     func testSettingsView_soundToggleChangeState() {
         // Arrange
         XCTAssertTrue(app.staticTexts["Som"].waitForExistence(timeout: 5))
-        let toggleSom = app.switches.element(boundBy: 1)
-        let estadoInicial = toggleSom.value as? String
+        let soundToggle = app.switches.element(boundBy: 1)
+        let initialState = soundToggle.value as? String
 
         // Act
-        toggleSom.tap()
+        soundToggle.tap()
 
         // Assert
-        let estadoFinal = toggleSom.value as? String
-        XCTAssertNotEqual(estadoInicial, estadoFinal,
+        let endState = soundToggle.value as? String
+        XCTAssertNotEqual(initialState, endState,
                           "O toggle de 'Som' deve alternar de estado ao ser tocado")
     }
 
@@ -113,27 +113,27 @@ final class SettingsViewUITest: XCTestCase {
         // Altera os toggles para um estado diferente do padrão
         app.switches.element(boundBy: 0).tap()
         app.switches.element(boundBy: 1).tap()
-        let botaoResetar = app.buttons["Resetar"]
-        XCTAssertTrue(botaoResetar.waitForExistence(timeout: 3))
+        let resetButton = app.buttons["Resetar"]
+        XCTAssertTrue(resetButton.waitForExistence(timeout: 3))
 
         // Act
-        botaoResetar.tap()
+        resetButton.tap()
 
         // Assert
         // Após resetar, ao menos um toggle deve estar habilitado (valor "1" = on, padrão esperado)
-        let valorToggleVibracao = app.switches.element(boundBy: 0).value as? String
-        XCTAssertNotNil(valorToggleVibracao,
+        let vibrationToggleValue = app.switches.element(boundBy: 0).value as? String
+        XCTAssertNotNil(vibrationToggleValue,
                         "Após resetar, os toggles devem ter um estado definido")
     }
 
     func testSettingsView_buttonOfRetornForHome() {
         // Arrange
         XCTAssertTrue(app.staticTexts["Ajustes"].waitForExistence(timeout: 5))
-        let botaoVoltar = app.buttons["Voltar"]
-        XCTAssertTrue(botaoVoltar.waitForExistence(timeout: 3))
+        let returnButton = app.buttons["Voltar"]
+        XCTAssertTrue(returnButton.waitForExistence(timeout: 3))
 
         // Act
-        botaoVoltar.tap()
+        returnButton.tap()
 
         // Assert
         XCTAssertTrue(app.navigationBars["EyeSearch"].waitForExistence(timeout: 5),

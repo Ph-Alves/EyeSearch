@@ -17,9 +17,9 @@ final class StickerViewUITest: XCTestCase {
         app.launchArguments += ["-hasCompletedOnboarding", "true"]
         app.launch()
         // Navega até a StickerView
-        let cardAdesivos = app.buttons["Gerar"]
-        if cardAdesivos.waitForExistence(timeout: 5) {
-            cardAdesivos.tap()
+        let stickerCard = app.buttons["Gerar"]
+        if stickerCard.waitForExistence(timeout: 5) {
+            stickerCard.tap()
         }
     }
 
@@ -81,11 +81,11 @@ final class StickerViewUITest: XCTestCase {
     func testStickerView_buttonPlusIncreaseQuantity() {
         // Arrange
         XCTAssertTrue(app.staticTexts["1"].waitForExistence(timeout: 5))
-        let botaoMais = app.buttons["+"]
-        XCTAssertTrue(botaoMais.waitForExistence(timeout: 3))
+        let plusButton = app.buttons["+"]
+        XCTAssertTrue(plusButton.waitForExistence(timeout: 3))
 
         // Act
-        botaoMais.tap()
+        plusButton.tap()
 
         // Assert
         XCTAssertTrue(app.staticTexts["2"].waitForExistence(timeout: 3),
@@ -95,15 +95,15 @@ final class StickerViewUITest: XCTestCase {
     func testStickerView_buttonMinusDecreaseQuantity() {
         // Arrange
         XCTAssertTrue(app.staticTexts["1"].waitForExistence(timeout: 5))
-        let botaoMais = app.buttons["+"]
-        XCTAssertTrue(botaoMais.waitForExistence(timeout: 3))
-        botaoMais.tap() // vai para 2
+        let plusButton = app.buttons["+"]
+        XCTAssertTrue(plusButton.waitForExistence(timeout: 3))
+        plusButton.tap() // vai para 2
         XCTAssertTrue(app.staticTexts["2"].waitForExistence(timeout: 3))
-        let botaoMenos = app.buttons["−"]
-        XCTAssertTrue(botaoMenos.waitForExistence(timeout: 3))
+        let minusButton = app.buttons["−"]
+        XCTAssertTrue(minusButton.waitForExistence(timeout: 3))
 
         // Act
-        botaoMenos.tap()
+        minusButton.tap()
 
         // Assert
         XCTAssertTrue(app.staticTexts["1"].waitForExistence(timeout: 3),
@@ -113,11 +113,11 @@ final class StickerViewUITest: XCTestCase {
     func testStickerView_smallestQuantityIsOne() {
         // Arrange
         XCTAssertTrue(app.staticTexts["1"].waitForExistence(timeout: 5))
-        let botaoMenos = app.buttons["−"]
-        XCTAssertTrue(botaoMenos.waitForExistence(timeout: 3))
+        let minusButton = app.buttons["−"]
+        XCTAssertTrue(minusButton.waitForExistence(timeout: 3))
 
         // Act
-        botaoMenos.tap() // tenta decrementar abaixo de 1
+        minusButton.tap() // tenta decrementar abaixo de 1
 
         // Assert
         XCTAssertTrue(app.staticTexts["1"].waitForExistence(timeout: 3),
@@ -127,12 +127,12 @@ final class StickerViewUITest: XCTestCase {
     func testStickerView_infoCardA4UpdateWhenIncrementing() {
         // Arrange
         XCTAssertTrue(app.staticTexts["1 adesivo - 1 Folhas A4"].waitForExistence(timeout: 5))
-        let botaoMais = app.buttons["+"]
-        XCTAssertTrue(botaoMais.waitForExistence(timeout: 3))
+        let plusButton = app.buttons["+"]
+        XCTAssertTrue(plusButton.waitForExistence(timeout: 3))
 
         // Act — incrementa até 25 (ultrapassa os 24 por folha)
         for _ in 0..<24 {
-            botaoMais.tap()
+            plusButton.tap()
         }
 
         // Assert
@@ -146,11 +146,11 @@ final class StickerViewUITest: XCTestCase {
     func testStickerView_buttonOfRetornForHome() {
         // Arrange
         XCTAssertTrue(app.staticTexts["Imprimir Adesivo"].waitForExistence(timeout: 5))
-        let botaoVoltar = app.buttons["Voltar"]
-        XCTAssertTrue(botaoVoltar.waitForExistence(timeout: 3))
+        let returnButton = app.buttons["Voltar"]
+        XCTAssertTrue(returnButton.waitForExistence(timeout: 3))
 
         // Act
-        botaoVoltar.tap()
+        returnButton.tap()
 
         // Assert
         XCTAssertTrue(app.navigationBars["EyeSearch"].waitForExistence(timeout: 5),
