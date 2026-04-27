@@ -63,6 +63,7 @@
 		8AC14D612F9FD59B00E1F5BD /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		8AC14D632F9FD59B00E1F5BD /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		8AC14D752F9FD7D600E1F5BD /* EyeSearch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EyeSearch.entitlements; sourceTree = "<group>"; };
+		8AE521902F9FF61500970B53 /* EyeSearchWidgetsExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EyeSearchWidgetsExtension.entitlements; sourceTree = "<group>"; };
 		EF69E88B2F87CFDB00FD9AE7 /* EyeSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EyeSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF69E89A2F87CFDD00FD9AE7 /* EyeSearchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EyeSearchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF69E8A42F87CFDD00FD9AE7 /* EyeSearchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EyeSearchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -163,6 +164,7 @@
 		EF69E8822F87CFDB00FD9AE7 = {
 			isa = PBXGroup;
 			children = (
+				8AE521902F9FF61500970B53 /* EyeSearchWidgetsExtension.entitlements */,
 				8AC14D752F9FD7D600E1F5BD /* EyeSearch.entitlements */,
 				EFE2E23A2F9903D100413ED1 /* Challenge13.xctestplan */,
 				EFAB54E92F96C95A00A009CE /* EyeSearchDoc.docc */,
@@ -423,6 +425,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = EyeSearchWidgetsExtension.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -462,6 +465,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = EyeSearchWidgetsExtension.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
