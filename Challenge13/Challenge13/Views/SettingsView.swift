@@ -24,32 +24,31 @@ struct SettingsView: View {
     // MARK: - Header
     ///Esse header engloba o botão voltar e o título da página.
     private var header: some View {
-         VStack {
-             //botão de voltar a tela
-             ReturnButton(action: {
-                  coordinator.pop()
-             })
-             
-            VStack(alignment: .leading, spacing: 12) {
+        VStack {
+            //botão de voltar a tela
+            ReturnButton(action: {
+                coordinator.pop()
+            })
+            
+            VStack(alignment: .leading, spacing: 12){
                 //título da tela
                 Text("Ajustes")
                     .fontWeight(.bold)
                     .font(.largeTitle)
-
+                
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.top, 12)
             .padding(.bottom, 24)
         }
     }
-    
-    //MARK: - Conteúdo da Settings View
-    private var content: some View {
-
-        ZStack {
-            Color(.background)
-                .ignoresSafeArea()
-            
+        
+        //MARK: - Conteúdo da Settings View
+         private var content: some View {
+            ZStack {
+                Color(.background)
+                    .ignoresSafeArea()
+                
                 VStack(alignment: .leading, spacing: 12) {
                     
                     // MARK: - Botão Voltar e Título da Página
@@ -118,30 +117,30 @@ struct SettingsView: View {
                     Spacer()
                 }
                 .padding(.horizontal, 24)
-        }
-    }
-    // MARK: - Body View
-    var body: some View {
-        ZStack {
-            Color(.background)
-                .ignoresSafeArea()
-            
-            //Esse IF verifica se o dynamic type do Iphone da pessoa é maior que AX1
-            if dynamicTypeSize >= .accessibility2 {
-                // se for, o conteúdo da tela fica dentro de uma scrollView
-                ScrollView {
-                    content
-                }
-            } else {
-                // se não for, o conteúdo da tela aparece normal
-                content
             }
         }
-        .navigationBarHidden(true)
-    }
+        // MARK: - Body View
+        var body: some View {
+            ZStack {
+                Color(.background)
+                    .ignoresSafeArea()
+                
+                //Esse IF verifica se o dynamic type do Iphone da pessoa é maior que AX1
+                if dynamicTypeSize >= .accessibility2 {
+                    // se for, o conteúdo da tela fica dentro de uma scrollView
+                    ScrollView {
+                        content
+                    }
+                } else {
+                    // se não for, o conteúdo da tela aparece normal
+                    content
+                }
+            }
+            .navigationBarHidden(true)
+        }
 }
-        
 
+        
 #Preview {
     CoordinatedNavigationStack {
         SettingsView(settingsVM: SettingsViewModel(haptics: HapticsManager(), soundManager: SoundManager(), settingsManager: SettingsManager())
@@ -149,3 +148,10 @@ struct SettingsView: View {
     }
     .environment(Coordinator(dependencyContainer: DependencyContainer()))
 }
+
+/*
+ 
+
+ 
+ 
+ */
