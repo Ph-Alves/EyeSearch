@@ -12,7 +12,6 @@ final class HintsViewUITests: XCTestCase {
     var app: XCUIApplication!
 
     override func setUpWithError() throws {
-        super.setUp()
         continueAfterFailure = false
         app = XCUIApplication()
         app.launchArguments += ["-hasCompletedOnboarding", "true"]
