@@ -14,26 +14,113 @@ import SwiftUI
 struct SettingsView: View {
     // MARK: - Variables
     @Environment(Coordinator.self) private var coordinator
+    @State var settingsVM: SettingsViewModel
+    
+    // MARK: - Header
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            
+            ReturnButton(action: {
+                 coordinator.pop()
+            })
+            
+            Text("Ajustes")
+                .font(.largeTitle)
+            
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal)
+        .padding(.top, 12)
+        .padding(.bottom, 24)
+    }
 
-    var settingsVM: SettingsViewModel
     
     // MARK: - Body View
     var body: some View {
-        VStack {
-            ReturnButton(action: {
-                coordinator.pop()
-            })
-            Text(LocalizedStringKey(L10n.Settings.Screen.title))
+
+        ZStack {
+            Color(.background)
+                .ignoresSafeArea()
+
+            ScrollView{
+                VStack(alignment: .leading, spacing: 12) {
+
+                    // MARK: Botão Voltar
+                    header
+
+                    VStack(spacing: 40) {
+                        // MARK: Vibração
+                        SettingsToggleRow(
+                            icon: "iphone.radiowaves.left.and.right",
+                            titulo: "Vibração",
+                            descricao: "Lorem Ipsum Dolor Sit Amet",
+                            isOn: Binding(
+                                //ele lê o valor atual
+                                get: { settingsVM.settings.isHapticsEnabled },
+                                //Quando o toggle muda, chama o ViewModel, que persiste e atualiza o valor
+                                set: { settingsVM.toggleHaptics($0) }
+                            )
+                        )
+
+                        // MARK: Som
+                        SettingsToggleRow(
+                            icon: "speaker.wave.2.fill",
+                            titulo: "Som",
+                            descricao: "Lorem Ipsum Dolor Sit Amet",
+                            isOn: Binding(
+                                get: { settingsVM.settings.isSoundEnabled },
+                                set: { settingsVM.toggleSound($0) }
+                            )
+                        )
+                        
+                        //MARK: - Botão Resetar
+                        Button(action: {
+                            settingsVM.resetConfiguration()
+                            print("Resetar clicado")
+                        }) {
+                            HStack(spacing: 14) {
+                                Image(systemName: "arrow.clockwise")
+                                    .font(.title3)
+                                    .foregroundStyle(.titleText)
+
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Resetar")
+                                        .font(.title2)
+                                        .fontWeight(.bold)
+                                        .foregroundStyle(.titleText)
+                                }
+
+                                Spacer()
+                            }
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 18)
+                            .background(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(Color(.settingsPrimary))
+                                    .stroke(Color(.settingsPrimaryBorder), lineWidth: 4)
+                            )
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    Text("Descrição")
+                        .font(.subheadline)
+                        .foregroundStyle(.titleText.opacity(0.75))
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.leading, 4)
+                    
+                    Spacer()
+                }
+                .padding(.horizontal, 24)
+            }
         }
-        .navigationBarBackButtonHidden(true)
+        .navigationBarHidden(true)
     }
 }
 
-// MARK: - Preview
 #Preview {
     CoordinatedNavigationStack {
-        SettingsView(settingsVM: SettingsViewModel(haptics: HapticsManager(), soundManager: SoundManager(), settingsManager: SettingsManager()))
+        SettingsView(settingsVM: SettingsViewModel(haptics: HapticsManager(), soundManager: SoundManager(), settingsManager: SettingsManager())
+        )
     }
     .environment(Coordinator(dependencyContainer: DependencyContainer()))
 }
-

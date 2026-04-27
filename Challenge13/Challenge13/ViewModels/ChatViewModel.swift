@@ -6,26 +6,40 @@
 //
 
 import Foundation
+import Combine
 
-@Observable
-final class ChatViewModel {
+// MARK: - ViewModel
+/// # ViewModel - ChatViewModel
+/// Intermediário entre ``ChatView`` e ``FoundationsManaging``.
+/// Recebe intenções da view, delega ao manager e expõe estado reativo pronto para exibição.
+/// ## Usado em:
+/// - ``ChatView``
+@MainActor
+final class ChatViewModel: ObservableObject {
 
-    var inputText: String = ""
-    var errorBanner: String? = nil
-    var showClearConfirmation: Bool = false
+    // MARK: - Estado publicado para a View
 
-    private let manager: FoundationsManager
+    /// Lista de mensagens exibidas na interface, em ordem cronológica.
+    @Published var displayedMessages: [ChatMessage] = []
+    /// Texto atual do campo de entrada do usuário.
+    @Published var inputText: String = ""
+    /// Indica se o assistente está processando uma resposta.
+    @Published var isLoading: Bool = false
+    /// Mensagem de erro exibida no banner, ou `nil` se não houver erro ativo.
+    @Published var errorBanner: String? = nil
+    /// Controla a exibição do diálogo de confirmação de limpeza do histórico.
+    @Published var showClearConfirmation: Bool = false
+
+    // MARK: - Dependências
+
+    /// Manager responsável pela comunicação com o modelo de linguagem.
+    private let manager: any FoundationsManaging
+    /// Coordinator responsável pela navegação entre telas.
     private let coordinator: Coordinator
+    /// Conjunto de subscriptions Combine ativas.
+    private var cancellables = Set<AnyCancellable>()
 
-    /// Mensagens vindas diretamente do manager (fonte única de verdade).
-    var displayedMessages: [ChatMessage] {
-        manager.messages
-    }
-
-    /// Estado de loading vindo diretamente do manager.
-    var isLoading: Bool {
-        manager.isLoading
-    }
+    // MARK: - Computed
 
     /// Indica se o botão de envio deve estar habilitado.
     var canSend: Bool {
@@ -37,66 +51,111 @@ final class ChatViewModel {
         isLoading ? "Assistente está digitando, aguarde." : ""
     }
 
-    init(manager: FoundationsManager, coordinator: Coordinator) {
+    // MARK: - Init
+
+    /// Init padrão: cria o ``FoundationsManager`` internamente.
+    /// Usado pelo `@StateObject` na ``ChatView``.
+    /// - Parameter coordinator: Instância do coordinator responsável pela navegação.
+    init(coordinator: Coordinator) {
+        self.manager = FoundationsManager()
+        self.coordinator = coordinator
+        bindManager()
+    }
+
+    /// Init com injeção de dependência — útil para testes e previews.
+    /// - Parameters:
+    ///   - manager: Qualquer tipo que conforme com ``FoundationsManaging``.
+    ///   - coordinator: Instância do coordinator responsável pela navegação.
+    init(manager: any FoundationsManaging, coordinator: Coordinator) {
         self.manager = manager
         self.coordinator = coordinator
+        bindManager()
+    }
+
+    // MARK: - Binding com o Manager
+
+    /// Assina os publishers do ``FoundationsManaging`` e repassa os valores para as propriedades `@Published`.
+    /// O erro é auto-descartado após 4 segundos via `Task`.
+    private func bindManager() {
+        manager.messagesPublisher
+            .receive(on: RunLoop.main)
+            .assign(to: &$displayedMessages)
+
+        manager.isLoadingPublisher
+            .receive(on: RunLoop.main)
+            .assign(to: &$isLoading)
+
+        manager.errorMessagePublisher
+            .receive(on: RunLoop.main)
+            .sink { [weak self] error in
+                self?.errorBanner = error
+                // Auto-dismiss após 4 segundos
+                if error != nil {
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .seconds(4))
+                        self?.errorBanner = nil
+                    }
+                }
+            }
+            .store(in: &cancellables)
     }
 
     // MARK: - Intenções da View
 
-    /// Chamado quando o usuário pressiona "Enviar".
+    /// Lê o `inputText`, limpa o campo e delega o envio ao ``FoundationsManaging``.
+    /// Não executa se o texto estiver vazio.
     func sendMessage() {
         let text = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
         inputText = ""
         Task {
             await manager.sendMessage(text)
-            // Auto-dismiss do erro após 6 segundos
-            if let error = manager.errorMessage {
-                errorBanner = error
-                try? await Task.sleep(for: .seconds(6))
-                errorBanner = nil
-            }
         }
     }
 
-    /// Chamado ao pressionar Enter no teclado.
+    /// Aciona ``sendMessage()`` somente se ``canSend`` for `true`.
+    /// Chamado pelo `.onSubmit` do campo de texto.
     func handleSubmit() {
         guard canSend else { return }
         sendMessage()
     }
 
-    /// Solicita confirmação para limpar conversa.
+    /// Exibe o diálogo de confirmação de limpeza do histórico.
     func requestClear() {
         showClearConfirmation = true
     }
 
-    /// Confirma e executa a limpeza.
+    /// Confirma a limpeza, delegando ao manager e fechando o diálogo.
     func confirmClear() {
         manager.clearConversation()
         showClearConfirmation = false
     }
 
     // MARK: - Navegação (via Coordinator)
-    
+
+    /// Navega para a tela de configurações via ``Coordinator``.
     func navigateToSettings() {
         coordinator.navigate(to: .settings)
     }
 
+    /// Navega para a tela de dicas via ``Coordinator``.
     func navigateToHints() {
         coordinator.navigate(to: .hints)
     }
 
-    // MARK: - Ajudantes de apresentação
+    // MARK: - Helpers de apresentação
 
-    /// Rótulo de acessibilidade completo para uma mensagem.
+    /// Gera o rótulo de acessibilidade completo de uma mensagem para o VoiceOver.
+    /// - Parameter message: Mensagem a ser descrita.
+    /// - Returns: Texto composto pelo papel do remetente, conteúdo e flag de filtro, se aplicável.
     func accessibilityLabel(for message: ChatMessage) -> String {
         let role = message.role == .user ? "Você disse" : "Assistente respondeu"
         let filtered = message.isFiltered ? " (mensagem fora do escopo)" : ""
         return "\(role): \(message.text)\(filtered)"
     }
 
-    /// Limpa a conversa ao sair da tela.
+    /// Limpa o histórico ao sair da tela, garantindo que a conversa não persiste entre sessões.
+    /// Chamado pelo `.onDisappear` da ``ChatView``.
     func onViewDisappear() {
         manager.clearConversation()
     }

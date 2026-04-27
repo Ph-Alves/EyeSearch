@@ -1,5 +1,4 @@
 name: CI
-
 on:
   pull_request:
     branches:
@@ -8,28 +7,30 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: self-hosted
-
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v4
         with:
           lfs: true
 
-      - name: Pull LFS files
-        run: git lfs pull
-      
-      - name: Build
-        run: |
-          xcodebuild build \
-            -project Challenge13/EyeSearch.xcodeproj \
-            -scheme Challenge13 \
-            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.0' \
-            CODE_SIGNING_ALLOWED=NO
+      # Cache do DerivedData — evita recompilar tudo do zero
+      - name: Cache DerivedData
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Developer/Xcode/DerivedData
+          key: ${{ runner.os }}-deriveddata-${{ hashFiles('**/*.xcodeproj/project.pbxproj') }}
+          restore-keys: |
+            ${{ runner.os }}-deriveddata-
 
-      - name: Run Tests
+      # Build + Test em um único comando
+      - name: Build & Test
         run: |
           xcodebuild test \
             -project Challenge13/EyeSearch.xcodeproj \
             -scheme Challenge13 \
-            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.0' \
-            CODE_SIGNING_ALLOWED=NO
+            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.1' \
+            -derivedDataPath ~/Library/Developer/Xcode/DerivedData \
+            -parallel-testing-enabled YES \
+            -jobs $(sysctl -n hw.logicalcpu) \
+            CODE_SIGNING_ALLOWED=NO \
+            | xcpretty && exit ${PIPESTATUS[0]}

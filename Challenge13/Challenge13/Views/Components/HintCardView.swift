@@ -5,6 +5,7 @@
 //  Created by Raquel Souza on 17/04/26.
 //
 
+
 import SwiftUI
 
 // MARK: - Component
@@ -24,35 +25,71 @@ struct HintCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             
-            // Título
+            // Título do card
             HStack {
+                Image(systemName: "chevron.down")
+                    .font(.title)
+                
                 Text(hint.title)
-                    .font(.headline)
+                    .font(.title)
+                    .foregroundColor(.primary)
                 
                 Spacer()
                 
                 Image(systemName: "chevron.down")
+                    .font(.headline)
                     .rotationEffect(.degrees(isExpanded ? 180 : 0))
                     .animation(.easeInOut, value: isExpanded)
             }
+            .padding(8)
             
             // Conteúdo
             if isExpanded {
+
+                Divider()
+                .padding(.bottom, 4)
+                .frame(maxWidth: .infinity)
+                .overlay(Color.hintsPrimaryBorder)
+                .padding(.horizontal, -16)
+
                 Text(hint.description)
+                    .padding(.top, 8)
                     .font(.subheadline)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.primary)
                     .transition(.opacity.combined(with: .move(edge: .top)))
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color(.hintsPrimary))
         .cornerRadius(12)
         .contentShape(Rectangle())
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.hintsPrimaryBorder, lineWidth: 4)
+        )
         .onTapGesture {
             withAnimation(.easeInOut) {
-                print("clicou no card")
                 action()
             }
         }
     }
 }
+
+#Preview {
+    VStack(spacing: 16) {
+        
+        HintCardView(
+            hint: Hint(id: UUID(), title: "VoiceOver", description: "Permite que pessoas com deficiência visual utilizem o app através de áudio."),
+            isExpanded: false,
+            action: {}
+        )
+        
+        HintCardView(
+            hint: Hint(id: UUID(),title: "Dynamic Type", description: "Ajusta automaticamente o tamanho da fonte conforme a preferência do usuário."),
+            isExpanded: true,
+            action: {}
+        )
+        
+    }
+}
+

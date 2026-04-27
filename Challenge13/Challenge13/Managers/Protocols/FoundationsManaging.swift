@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 // MARK: - Protocol
 /// # Protocol - FoundationsManaging
@@ -14,6 +15,11 @@ import Foundation
 /// ## Implementado por:
 /// - ``FoundationsManager``
 protocol FoundationsManaging {
+    /// Publishers expostos como AnyPublisher — sem amarrar a implementação
+    var messagesPublisher: AnyPublisher<[ChatMessage], Never> { get }
+    var isLoadingPublisher: AnyPublisher<Bool, Never> { get }
+    var errorMessagePublisher: AnyPublisher<String?, Never> { get }
+    
     /// Método assíncrono que envia uma mensagem do usuário ao chatbot e aguarda a resposta.
     /// - Parameter userInput: Texto digitado pelo usuário.
     func sendMessage(_ userInput: String) async

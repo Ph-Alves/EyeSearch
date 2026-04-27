@@ -15,40 +15,72 @@ import PDFKit
 struct StickerView: View {
     // MARK: - Variables
     @Environment(Coordinator.self) private var coordinator
-    
-    // Quantidade de adesivos selecionada pelo usuário (1 a 20)
-    @State var quantity: Int = 1
+
     var stickerVM: StickerViewModel
+    
+    @State var quantity: Int = 1
+    
+    // Quantos adesivos cabem por folha A4
+    private let adesivosPerSheet = 24
+    
+    /// Computed property — calcula automaticamente o número de folhas A4  necessárias com base na quantidade atual de adesivos.
+    /// É recalculada toda vez que `quantity` muda.
+    private var sheetsNeeded: Int {
+        guard quantity > 0 else { return 0 }
+        return Int(ceil(Double(quantity) / Double(adesivosPerSheet)))
+    }
+    
+    
+    // MARK: - Header
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            
+            ReturnButton(action: {
+                 coordinator.pop()
+            })
+            
+            Text("Imprimir Adesivo")
+                .font(.largeTitle)
+            
+            Text("Lorem Ipsum Dolor Sit Amet Lorem Ipsum Dolor Sit Amet Lorem Ipsum Dolor Sit")
+                .font(.body)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .fixedSize(horizontal: false, vertical: true)
+            
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal)
+        .padding(.top, 12)
+    }
     
     // MARK: - Body View
     var body: some View {
-        ReturnButton(action: {
-            coordinator.pop()
-        })
-        VStack(spacing: 20) {
-            Text(LocalizedStringKey(L10n.Sticker.Screen.title))
-                .font(.title)
 
-            Stepper(value: $quantity, in: 1...20) {
-                Text(verbatim: String(format: NSLocalizedString(L10n.Sticker.Quantity.label, comment: ""), quantity))
-            }
-            .padding()
+        ZStack {
+            Color(.background)
+                .ignoresSafeArea()
+            
+            VStack(spacing: 0) {
+                
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 32) {
+                        header
+                        
+                        CustomStepperView(quantity: $quantity)
+                        A4InfoCardView(quantity: quantity, sheetsNeeded: sheetsNeeded)
+                        
+                        Spacer()
+                        
+                        GeneratePDFButton {
+                            stickerVM.generatePDF(stickerQuantity: quantity)
+                            coordinator.navigate(to: .stickerPreview)
+                        }
 
-            Button(action: {
-                // Gera o PDF e navega para a tela de preview
-                stickerVM.generatePDF(stickerQuantity: quantity)
-                coordinator.navigate(to: .stickerPreview)
-            }) {
-                Text(LocalizedStringKey(L10n.Sticker.Button.generatePDF))
-                    .frame(maxWidth: .infinity)
+                    }
                     .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+                }
             }
         }
-        .padding()
-        .navigationTitle(LocalizedStringKey(L10n.Sticker.Preview.navigationTitle))
         .navigationBarBackButtonHidden(true)
     }
 }
