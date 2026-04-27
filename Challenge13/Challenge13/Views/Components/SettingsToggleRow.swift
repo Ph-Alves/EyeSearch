@@ -42,8 +42,8 @@ struct SettingsToggleRow: View {
             )
 
             Text(descricao)
-                .font(.subheadline)
-                .foregroundStyle(.titleText.opacity(0.75))
+                .font(.body)
+                .foregroundStyle(.titleText)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.leading, 4)
         }
@@ -54,7 +54,7 @@ struct SettingsToggleRow: View {
     SettingsToggleRow(
         icon: "speaker.wave.2.fill",
         titulo: "Som",
-        descricao: "Descrição de exemplo",
+        descricao: "Emitirá som sempre que identificar adesivos",
         isOn: .constant(true)
     )
     .padding()
