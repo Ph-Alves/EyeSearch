@@ -45,6 +45,7 @@ struct HintCardView: View {
             
             // Conteúdo
             if isExpanded {
+
                 Divider()
                 .padding(.bottom, 4)
                 .frame(maxWidth: .infinity)

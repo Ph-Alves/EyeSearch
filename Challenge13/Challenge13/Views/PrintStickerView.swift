@@ -24,6 +24,7 @@ struct PrintStickerView: View {
             Color(.background)
                 .ignoresSafeArea()
             
+
             VStack(spacing: 16) {
 
                 // Botão voltar alinhado à esquerda

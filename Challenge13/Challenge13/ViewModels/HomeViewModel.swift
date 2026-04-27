@@ -24,6 +24,7 @@ class HomeViewModel {
     /// - Returns: Array de tuplas representando cada item da home.
     func generateItems() -> [(title: String, icon: String, color: Color, screen: HomeDestination)] {
         return [
+
             ("Procurar",     "magnifyingglass", Color("searchPrimary"),    HomeDestination.searchObject),
             ("Gerar",        "eye",             Color("stickerPrimary"),    HomeDestination.stickerConfig),
             ("Dicas",        "lightbulb.fill",  Color("hintsPrimary"),    HomeDestination.hints),

@@ -21,7 +21,6 @@ struct SettingsView: View {
     // Flag de primeira execução: enquanto false, exibe o onboarding em vez da Home.
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding: Bool = false
     
-    
     // MARK: - Header
     ///Esse header engloba o botão voltar e o título da página.
     private var header: some View {
@@ -46,6 +45,7 @@ struct SettingsView: View {
     
     //MARK: - Conteúdo da Settings View
     private var content: some View {
+
         ZStack {
             Color(.background)
                 .ignoresSafeArea()
@@ -120,20 +120,20 @@ struct SettingsView: View {
                 .padding(.horizontal, 24)
         }
     }
-            
-
-    
     // MARK: - Body View
     var body: some View {
         ZStack {
             Color(.background)
                 .ignoresSafeArea()
-
+            
+            //Esse IF verifica se o dynamic type do Iphone da pessoa é maior que AX1
             if dynamicTypeSize >= .accessibility2 {
+                // se for, o conteúdo da tela fica dentro de uma scrollView
                 ScrollView {
                     content
                 }
             } else {
+                // se não for, o conteúdo da tela aparece normal
                 content
             }
         }
