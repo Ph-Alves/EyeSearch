@@ -5,6 +5,8 @@
 //  Created by Manoel Pedro Prado Sa Teles on 22/04/26.
 //
 
+import Foundation
+
 // MARK: - Localization Keys
 enum L10n {
 
@@ -26,18 +28,36 @@ enum L10n {
     }
 
     enum Hints {
+        
+        enum Screen {
+            static let title       = "hints.screen.title"
+            static let description = "hints.screen.description"
+            
+            static let chatTitle       = "hints.screen.chat.title"
+            static let chatDescription = "hints.screen.chat.description"
+        }
+        
         enum Card {
-            enum HowToUse {
-                static let title       = "hints.card.howToUse.title"
-                static let description = "hints.card.howToUse.description"
+            enum Stickers {
+                static let title       = "hints.card.stickers.title"
+                static let description = "hints.card.stickers.description"
+            
             }
-            enum ManageEmotions {
-                static let title       = "hints.card.manageEmotions.title"
-                static let description = "hints.card.manageEmotions.description"
+            enum Siri {
+                static let title       = "hints.card.siri.title"
+                static let description = "hints.card.siri.description"
             }
-            enum FocusTips {
-                static let title       = "hints.card.focusTips.title"
-                static let description = "hints.card.focusTips.description"
+            enum Text {
+                static let title       = "hints.card.text.title"
+                static let description = "hints.card.text.description"
+            }
+            enum VoiceOver {
+                static let title       = "hints.card.voiceOver.title"
+                static let description = "hints.card.voiceOver.description"
+            }
+            enum Widgets {
+                static let title       = "hints.card.widgets.title"
+                static let description = "hints.card.widgets.description"
             }
         }
     }
@@ -81,5 +101,11 @@ enum L10n {
             static let openSearch   = "intents.searchObject.openSearch"
             static let obejctSearch  = "intents.searchObject.openSticker"
         }
+    }
+}
+
+extension String {
+    static func localized(_ key: String) -> String {
+        NSLocalizedString(key, comment: "")
     }
 }

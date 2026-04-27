@@ -20,5 +20,7 @@ struct Hint: Identifiable, Equatable {
     let title: String
     /// Descrição da dica
     let description: String
+    /// Icone
+    let icon: String
 }
 
