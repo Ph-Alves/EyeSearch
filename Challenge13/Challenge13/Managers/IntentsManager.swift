@@ -22,14 +22,28 @@ final class IntentsManager: IntentsManaging {
     static let shared = IntentsManager()
 
     /// Referência fraca ao Coordinator para evitar ciclo de retenção.
-    weak var coordinator: Coordinator?
+    weak var coordinator: Coordinator? {
+        didSet {
+            if coordinator != nil, hasPendingDeepLink {
+                hasPendingDeepLink = false
+                Task { @MainActor in
+                    openSearchObject()
+                }
+            }
+        }
+    }
+    
+    private var hasPendingDeepLink = false
 
     private init() { }
 
     /// Navega até a SearchObjectView respeitando o padrão do ``Coordinator``.
     @MainActor
     func openSearchObject() {
-        guard let coordinator else { return }
+        guard let coordinator else {
+            hasPendingDeepLink = true
+            return
+        }
 
         if !coordinator.path.isEmpty {
             coordinator.popToRoot()

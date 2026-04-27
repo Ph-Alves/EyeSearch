@@ -32,6 +32,11 @@ struct Challenge13App: App {
                 .environment(coordinator)
                 // Expõe o coordinator ao IntentsManager para que os AppIntents (Siri)
                 // possam disparar navegações seguindo o padrão do Coordinator.
+                .onOpenURL { url in
+                    if url.scheme == "eyesearch" && url.host == "searchObject" {
+                        IntentsManager.shared.openSearchObject()
+                    }
+                }
                 .task {
                     IntentsManager.shared.coordinator = coordinator
                 }
