@@ -125,13 +125,13 @@ struct SearchObjectView: View {
             await SearchObjectVM.getPermission()
             showCameraDeniedAlert = SearchObjectVM.isCameraDenied
         }
-        .alert("Câmera bloqueada", isPresented: $showCameraDeniedAlert) {
-            Button("Abrir Ajustes") {
+        .alert(.init(.localized(L10n.SearchObject.Screen.cameraDeniedTitle)), isPresented: $showCameraDeniedAlert) {
+            Button(.init(.localized(L10n.SearchObject.Screen.openSettings))) {
                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
             }
-            Button("Cancelar", role: .cancel) { }
+            Button(.init(.localized(L10n.Common.Button.back)), role: .cancel) { }
         } message: {
-            Text("Para usar o EyeSearch, permita o acesso à câmera em Ajustes > Privacidade & Segurança > Câmera.")
+            Text(verbatim: .localized(L10n.SearchObject.Screen.cameraPermission))
         }
         .preferredColorScheme(.dark)
         .navigationBarBackButtonHidden(true)
