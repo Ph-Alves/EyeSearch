@@ -12,19 +12,24 @@ struct AIChatCardView: View {
     var body: some View {
         
         HStack {
-            Image(systemName: "iphone.radiowaves.left.and.right")
+            Image(systemName: "message.fill")
                 .font(.title)
             
-            Text("AIChat")
-                .font(.title)
+            
+            Text("EyeChat")
+                .font(.title2)
+                .bold()
                 .foregroundColor(.titleText)
                 .padding(16)
             
+            Spacer()
             
             Image(systemName: "chevron.right")
-                .font(.headline)
+                .font(.title)
+                .bold()
         }
         .padding()
+        .frame(maxWidth: .infinity, minHeight: 80, alignment: .leading)
         .background(Color(.hintsPrimary.opacity(0.4)))
         .cornerRadius(12)
         .contentShape(Rectangle())
@@ -44,3 +49,15 @@ struct AIChatCardView: View {
             .padding()
     }
 }
+
+#Preview {
+    ZStack {
+        Color.background
+            .ignoresSafeArea()
+        
+        AIChatCardView()
+            .padding()
+    }
+    .preferredColorScheme(.dark)
+}
+

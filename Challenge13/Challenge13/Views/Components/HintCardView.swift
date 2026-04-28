@@ -23,25 +23,28 @@ struct HintCardView: View {
     let action: () -> Void
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack() {
             
             // Título do card
-            HStack {
-                Image(systemName: "chevron.down")
+            HStack (spacing: 12) {
+                Image(systemName: hint.icon)
                     .font(.title)
+                    .bold()
                 
                 Text(hint.title)
-                    .font(.title)
+                    .font(.title2)
+                    .bold()
                     .foregroundColor(.primary)
                 
                 Spacer()
                 
                 Image(systemName: "chevron.down")
-                    .font(.headline)
+                    .font(.title)
+                    .bold()
                     .rotationEffect(.degrees(isExpanded ? 180 : 0))
                     .animation(.easeInOut, value: isExpanded)
             }
-            .padding(8)
+            .frame(maxWidth: .infinity, minHeight: 60, alignment: .leading)
             
             // Conteúdo
             if isExpanded {
@@ -79,17 +82,33 @@ struct HintCardView: View {
     VStack(spacing: 16) {
         
         HintCardView(
-            hint: Hint(id: UUID(), title: "VoiceOver", description: "Permite que pessoas com deficiência visual utilizem o app através de áudio."),
-            isExpanded: false,
-            action: {}
-        )
-        
-        HintCardView(
-            hint: Hint(id: UUID(),title: "Dynamic Type", description: "Ajusta automaticamente o tamanho da fonte conforme a preferência do usuário."),
+            hint: Hint(
+                id: UUID(),
+                title: "Adesivos",
+                description: "Baixe a folha de adesivos e imprima. Cole nos objetos que deseja encontrar. A câmera do EyeSearch identifica os adesivos a até 2 metros e avisa quando o item for localizado.",
+                icon: "printer.fill"
+            ),
             isExpanded: true,
             action: {}
         )
         
+    }
+}
+
+#Preview {
+    VStack(spacing: 16) {
+        
+        HintCardView(
+            hint: Hint(
+                id: UUID(),
+                title: "Adesivos",
+                description: "Baixe a folha de adesivos e imprima. Cole nos objetos que deseja encontrar. A câmera do EyeSearch identifica os adesivos a até 2 metros e avisa quando o item for localizado.", 
+                icon: "printer.fill"
+            ),
+            isExpanded: true,
+            action: {}
+        )
+        .preferredColorScheme(.dark)
     }
 }
 

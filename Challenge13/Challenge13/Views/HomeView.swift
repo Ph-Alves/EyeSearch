@@ -18,12 +18,11 @@ struct HomeView: View {
     // Coordinator para navegação entre telas
     @Environment(Coordinator.self) private var coordinator
     
-    // Lista de itens do menu principal (carregada no onAppear)
-    @State private var items: [(title: String, icon: String, color: Color, borderColor: Color, screen: HomeDestination)] = []
+//    // Lista de itens do menu principal (carregada no onAppear)
+//    @State private var items: [(title: String, icon: String, color: Color, borderColor: Color, screen: HomeDestination)] = []
     
     var homeVM: HomeViewModel
     
-    private let screenTitle = "EyeSearch"
     // Decide se usa cards grandes (quando acessibilidade de texto grande está ativa)
     private var usesLargeCard: Bool {
         dynamicTypeSize >= .xxxLarge

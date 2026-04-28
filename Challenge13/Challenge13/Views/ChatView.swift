@@ -448,3 +448,12 @@ struct ErrorBannerView: View {
     }
     .environment(coordinator)
 }
+
+#Preview {
+    let coordinator = Coordinator(dependencyContainer: DependencyContainer())
+    CoordinatedNavigationStack {
+        ChatView(coordinator: coordinator)
+    }
+    .environment(coordinator)
+    .preferredColorScheme(.dark)
+}
