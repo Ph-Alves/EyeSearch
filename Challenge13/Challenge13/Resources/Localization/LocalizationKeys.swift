@@ -70,7 +70,8 @@ enum L10n {
     
     enum SearchObject {
         enum Screen {
-            static let searchInformation = "searchObject.screen.searchInformation"
+            static let searchSticker = "searchObject.screen.searchSticker"
+            static let stickerCount      = "searchObject.screen.stickerCount"
         }
     }
 
@@ -108,4 +109,8 @@ extension String {
     static func localized(_ key: String) -> String {
         NSLocalizedString(key, comment: "")
     }
+    
+    static func localized(_ key: String, _ args: CVarArg...) -> String {
+            String(format: NSLocalizedString(key, comment: ""), arguments: args)
+        }
 }

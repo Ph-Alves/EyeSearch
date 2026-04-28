@@ -93,7 +93,7 @@ struct SearchObjectView: View {
                                 .foregroundColor(.primary)
                                 
                             
-                            Text("\(SearchObjectVM.stickerCount) adesivos encontrados")
+                            Text(verbatim: .localized(L10n.SearchObject.Screen.stickerCount, SearchObjectVM.stickerCount))
                                 .font(.title)
                                 .foregroundColor(.primary)
                         }
@@ -108,7 +108,7 @@ struct SearchObjectView: View {
                                 .symbolEffect(.rotate)
                                 .onAppear { isRotating = true }
                             
-                            Text("Procurando adesivo...")
+                            Text(verbatim: .localized(L10n.SearchObject.Screen.searchSticker))
                                 .font(.title)
                                 .foregroundColor(.primary)
                         }
