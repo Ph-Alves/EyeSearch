@@ -158,7 +158,6 @@
 				Resources/Info.plist,
 				Resources/Localization/Constants/PDFConstants.swift,
 				Resources/Localization/Localizable.xcstrings,
-				Resources/Localization/LocalizationKeys.swift,
 				"Resources/Sounds/item-found.mp3",
 				Resources/Sounds/ObjectFound.mp3,
 				Resources/YoloTranslations.swift,
