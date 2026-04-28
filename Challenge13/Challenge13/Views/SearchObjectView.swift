@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 import AVFoundation
 
 // MARK: - View
@@ -20,6 +21,7 @@ struct SearchObjectView: View {
     var SearchObjectVM: SearchObjectViewModel
     /// States
     @State private var flashLight: Bool = true
+    @State private var showCameraDeniedAlert = false
     @State private var isRotating = false
 
     /// init
@@ -120,8 +122,16 @@ struct SearchObjectView: View {
             .background(Color.onboardingProgressInactive)
         }
         .task {
-            // Solicita permissão de câmera ao aparecer
             await SearchObjectVM.getPermission()
+            showCameraDeniedAlert = SearchObjectVM.isCameraDenied
+        }
+        .alert("Câmera bloqueada", isPresented: $showCameraDeniedAlert) {
+            Button("Abrir Ajustes") {
+                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+            }
+            Button("Cancelar", role: .cancel) { }
+        } message: {
+            Text("Para usar o EyeSearch, permita o acesso à câmera em Ajustes > Privacidade & Segurança > Câmera.")
         }
         .preferredColorScheme(.dark)
         .navigationBarBackButtonHidden(true)

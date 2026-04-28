@@ -13,6 +13,7 @@ import Foundation
 /// ## Usado em:
 /// - ``SettingsView``
 @Observable
+@MainActor
 class SettingsViewModel {
     // MARK: - Variables
     /// Manager de feedback tátil (injetado via protocolo).
