@@ -18,9 +18,40 @@ class HintsViewModel {
     // MARK: - Variables
     /// Lista de dicas exibidas na tela.
     var hints: [Hint] = [
-        Hint(id: UUID(), title: "Como usar o app", description: "Explore os recursos e registre seus pensamentos diariamente."),
-        Hint(id: UUID(), title: "Gerenciar emoções", description: "Escreva com frequência para identificar padrões emocionais."),
-        Hint(id: UUID(), title: "Dicas de foco", description: "Reserve alguns minutos do dia para refletir e se organizar.")
+        Hint(
+            id: UUID(),
+            title: .localized(L10n.Hints.Card.Stickers.title),
+            description: .localized(L10n.Hints.Card.Stickers.description),
+            icon: "printer.fill"
+        ),
+        
+        Hint(
+            id: UUID(),
+            title: .localized(L10n.Hints.Card.Siri.title),
+            description: .localized(L10n.Hints.Card.Siri.description),
+            icon: "apple.intelligence"
+        ),
+        
+        Hint(
+            id: UUID(),
+            title: .localized(L10n.Hints.Card.Text.title),
+            description: .localized(L10n.Hints.Card.Text.description),
+            icon: "textformat.size"
+        ),
+        
+        Hint(
+            id: UUID(),
+            title: .localized(L10n.Hints.Card.VoiceOver.title),
+            description: .localized(L10n.Hints.Card.VoiceOver.description),
+            icon: "voiceover"
+        ),
+        
+        Hint(
+            id: UUID(),
+            title: .localized(L10n.Hints.Card.Widgets.title),
+            description: .localized(L10n.Hints.Card.Widgets.description),
+            icon: "widget.small.badge.plus"
+        ),
     ]
     
     /// ID da dica atualmente expandida. `nil` se nenhuma estiver aberta.

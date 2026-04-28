@@ -5,6 +5,7 @@
 //  Created by Raquel Souza on 17/04/26.
 //
 
+
 import SwiftUI
 
 // MARK: - Component
@@ -22,37 +23,92 @@ struct HintCardView: View {
     let action: () -> Void
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack() {
             
-            // Título
-            HStack {
+            // Título do card
+            HStack (spacing: 12) {
+                Image(systemName: hint.icon)
+                    .font(.title)
+                    .bold()
+                
                 Text(hint.title)
-                    .font(.headline)
+                    .font(.title2)
+                    .bold()
+                    .foregroundColor(.primary)
                 
                 Spacer()
                 
                 Image(systemName: "chevron.down")
+                    .font(.title)
+                    .bold()
                     .rotationEffect(.degrees(isExpanded ? 180 : 0))
                     .animation(.easeInOut, value: isExpanded)
             }
+            .frame(maxWidth: .infinity, minHeight: 60, alignment: .leading)
             
             // Conteúdo
             if isExpanded {
-                Text("isExpanded: \(isExpanded.description)")
+
+                Divider()
+                .padding(.bottom, 4)
+                .frame(maxWidth: .infinity)
+                .overlay(Color.hintsPrimaryBorder)
+                .padding(.horizontal, -16)
+
+                Text(hint.description)
+                    .padding(.top, 8)
                     .font(.subheadline)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.primary)
                     .transition(.opacity.combined(with: .move(edge: .top)))
             }
         }
         .padding()
-        .background(Color(.systemGray6))
+        .background(Color(.hintsPrimary))
         .cornerRadius(12)
         .contentShape(Rectangle())
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.hintsPrimaryBorder, lineWidth: 4)
+        )
         .onTapGesture {
             withAnimation(.easeInOut) {
-                print("clicou no card")
                 action()
             }
         }
     }
 }
+
+#Preview {
+    VStack(spacing: 16) {
+        
+        HintCardView(
+            hint: Hint(
+                id: UUID(),
+                title: "Adesivos",
+                description: "Baixe a folha de adesivos e imprima. Cole nos objetos que deseja encontrar. A câmera do EyeSearch identifica os adesivos a até 2 metros e avisa quando o item for localizado.",
+                icon: "printer.fill"
+            ),
+            isExpanded: true,
+            action: {}
+        )
+        
+    }
+}
+
+#Preview {
+    VStack(spacing: 16) {
+        
+        HintCardView(
+            hint: Hint(
+                id: UUID(),
+                title: "Adesivos",
+                description: "Baixe a folha de adesivos e imprima. Cole nos objetos que deseja encontrar. A câmera do EyeSearch identifica os adesivos a até 2 metros e avisa quando o item for localizado.", 
+                icon: "printer.fill"
+            ),
+            isExpanded: true,
+            action: {}
+        )
+        .preferredColorScheme(.dark)
+    }
+}
+

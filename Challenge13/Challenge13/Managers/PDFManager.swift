@@ -32,7 +32,7 @@ final class PDFManager: PDFManaging {
             return nil
         }
         //Tamanho do Sticker e espaçamento entre eles
-        let stickerSize = CGSize(width: 200, height: 200)
+        let stickerSize = CGSize(width: 110, height: 110)
         let spacing: CGFloat = 20
         
         //Configuração do tamanho da folha do PDF
@@ -95,6 +95,6 @@ struct CustomPDFDoc: Transferable {
         DataRepresentation(exportedContentType: .pdf) { documento in
             documento.data
         }
-        .suggestedFileName("Adesivos.pdf")
+        .suggestedFileName(PDFConstants.fileName)
     }
 }
