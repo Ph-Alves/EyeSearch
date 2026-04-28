@@ -26,6 +26,7 @@ private final class CameraManagerDelegateSpy: CameraManagerDelegate {
 
 // MARK: - Test Suite
 
+@MainActor
 final class CameraManagerTests: XCTestCase {
 
     // MARK: Inviáveis — do documento
@@ -40,6 +41,15 @@ final class CameraManagerTests: XCTestCase {
     //
     // T14 RN17 — Reconhecimento em até 3 segundos sem travar
     //   Performance/UI test: exige hardware real, câmera ativa e medição ponta a ponta.
+    //
+    // T_Denied — Testar o caminho .denied / .restricted de checkAuthorization
+    //   AVCaptureDevice.authorizationStatus não é injetável sem refactor do CameraManager.
+    //   Proposta: extrair um closure `authorizationStatusProvider: () -> AVAuthorizationStatus`
+    //   no init para permitir stubbing e cobrir os ramos isDenied = true / isAuthorized = false.
+    //
+    // T_HappyPath — Testar isAuthorized = true / isDenied = false
+    //   O simulador nega o acesso à câmera automaticamente no ambiente de testes.
+    //   Os ramos .authorized e .notDetermined → granted não são atingíveis sem DI ou dispositivo real.
 
     // MARK: - Propriedades
 
@@ -57,26 +67,32 @@ final class CameraManagerTests: XCTestCase {
         super.tearDown()
     }
 
+    // MARK: - checkAuthorization
+
+
     // MARK: - Additional coverage
 
     func test_IsAuthorized_InitiallyFalse() {
         // Arrange — CameraManager recém-criado, checkAuthorization não chamado
-
         // Act — (nenhuma ação; apenas leitura do estado inicial)
-
-        // Assert
         XCTAssertFalse(
             sut.isAuthorized,
             "isAuthorized deve ser false antes de qualquer chamada a checkAuthorization."
         )
     }
 
+    func test_IsDenied_InitiallyFalse() {
+        // Arrange — CameraManager recém-criado, checkAuthorization não chamado
+        // Act — (nenhuma ação; apenas leitura do estado inicial)
+        XCTAssertFalse(
+            sut.isDenied,
+            "isDenied deve ser false antes de qualquer chamada a checkAuthorization."
+        )
+    }
+
     func test_Session_InitiallyEmpty() {
         // Arrange — CameraManager recém-criado, setupSession não chamado
-
         // Act — (nenhuma ação; apenas leitura do estado inicial)
-
-        // Assert
         XCTAssertTrue(
             sut.session.inputs.isEmpty,
             "session não deve ter inputs antes de setupSession ser chamado."
@@ -84,6 +100,36 @@ final class CameraManagerTests: XCTestCase {
         XCTAssertTrue(
             sut.session.outputs.isEmpty,
             "session não deve ter outputs antes de setupSession ser chamado."
+        )
+    }
+
+    func test_Stop_DoesNotCrash() {
+        // Arrange — session não iniciada (simulador não tem câmera real)
+
+        // Act & Assert — session.stopRunning() em sessão não configurada deve ser noop seguro
+        XCTAssertNoThrow(sut.stop(), "stop() antes de setupSession não deve crashar.")
+    }
+
+    func test_Stop_CalledMultipleTimes_DoesNotCrash() {
+        // Arrange — primeira chamada coloca o estado em "parado"
+        sut.stop()
+
+        // Act & Assert — segunda chamada em sessão já parada é noop seguro
+        XCTAssertNoThrow(sut.stop(), "stop() chamado múltiplas vezes não deve crashar.")
+    }
+
+    func test_SetTorch_WithoutDevice_DoesNotCrash() {
+        // Arrange — device é nil antes de setupSession (não há hardware no simulador)
+        // guard let device, device.hasTorch (linha 52) deve retornar silenciosamente
+
+        // Act & Assert
+        XCTAssertNoThrow(
+            sut.setTorch(on: true),
+            "setTorch antes de setupSession não deve crashar quando device é nil."
+        )
+        XCTAssertNoThrow(
+            sut.setTorch(on: false),
+            "setTorch(on: false) antes de setupSession não deve crashar."
         )
     }
 
@@ -169,3 +215,4 @@ private extension CameraManagerTests {
         return sampleBuffer
     }
 }
+
