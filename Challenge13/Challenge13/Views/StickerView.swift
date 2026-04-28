@@ -20,7 +20,7 @@ struct StickerView: View {
     
     @State var quantity: Int = 1
     
-    // Quantos adesivos cabem por folha A4
+    /// Quantos adesivos cabem por folha A4.
     private let adesivosPerSheet = 24
     
     /// Computed property — calcula automaticamente o número de folhas A4  necessárias com base na quantidade atual de adesivos.
