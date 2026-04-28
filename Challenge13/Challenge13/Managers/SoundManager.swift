@@ -40,11 +40,11 @@ final class SoundManager: SoundManaging {
         guard isEnabled else { return }
         let cleanLabel = label.trimmingCharacters(in: .whitespaces)
         
-        guard let translation = YoloTranslations(rawValue: cleanLabel) else { return }
-        let textToSpeak = translation.localizedString
-        
+        guard YoloTranslations(rawValue: cleanLabel) != nil else { return }
+        let textToSpeak = String.localized("yolo.label.\(cleanLabel)")
+
         let utterance = AVSpeechUtterance(string: textToSpeak)
-        utterance.voice = AVSpeechSynthesisVoice(language: "pt-BR")
+        utterance.voice = AVSpeechSynthesisVoice(language: Locale.preferredLanguages.first ?? "en")
         utterance.rate = 0.53
         
         if synthesizer.isSpeaking {

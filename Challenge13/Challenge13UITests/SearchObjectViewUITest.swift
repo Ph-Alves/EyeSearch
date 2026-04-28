@@ -38,7 +38,7 @@ final class SearchObjectViewUITest: XCTestCase {
 
         // Assert
         XCTAssertTrue(
-            app.staticTexts["Procurando..."].waitForExistence(timeout: 5),
+            app.staticTexts["Procurando adesivo..."].waitForExistence(timeout: 5),
             "SearchObjectView deve exibir 'Procurando...' quando nenhum adesivo é detectado"
         )
     }
@@ -68,7 +68,7 @@ final class SearchObjectViewUITest: XCTestCase {
         // a view não deve conter o overlay animado ativo.
         // Verifica indiretamente: o status "Procurando..." deve ser o único label de status.
         XCTAssertTrue(
-            app.staticTexts["Procurando..."].waitForExistence(timeout: 5),
+            app.staticTexts["Procurando adesivo..."].waitForExistence(timeout: 5),
             "Sem adesivos detectados, apenas 'Procurando...' deve aparecer como status"
         )
         XCTAssertFalse(
@@ -80,7 +80,7 @@ final class SearchObjectViewUITest: XCTestCase {
 
     func testSearchObjectView_buttonOfRetornForHome() {
         // Arrange
-        XCTAssertTrue(app.staticTexts["Procurando..."].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Procurando adesivo..."].waitForExistence(timeout: 5))
         let returnButton = app.buttons["Voltar"]
         XCTAssertTrue(returnButton.waitForExistence(timeout: 3))
 
@@ -90,7 +90,7 @@ final class SearchObjectViewUITest: XCTestCase {
 
         // Assert
         XCTAssertTrue(
-            app.navigationBars["EyeSearch"].waitForExistence(timeout: 5),
+            app.staticTexts["EyeSearch"].waitForExistence(timeout: 5),
             "Sair da SearchObjectView deve retornar para a HomeView e parar a câmera"
         )
     }

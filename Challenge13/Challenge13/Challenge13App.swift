@@ -30,14 +30,34 @@ struct Challenge13App: App {
                 }
                 // Coordinator injetado como variável de ambiente
                 .environment(coordinator)
-                // Expõe o coordinator ao IntentsManager para que os AppIntents (Siri)
-                // possam disparar navegações seguindo o padrão do Coordinator.
                 .task {
                     IntentsManager.shared.coordinator = coordinator
                 }
+                .onOpenURL { url in
+                    if url.scheme == "eyesearch" {
+                        IntentsManager.shared.openSearchObject()
+                    }
+                }
             } else {
-                OnboardingView()
-            }
+                CoordinatedNavigationStack {
+                    OnboardingView()
+                }
+                // Coordinator injetado como variável de ambiente
+                .environment(coordinator)
+                .task {
+                    IntentsManager.shared.coordinator = coordinator
+                }
+                .onOpenURL { url in
+                    if url.scheme == "eyesearch" && url.host == "searchObject" {
+                        IntentsManager.shared.openSearchObject()
+                    }
+                }
+                        .onOpenURL { url in
+                            if url.scheme == "eyesearch" && url.host == "searchObject" {
+                                IntentsManager.shared.openSearchObject()
+                            }
+                        }
+                }
         }
     }
 }

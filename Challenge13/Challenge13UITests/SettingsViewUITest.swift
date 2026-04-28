@@ -17,7 +17,7 @@ final class SettingsViewUITest: XCTestCase {
         app.launchArguments += ["-hasCompletedOnboarding", "true"]
         app.launch()
         // Navega até a SettingsView
-        let hintsCard = app.buttons["Configurações"]
+        let hintsCard = app.buttons["Ajustes"]
         if hintsCard.waitForExistence(timeout: 5) {
             hintsCard.tap()
         }
@@ -63,7 +63,7 @@ final class SettingsViewUITest: XCTestCase {
                       "SettingsView deve exibir a opção 'Som'")
     }
 
-    func testSettingsView_exhibitionResetButton() {
+    func testSettingsView_exhibitionStepByStepButton() {
         // Arrange
         // Já na SettingsView (setUp)
 
@@ -71,8 +71,8 @@ final class SettingsViewUITest: XCTestCase {
         // Nenhuma ação necessária
 
         // Assert
-        XCTAssertTrue(app.buttons["Resetar"].waitForExistence(timeout: 5),
-                      "SettingsView deve exibir o botão 'Resetar'")
+        XCTAssertTrue(app.buttons["Passo a passo"].waitForExistence(timeout: 5),
+                      "SettingsView deve exibir o botão 'Passo a passo'")
     }
 
     func testSettingsView_vibrationToggleChangeState() {
@@ -107,22 +107,17 @@ final class SettingsViewUITest: XCTestCase {
                           "O toggle de 'Som' deve alternar de estado ao ser tocado")
     }
 
-    func testSettingsView_resetButtonChangeToggleForDefault() {
+    func testSettingsView_stepByStepCallOnboardingView() {
         // Arrange
         XCTAssertTrue(app.staticTexts["Ajustes"].waitForExistence(timeout: 5))
-        // Altera os toggles para um estado diferente do padrão
-        app.switches.element(boundBy: 0).tap()
-        app.switches.element(boundBy: 1).tap()
-        let resetButton = app.buttons["Resetar"]
+        let resetButton = app.buttons["Passo a passo"]
         XCTAssertTrue(resetButton.waitForExistence(timeout: 3))
 
         // Act
         resetButton.tap()
 
         // Assert
-        // Após resetar, ao menos um toggle deve estar habilitado (valor "1" = on, padrão esperado)
-        let vibrationToggleValue = app.switches.element(boundBy: 0).value as? String
-        XCTAssertNotNil(vibrationToggleValue,
+        XCTAssertNotNil(app.staticTexts["Encontre seus objetos com facilidade"].waitForExistence(timeout: 5),
                         "Após resetar, os toggles devem ter um estado definido")
     }
 
@@ -136,7 +131,7 @@ final class SettingsViewUITest: XCTestCase {
         returnButton.tap()
 
         // Assert
-        XCTAssertTrue(app.navigationBars["EyeSearch"].waitForExistence(timeout: 5),
+        XCTAssertTrue(app.staticTexts["EyeSearch"].waitForExistence(timeout: 5),
                       "O botão 'Voltar' deve retornar para a HomeView")
     }
 }

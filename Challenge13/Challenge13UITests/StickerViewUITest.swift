@@ -17,7 +17,7 @@ final class StickerViewUITest: XCTestCase {
         app.launchArguments += ["-hasCompletedOnboarding", "true"]
         app.launch()
         // Navega até a StickerView
-        let stickerCard = app.buttons["Gerar"]
+        let stickerCard = app.buttons["Adesivos"]
         if stickerCard.waitForExistence(timeout: 5) {
             stickerCard.tap()
         }
@@ -153,7 +153,7 @@ final class StickerViewUITest: XCTestCase {
         returnButton.tap()
 
         // Assert
-        XCTAssertTrue(app.navigationBars["EyeSearch"].waitForExistence(timeout: 5),
+        XCTAssertTrue(app.staticTexts["EyeSearch"].waitForExistence(timeout: 5),
                       "O botão 'Voltar' deve retornar para a HomeView")
     }
 

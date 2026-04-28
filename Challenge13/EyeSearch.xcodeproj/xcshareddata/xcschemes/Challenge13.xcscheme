@@ -52,7 +52,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EF69E8A32F87CFDD00FD9AE7"
-               BuildableName = "EyeSearchUITests.xctest"
+               BuildableName = "EyeSearchUITests"
                BlueprintName = "EyeSearchUITests"
                ReferencedContainer = "container:EyeSearch.xcodeproj">
             </BuildableReference>
@@ -62,9 +62,9 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9E775B742F9E458A00EFFE99"
-               BuildableName = "Challenge13UITests.xctest"
-               BlueprintName = "Challenge13UITests"
+               BlueprintIdentifier = "9E7762A02FA1288800EFFE99"
+               BuildableName = "EyeSearchUITests.xctest"
+               BlueprintName = "EyeSearchUITests"
                ReferencedContainer = "container:EyeSearch.xcodeproj">
             </BuildableReference>
          </TestableReference>

@@ -47,8 +47,8 @@ final class HintsViewUITests: XCTestCase {
         // Nenhuma ação necessária
 
         // Assert
-        XCTAssertTrue(app.staticTexts["AIChat"].waitForExistence(timeout: 5),
-                      "HintsView deve exibir o card 'AIChat'")
+        XCTAssertTrue(app.staticTexts["EyeChat"].waitForExistence(timeout: 5),
+                      "HintsView deve exibir o card 'EyeChat'")
     }
 
     func testHintsView_exhibitionOfCardsList() {
@@ -124,7 +124,7 @@ final class HintsViewUITests: XCTestCase {
         returnButton.tap()
 
         // Assert
-        XCTAssertTrue(app.navigationBars["EyeSearch"].waitForExistence(timeout: 5),
+        XCTAssertTrue(app.staticTexts["EyeSearch"].waitForExistence(timeout: 5),
                       "O botão 'Voltar' deve retornar para a HomeView")
     }
 }
