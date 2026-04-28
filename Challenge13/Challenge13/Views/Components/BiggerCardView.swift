@@ -18,22 +18,34 @@ struct BiggerCardView: View {
     let icon: String
     /// Cor de fundo do card.
     let color: Color
+    /// Cor da borda do card.
+    let borderColor: Color
 
     var body: some View {
         VStack(spacing: 12) {
             Image(systemName: icon)
-                .font(.system(size: 75, weight: .regular))
-                .foregroundColor(.white)
+                .font(.largeTitle)
+                .foregroundColor(.titleText)
+                .padding(.bottom, 16)
+                
             Text(title)
-                .font(.headline)
+                .font(.largeTitle)
                 .fontWeight(.bold)
-                .foregroundColor(.white)
+                .foregroundColor(.titleText)
                 .multilineTextAlignment(.center)
         }
-        .frame(maxWidth: .infinity, minHeight: 270)
+        .frame(maxWidth: .infinity, minHeight: 283)
         .padding(.vertical, 34)
         .background(color)
-        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .cornerRadius(22)
+        .contentShape(Rectangle())
+        .overlay(
+            RoundedRectangle(cornerRadius: 22)
+                .stroke(Color(borderColor), lineWidth: 8)
+        )
     }
 }
-// medidas ainda a refinar com o protótipo de alta
+
+#Preview {
+    BiggerCardView(title: "Settings", icon: "iphone.radiowaves.left.and.right", color: Color(.searchPrimary), borderColor: .searchPrimaryBorder)
+}

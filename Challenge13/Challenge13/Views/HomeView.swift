@@ -18,45 +18,66 @@ struct HomeView: View {
     // Coordinator para navegação entre telas
     @Environment(Coordinator.self) private var coordinator
     
-    // Lista de itens do menu principal (carregada no onAppear)
-    @State private var items: [(title: String, icon: String, color: Color, screen: HomeDestination)] = []
+//    // Lista de itens do menu principal (carregada no onAppear)
+//    @State private var items: [(title: String, icon: String, color: Color, borderColor: Color, screen: HomeDestination)] = []
     
     var homeVM: HomeViewModel
     
-    private let screenTitle = "EyeSearch"
     // Decide se usa cards grandes (quando acessibilidade de texto grande está ativa)
     private var usesLargeCard: Bool {
         dynamicTypeSize >= .xxxLarge
     }
- 
+    
+    private var content: some View {
+        ZStack {
+            Color(.background)
+                .ignoresSafeArea()
+            
+            VStack {
+                VStack(alignment: .leading, spacing: 12){
+                    //título da tela
+                    Text("EyeSearch")
+                        .fontWeight(.bold)
+                        .font(.largeTitle)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, 12)
+                .padding(.bottom, 24)
+                
+                VStack(spacing: 24) {
+                    ForEach(homeVM.generateItems(), id: \.title) { item in
+                        Button {
+                            // Navega para a tela correspondente ao card tocado
+                            coordinator.navigate(to: item.screen)
+                        } label: {
+                            // Alterna entre card grande e compacto conforme Dynamic Type
+                            if usesLargeCard {
+                                BiggerCardView(title: item.title, icon: item.icon, color: item.color, borderColor: item.borderColor)
+                            } else {
+                                CompactCardView(title: item.title, icon: item.icon, color: item.color, borderColor: item.borderColor)
+                            }
+                        }
+                        .accessibilityLabel(item.title)
+                    }
+                }
+                
+                Spacer()
+            }
+            .padding(.horizontal, 28.5)
+            
+        }
+    }
+    
     // MARK: - Body View
     var body: some View {
-        ScrollView {
-            VStack(spacing: 16) {
-                ForEach(items, id: \.title) { item in
-                    Button {
-                        // Navega para a tela correspondente ao card tocado
-                        coordinator.navigate(to: item.screen)
-                    } label: {
-                        // Alterna entre card grande e compacto conforme Dynamic Type
-                        if usesLargeCard {
-                            BiggerCardView(title: item.title, icon: item.icon, color: item.color)
-                        } else {
-                            CompactCardView(title: item.title, icon: item.icon, color: item.color)
-                        }
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(item.title)
-                }
+        
+        if dynamicTypeSize >= .xxxLarge {
+            ScrollView {
+                content
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
-        }
-        .navigationTitle(screenTitle)
-        .navigationBarTitleDisplayMode(.large)
-        .onAppear {
-            // Carrega os itens do menu ao aparecer na tela
-            items = homeVM.generateItems()
+            .background(Color(.background).ignoresSafeArea())
+        } else {
+            content
         }
     }
 }
@@ -79,10 +100,10 @@ struct HomeView: View {
     .environment(\.dynamicTypeSize, .large)
 }
 
-#Preview("xxLarge") {
+#Preview("xxxLarge") {
     CoordinatedNavigationStack {
         HomeView(homeVM: HomeViewModel())
     }
     .environment(Coordinator(dependencyContainer: DependencyContainer()))
-    .environment(\.dynamicTypeSize, .xxLarge)
+    .environment(\.dynamicTypeSize, .xxxLarge)
 }

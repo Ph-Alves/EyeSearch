@@ -16,20 +16,30 @@ struct ReturnButton: View {
     /// Ação executada ao tocar no botão.
     var action: () -> Void
     /// Texto exibido no botão.
-    let returnText: String = "Voltar"
+    let returnText: String = .localized(L10n.Common.Button.back)
     
     // MARK: - Body view
     var body: some View {
-        Button(action: action, label: {
-            HStack {
-                Image(systemName: "chevron.left")
-                    .fontWeight(.bold)
-                Text(returnText)
-                    .fontWeight(.bold)
-            }
-        })
+        VStack (alignment: .leading, spacing: 12) {
+            Button(action: action, label: {
+                HStack {
+                    Image(systemName: "chevron.left")
+                        .font(.title)
+                        .fontWeight(.bold)
+                    Text(returnText)
+                        .font(.title)
+                        .fontWeight(.semibold)
+                }
+            })
+            .buttonStyle(.plain)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.top, 12)
+        .padding(.bottom, 24)
     }
 }
+
+
 
 // MARK: - Preview
 #Preview {

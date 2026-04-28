@@ -29,23 +29,20 @@ struct HintsView: View {
                     ReturnButton {
                         coordinator.pop()
                     }
+                    
                     // Título + subtítulo
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("Dicas")
+                        Text(verbatim: .localized(L10n.Hints.Screen.title))
+                            .fontWeight(.semibold)
                             .font(.largeTitle)
-                        
-                        Text("Lorem Ipsum Dolor Sit Amet Dolor Sit Sit Amet Dolor Sit")
+                            .padding(.bottom, 10)
+
+                        Text(verbatim: .localized(L10n.Hints.Screen.description))
                             .font(.body)
                             .foregroundColor(.primary)
                     }
-                    .padding(.top, 8)
-                    
-                    // Card para o AIChat, ainda não funcionando.
-                    AIChatCardView()
-                        .padding(.top, 28)
-                    
-                    Text("Tire dúvidas com a IA")
-                        .padding(.top, 8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 20)
                     
                     // Lista de cards de Hints
                     VStack(spacing: 16) {
@@ -57,10 +54,29 @@ struct HintsView: View {
                                     viewModel.toggleHint(hint)
                                 }
                             )
+                            .padding(.bottom, 20)
                         }
                     }
+                    .padding(.bottom, 20)
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(verbatim: .localized(L10n.Hints.Screen.chatTitle))
+                            .fontWeight(.semibold)
+                            .font(.largeTitle)
+                            .padding(.bottom, 10)
+
+                        Text(verbatim: .localized(L10n.Hints.Screen.chatDescription))
+                            .font(.body)
+                            .foregroundColor(.primary)
+                    }
+                    .padding(.bottom, 20)
+                    .frame(maxWidth: .infinity, alignment: .leading) // ← mesmo aqui
+                    
+                    // Card para o AIChat
+                    AIChatCardView()
+                        
                 }
-                .padding(.horizontal, 20)
+                .padding(.horizontal, 20) // ← só aqui, uma vez só
                 .padding(.top)
             }
         }
@@ -74,4 +90,12 @@ struct HintsView: View {
         HintsView()
     }
     .environment(Coordinator(dependencyContainer: DependencyContainer()))
+}
+
+#Preview {
+    CoordinatedNavigationStack {
+        HintsView()
+    }
+    .environment(Coordinator(dependencyContainer: DependencyContainer()))
+    .preferredColorScheme(.dark)
 }
