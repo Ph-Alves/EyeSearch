@@ -18,21 +18,36 @@ struct CompactCardView: View {
     let icon: String
     /// Cor de fundo do card.
     let color: Color
-
+    ///Cor da borda do card
+    let borderColor: Color
+    
+    @ScaledMetric(relativeTo: .title) private var minHeight: CGFloat = 100
+    @ScaledMetric(relativeTo: .title) private var horizontalPadding: CGFloat = 32.5
+    
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: icon)
-                .font(.system(size: 25, weight: .regular))
-                .foregroundColor(.white)
+                .font(.title)
+                .foregroundColor(.titleText)
             Text(title)
-                .font(.title3)
+                .font(.title)
                 .fontWeight(.bold)
-                .foregroundColor(.white)
+                .foregroundColor(.titleText)
                 .multilineTextAlignment(.center)
+            
+            Spacer()
         }
-        .frame(maxWidth: .infinity, minHeight: 64)
+        .padding(.horizontal, horizontalPadding)
+        .frame(maxWidth: .infinity, minHeight: minHeight)
         .background(color)
-        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .cornerRadius(22)
+        .contentShape(Rectangle())
+        .overlay(
+            RoundedRectangle(cornerRadius: 22)
+                .stroke(Color(borderColor), lineWidth: 8)
+        )
     }
 }
-// medidas ainda a refinar com o protótipo de alta
+#Preview {
+    CompactCardView(title: "Settings", icon: "iphone.radiowaves.left.and.right", color: Color(.settingsPrimary), borderColor: Color(.settingsPrimaryBorder))
+}

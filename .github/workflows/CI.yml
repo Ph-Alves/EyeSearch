@@ -7,20 +7,20 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: macos-26
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
         with:
           lfs: true
 
-      # Cache do DerivedData — evita recompilar tudo do zero
-      - name: Cache DerivedData
-        uses: actions/cache@v4
-        with:
-          path: ~/Library/Developer/Xcode/DerivedData
-          key: ${{ runner.os }}-deriveddata-${{ hashFiles('**/*.xcodeproj/project.pbxproj') }}
-          restore-keys: |
-            ${{ runner.os }}-deriveddata-
+      # # Cache do DerivedData — evita recompilar tudo do zero
+      # - name: Cache DerivedData
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ~/Library/Developer/Xcode/DerivedData
+      #     key: ${{ runner.os }}-deriveddata-${{ hashFiles('**/*.xcodeproj/project.pbxproj') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-deriveddata-
 
       # Build + Test em um único comando
       - name: Build & Test
@@ -32,5 +32,4 @@ jobs:
             -derivedDataPath ~/Library/Developer/Xcode/DerivedData \
             -parallel-testing-enabled YES \
             -jobs $(sysctl -n hw.logicalcpu) \
-            CODE_SIGNING_ALLOWED=NO \
-            | xcpretty && exit ${PIPESTATUS[0]}
+            CODE_SIGNING_ALLOWED=NO
