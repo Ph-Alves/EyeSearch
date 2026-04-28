@@ -39,7 +39,7 @@ final class HintsViewModelTests: XCTestCase {
         // Act — (nenhuma ação; apenas leitura do estado inicial)
 
         // Assert
-        XCTAssertEqual(sut.hints.count, 3, "hints deve conter exatamente 3 dicas na inicialização.")
+        XCTAssertEqual(sut.hints.count, 5, "hints deve conter exatamente 5 dicas na inicialização.")
         XCTAssertNil(sut.selectedHintID, "selectedHintID deve ser nil na inicialização.")
     }
 
