@@ -57,7 +57,7 @@ struct SearchObjectView: View {
                         .foregroundColor(.primary)
                         
                 }
-                
+                .accessibilityLabel(flashLight ? "Lanterna ligada" : "Lanterna desligada")
             }
             .padding(padding)
             .background(Color.onboardingProgressInactive)

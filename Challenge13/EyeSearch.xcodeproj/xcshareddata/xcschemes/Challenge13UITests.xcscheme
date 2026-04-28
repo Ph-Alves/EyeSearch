@@ -19,7 +19,18 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EF69E8A32F87CFDD00FD9AE7"
+               BlueprintIdentifier = "9E7762A02FA1288800EFFE99"
+               BuildableName = "EyeSearchUITests.xctest"
+               BlueprintName = "EyeSearchUITests"
+               ReferencedContainer = "container:EyeSearch.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "9E7762A02FA1288800EFFE99"
                BuildableName = "EyeSearchUITests.xctest"
                BlueprintName = "EyeSearchUITests"
                ReferencedContainer = "container:EyeSearch.xcodeproj">
