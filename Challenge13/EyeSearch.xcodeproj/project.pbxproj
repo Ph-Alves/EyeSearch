@@ -804,7 +804,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 446CS4MA3A;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = R2L5WD5D2K;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -851,7 +851,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 446CS4MA3A;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = R2L5WD5D2K;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -904,7 +904,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = br.com.victoria.Challenge13;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = EyeSearch_UITests_Profile;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = EyeSearch_Team_Profile;
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -936,7 +936,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = br.com.victoria.Challenge13;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = EyeSearch_UITests_Profile;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = EyeSearch_Team_Profile;
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
