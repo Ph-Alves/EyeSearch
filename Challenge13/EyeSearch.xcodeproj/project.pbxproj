@@ -95,7 +95,6 @@
 		EF69E8A42F87CFDD00FD9AE7 /* EyeSearchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EyeSearchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFAB54E92F96C95A00A009CE /* EyeSearchDoc.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = EyeSearchDoc.docc; sourceTree = "<group>"; };
 		EFC4A27A2FA007A2001E7D05 /* EyeSearch copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "EyeSearch copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		EFC4A27B2FA007A2001E7D05 /* EyeSearch copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "EyeSearch copy-Info.plist"; path = "/Users/ph/Desktop/Programação/Swift/Projetos/Challenge13/Challenge13/EyeSearch copy-Info.plist"; sourceTree = "<absolute>"; };
 		EFE2E23A2F9903D100413ED1 /* Challenge13.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Challenge13.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -168,28 +167,28 @@
 				ViewModels/SearchObjectViewModel.swift,
 				ViewModels/SettingsViewModel.swift,
 				ViewModels/StickerViewModel.swift,
-				Views/ChatView.swift,
-				Views/Components/A4InfoCardView.swift,
-				Views/Components/AIChatCardView.swift,
-				Views/Components/BiggerCardView.swift,
-				Views/Components/CompactCardView.swift,
-				Views/Components/CustomStepperView.swift,
-				Views/Components/HintCardView.swift,
-				Views/Components/PDFButton.swift,
 				Views/Components/ReturnButton.swift,
-				Views/Components/SettingsToggleRow.swift,
-				Views/Components/WaveOverlay.swift,
-				Views/HintsView.swift,
-				Views/HomeView.swift,
+				Views/Hint/ChatView.swift,
+				Views/Hint/Components/AIChatCardView.swift,
+				Views/Hint/Components/HintCardView.swift,
+				Views/Hint/HintsView.swift,
+				Views/Home/Components/BiggerCardView.swift,
+				Views/Home/Components/CompactCardView.swift,
+				Views/Home/HomeView.swift,
 				Views/Onboarding/Components/OnboardingContinueButton.swift,
+				Views/Onboarding/Components/OnboardingPage.swift,
 				Views/Onboarding/Components/OnboardingProgressBar.swift,
-				Views/Onboarding/OnboardingPage.swift,
-				Views/Onboarding/OnboardingStepView.swift,
+				Views/Onboarding/Components/OnboardingStepView.swift,
 				Views/Onboarding/OnboardingView.swift,
-				Views/PrintStickerView.swift,
-				Views/SearchObjectView.swift,
-				Views/SettingsView.swift,
-				Views/StickerView.swift,
+				Views/PrintSticker/Components/A4InfoCardView.swift,
+				Views/PrintSticker/Components/CustomStepperView.swift,
+				Views/PrintSticker/Components/PDFButton.swift,
+				Views/PrintSticker/PrintStickerView.swift,
+				Views/PrintSticker/StickerView.swift,
+				Views/SearchObject/Components/WaveOverlay.swift,
+				Views/SearchObject/SearchObjectView.swift,
+				Views/Settings/Components/SettingsToggleRow.swift,
+				Views/Settings/SettingsView.swift,
 			);
 			target = EFC4A26C2FA007A2001E7D05 /* EyeSearch copy */;
 		};
@@ -287,7 +286,6 @@
 				EF69E8A72F87CFDD00FD9AE7 /* Challenge13UITests */,
 				8AC14D652F9FD59B00E1F5BD /* EyeSearchWidgets */,
 				8AC14D602F9FD59B00E1F5BD /* Frameworks */,
-				EFC4A27B2FA007A2001E7D05 /* EyeSearch copy-Info.plist */,
 				EF69E88C2F87CFDB00FD9AE7 /* Products */,
 			);
 			sourceTree = "<group>";
