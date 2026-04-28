@@ -187,9 +187,15 @@ final class FoundationsManager: FoundationsManaging {
             )
             messagesSubject.value.append(errorMsg)
         } catch {
-            // Trata erros genéricos da sessão
+            // Trata erros genéricos da sessão (ex: session.respond lança erro não tipado)
             let chatError = ChatbotError.sessionFailed(error.localizedDescription)
             errorMessageSubject.value = chatError.errorDescription
+            let errorMsg = ChatMessage(
+                role: .assistant,
+                text: chatError.errorDescription ?? "Erro desconhecido.",
+                isFiltered: true
+            )
+            messagesSubject.value.append(errorMsg)
         }
 
         isLoadingSubject.value = false
