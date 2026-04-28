@@ -32,7 +32,7 @@ struct SettingsView: View {
             
             VStack(alignment: .leading, spacing: 12){
                 //título da tela
-                Text("Ajustes")
+                Text(verbatim: .localized(L10n.Settings.Screen.title))
                     .fontWeight(.bold)
                     .font(.largeTitle)
                 
@@ -58,8 +58,8 @@ struct SettingsView: View {
                         // MARK: - Toggle Vibração
                         SettingsToggleRow(
                             icon: "iphone.radiowaves.left.and.right",
-                            titulo: "Vibração",
-                            descricao: "Vibrará sempre que identificar adesivos ",
+                            titulo: .localized(L10n.Settings.Haptics.title),
+                            descricao: .localized(L10n.Settings.Haptics.description),
                             isOn: Binding(
                                 //ele lê o valor atual
                                 get: { settingsVM.settings.isHapticsEnabled },
@@ -71,8 +71,8 @@ struct SettingsView: View {
                         // MARK: - Toggle Som
                         SettingsToggleRow(
                             icon: "speaker.wave.2.fill",
-                            titulo: "Som",
-                            descricao: "Emitirá som sempre que identificar adesivos",
+                            titulo: .localized(L10n.Settings.Sound.title),
+                            descricao: .localized(L10n.Settings.Sound.description),
                             isOn: Binding(
                                 get: { settingsVM.settings.isSoundEnabled },
                                 set: { settingsVM.toggleSound($0) }
@@ -90,7 +90,7 @@ struct SettingsView: View {
                                     .foregroundStyle(.titleText)
                                 
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text("Passo a passo")
+                                    Text(verbatim: .localized(L10n.Settings.Onboarding.button))
                                         .font(.title2)
                                         .fontWeight(.bold)
                                         .foregroundStyle(.titleText)
@@ -108,7 +108,7 @@ struct SettingsView: View {
                         }
                         .buttonStyle(.plain)
                     }
-                    Text("Revisite a instruções iniciais de como utilizar as funcionalidades do app")
+                    Text(verbatim: .localized(L10n.Settings.Onboarding.footer))
                         .font(.body)
                         .foregroundStyle(.titleText)
                         .fixedSize(horizontal: false, vertical: true)
