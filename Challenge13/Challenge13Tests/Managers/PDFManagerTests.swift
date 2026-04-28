@@ -75,27 +75,27 @@ final class PDFManagerTests: XCTestCase {
         )
     }
 
-//    func test_GeneratePDF_WithLargeQuantity_GeneratesMultiplePages() throws {
-//        // Arrange
-//        // Layout: sticker 200×200 + spacing 20 + margin 20 em página A4 (595.2×841.8).
-//        // Cabem 2 stickers/linha × 3 linhas completas + 1 na 4ª linha = 7 stickers antes
-//        // de beginPage(). Com quantity=14: página 1 (S1–S7) + página 2 (S8–S14) + página 3
-//        // iniciada vazia → pageCount = 3 > 1.
-//        try skipIfStickerAssetMissing()
-//
-//        // Act
-//        let data = try XCTUnwrap(
-//            sut.generatePDF(quantity: 14),
-//            "generatePDF deve retornar Data não-nil com quantity=14."
-//        )
-//
-//        // Assert
-//        let document = try XCTUnwrap(PDFDocument(data: data))
-//        XCTAssertGreaterThan(
-//            document.pageCount, 1,
-//            "14 adesivos devem ocupar mais de 1 página A4."
-//        )
-//    }
+    func test_GeneratePDF_WithLargeQuantity_GeneratesMultiplePages() throws {
+        // Arrange
+        // Layout: sticker 110×110 + spacing 20 + margin 20 em página A4 (595.2×841.8).
+        // Stickers/linha = floor((595.2 - 20) / (110 + 20)) = 4.
+        // Linhas/página  = floor((841.8 - 20) / (110 + 20)) = 6.
+        // Stickers/página = 4 × 6 = 24. quantity=25 → página 2 iniciada → pageCount > 1.
+        try skipIfStickerAssetMissing()
+
+        // Act
+        let data = try XCTUnwrap(
+            sut.generatePDF(quantity: 25),
+            "generatePDF deve retornar Data não-nil com quantity=25."
+        )
+
+        // Assert
+        let document = try XCTUnwrap(PDFDocument(data: data))
+        XCTAssertGreaterThan(
+            document.pageCount, 1,
+            "25 adesivos devem ocupar mais de 1 página A4."
+        )
+    }
 }
 
 // MARK: - Helpers

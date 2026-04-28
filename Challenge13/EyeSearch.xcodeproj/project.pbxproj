@@ -42,6 +42,13 @@
 			remoteGlobalIDString = EF69E88A2F87CFDB00FD9AE7;
 			remoteInfo = Challenge13;
 		};
+		EF69E8A52F87CFDD00FD9AE7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EF69E8832F87CFDB00FD9AE7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EF69E88A2F87CFDB00FD9AE7;
+			remoteInfo = Challenge13;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -151,6 +158,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		EF69E8972F87CFDD00FD9AE7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EF69E8A12F87CFDD00FD9AE7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -292,6 +306,29 @@
 			productReference = EF69E89A2F87CFDD00FD9AE7 /* EyeSearchTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		EF69E8A32F87CFDD00FD9AE7 /* EyeSearchUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EF69E8B42F87CFDD00FD9AE7 /* Build configuration list for PBXNativeTarget "EyeSearchUITests" */;
+			buildPhases = (
+				EF69E8A02F87CFDD00FD9AE7 /* Sources */,
+				EF69E8A12F87CFDD00FD9AE7 /* Frameworks */,
+				EF69E8A22F87CFDD00FD9AE7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EF69E8A62F87CFDD00FD9AE7 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				EF69E8A72F87CFDD00FD9AE7 /* Challenge13UITests */,
+			);
+			name = EyeSearchUITests;
+			packageProductDependencies = (
+			);
+			productName = Challenge13UITests;
+			productReference = EF69E8A42F87CFDD00FD9AE7 /* EyeSearchUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -373,6 +410,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EF69E8A22F87CFDD00FD9AE7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -405,6 +449,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EF69E8A02F87CFDD00FD9AE7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -427,6 +478,11 @@
 			isa = PBXTargetDependency;
 			target = EF69E88A2F87CFDB00FD9AE7 /* EyeSearch */;
 			targetProxy = EF69E89B2F87CFDD00FD9AE7 /* PBXContainerItemProxy */;
+		};
+		EF69E8A62F87CFDD00FD9AE7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EF69E88A2F87CFDB00FD9AE7 /* EyeSearch */;
+			targetProxy = EF69E8A52F87CFDD00FD9AE7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -793,6 +849,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -825,6 +882,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -848,6 +906,66 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EyeSearch.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/EyeSearch";
+			};
+			name = Release;
+		};
+		EF69E8B52F87CFDD00FD9AE7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 446CS4MA3A;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = R2L5WD5D2K;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.victoria.Challenge13.xctrunner;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = EyeSearch_UITests_Profile;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = Challenge13;
+			};
+			name = Debug;
+		};
+		EF69E8B62F87CFDD00FD9AE7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 446CS4MA3A;
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = R2L5WD5D2K;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.victoria.Challenge13.xctrunner;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = EyeSearch_UITests_Profile;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = Challenge13;
 			};
 			name = Release;
 		};
@@ -895,6 +1013,15 @@
 			buildConfigurations = (
 				EF69E8B22F87CFDD00FD9AE7 /* Debug */,
 				EF69E8B32F87CFDD00FD9AE7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EF69E8B42F87CFDD00FD9AE7 /* Build configuration list for PBXNativeTarget "EyeSearchUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EF69E8B52F87CFDD00FD9AE7 /* Debug */,
+				EF69E8B62F87CFDD00FD9AE7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
