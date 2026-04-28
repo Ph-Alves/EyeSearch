@@ -24,10 +24,11 @@ struct ReturnButton: View {
             Button(action: action, label: {
                 HStack {
                     Image(systemName: "chevron.left")
+                        .font(.title)
                         .fontWeight(.bold)
                     Text(returnText)
                         .font(.title)
-                        .fontWeight(.bold)
+                        .fontWeight(.semibold)
                 }
             })
             .buttonStyle(.plain)
