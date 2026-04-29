@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Combine
 import FoundationModels
 
 // MARK: - Manager
@@ -43,28 +42,12 @@ final class FoundationsManager: FoundationsManaging {
     }
     
     // MARK: - Variables
-    /// Histórico de mensagens da conversa.
-    private let messagesSubject = CurrentValueSubject<[ChatMessage], Never>([])
-    /// Indica se uma resposta está sendo processada.
-    private let isLoadingSubject = CurrentValueSubject<Bool, Never>(false)
-    /// Mensagem de erro atual, se houver.
-    private let errorMessageSubject = CurrentValueSubject<String?, Never>(nil)
+    /// Singleton
+    static let shared: FoundationsManaging = FoundationsManager()
     /// Sessão do modelo de linguagem Apple Intelligence.
     private var session: LanguageModelSession?
 
     // MARK: - FoundationsManaging
-    /// Publisher do histórico de mensagens, observável pela ViewModel.
-    var messagesPublisher: AnyPublisher<[ChatMessage], Never> {
-        messagesSubject.eraseToAnyPublisher()
-    }
-    /// Publisher do estado de carregamento, observável pela ViewModel.
-    var isLoadingPublisher: AnyPublisher<Bool, Never> {
-        isLoadingSubject.eraseToAnyPublisher()
-    }
-    /// Publisher de erros, observável pela ViewModel.
-    var errorMessagePublisher: AnyPublisher<String?, Never> {
-        errorMessageSubject.eraseToAnyPublisher()
-    }
 
     /// Instruções de sistema enviadas ao modelo na inicialização da sessão.
     /// Define identidade, escopo, restrições e estilo de resposta do assistente.
@@ -124,29 +107,21 @@ final class FoundationsManager: FoundationsManaging {
 
     // MARK: - Init
     /// Inicializa o manager e configura a sessão do modelo de linguagem.
-    init() {
+    private init() {
         setupSession()
     }
 
     // MARK: - Functions
     /// Envia uma mensagem ao chatbot, faz validação local de escopo e processa a resposta do modelo.
     /// - Parameter userInput: Texto digitado pelo usuário.
-    func sendMessage(_ userInput: String) async {
+    func sendMessage(_ userInput: String) async -> ChatMessage? {
         let trimmed = userInput.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else { return }
-
-        let userMessage = ChatMessage(role: .user, text: trimmed)
-        messagesSubject.value.append(userMessage)
-        isLoadingSubject.value = true
-        errorMessageSubject.value = nil
+        guard !trimmed.isEmpty else { return nil }
 
         do {
             // Verifica localmente se a mensagem está fora do escopo antes de enviar ao modelo
             if let localDenial = localScopeCheck(for: trimmed) {
-                let filtered = ChatMessage(role: .assistant, text: localDenial, isFiltered: true)
-                messagesSubject.value.append(filtered)
-                isLoadingSubject.value = false
-                return
+                return ChatMessage(role: .assistant, text: localDenial, isFiltered: true)
             }
 
             // Garante que a sessão do modelo está disponível
@@ -159,37 +134,29 @@ final class FoundationsManager: FoundationsManaging {
             let rawText = response.content.trimmingCharacters(in: .whitespacesAndNewlines)
             let finalText = try processModelResponse(rawText)
 
-            let assistantMessage = ChatMessage(role: .assistant, text: finalText)
-            messagesSubject.value.append(assistantMessage)
+            return ChatMessage(role: .assistant, text: finalText)
+            
 
         } catch let error as ChatbotError {
             // Trata erros específicos do chatbot (off-topic, modelo indisponível, etc.)
-            errorMessageSubject.value = error.errorDescription
-            let errorMsg = ChatMessage(
+            return ChatMessage(
                 role: .assistant,
                 text: error.errorDescription ?? "Erro desconhecido.",
                 isFiltered: true
             )
-            messagesSubject.value.append(errorMsg)
         } catch {
             // Trata erros genéricos da sessão (ex: session.respond lança erro não tipado)
             let chatError = ChatbotError.sessionFailed(error.localizedDescription)
-            errorMessageSubject.value = chatError.errorDescription
-            let errorMsg = ChatMessage(
+            return ChatMessage(
                 role: .assistant,
                 text: chatError.errorDescription ?? "Erro desconhecido.",
                 isFiltered: true
             )
-            messagesSubject.value.append(errorMsg)
         }
-
-        isLoadingSubject.value = false
     }
 
     /// Limpa o histórico de mensagens e reinicia a sessão do modelo.
     func clearConversation() {
-        messagesSubject.value.removeAll()
-        errorMessageSubject.value = nil
         setupSession()
     }
     
@@ -198,7 +165,6 @@ final class FoundationsManager: FoundationsManaging {
     /// Emite erro no ``errorMessagePublisher`` se o Apple Intelligence não estiver disponível.
     private func setupSession() {
         guard SystemLanguageModel.default.isAvailable else {
-            errorMessageSubject.value = ChatbotError.modelUnavailable.errorDescription
             return
         }
 

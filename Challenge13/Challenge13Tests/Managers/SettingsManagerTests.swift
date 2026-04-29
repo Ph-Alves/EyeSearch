@@ -27,7 +27,7 @@ final class SettingsManagerTests: XCTestCase {
 
     // MARK: - Propriedades
 
-    private var sut: SettingsManager!
+    private var sut: SettingsManaging!
 
     // MARK: - Setup / Teardown
 
@@ -35,7 +35,7 @@ final class SettingsManagerTests: XCTestCase {
         super.setUp()
         UserDefaults.standard.removeObject(forKey: hapticsKey)
         UserDefaults.standard.removeObject(forKey: soundKey)
-        sut = SettingsManager()
+        sut = SettingsManager.shared
     }
 
     override func tearDown() {

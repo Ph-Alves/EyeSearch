@@ -10,7 +10,7 @@ import SwiftUI
 struct ChatView: View {
     @Environment(Coordinator.self) private var coordinator
     
-    @StateObject var chatVM: ChatViewModel
+    @State var chatVM: ChatViewModel
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -47,15 +47,16 @@ struct ChatView: View {
             }
             
             Spacer()
-            ChatUserText(chatVM: chatVM)
+            ChatUserText(chatVM: $chatVM)
         }
         .navigationBarBackButtonHidden(true)
     }
 }
 
 #Preview {
+    @Previewable @State var chatVM: ChatViewModel = ChatViewModel(manager: FoundationsManager.shared)
     CoordinatedNavigationStack {
-        ChatView(chatVM: ChatViewModel(manager: FoundationsManager()))
+        ChatView(chatVM: chatVM)
     }
     .environment(Coordinator(dependencyContainer: DependencyContainer()))
 }

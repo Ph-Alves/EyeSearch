@@ -29,7 +29,7 @@ final class SettingsViewModelTests: XCTestCase {
     // MARK: - Propriedades
 
     private var sut: SettingsViewModel!
-    private var verifyManager: SettingsManager!
+    private var verifyManager: SettingsManaging!
 
     // MARK: - Setup / Teardown
 
@@ -37,11 +37,11 @@ final class SettingsViewModelTests: XCTestCase {
         UserDefaults.standard.removeObject(forKey: hapticsKey)
         UserDefaults.standard.removeObject(forKey: soundKey)
         sut = SettingsViewModel(
-            haptics: HapticsManager(),
-            soundManager: SoundManager(),
-            settingsManager: SettingsManager()
+            haptics: HapticsManager.shared,
+            soundManager: SoundManager.shared,
+            settingsManager: SettingsManager.shared
         )
-        verifyManager = SettingsManager()
+        verifyManager = SettingsManager.shared
     }
 
     override func tearDown() async throws {

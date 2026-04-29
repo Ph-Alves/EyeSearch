@@ -14,7 +14,7 @@ import SwiftUI
 struct ChatUserText: View {
     // MARK: - Variables
     /// Objeto viewModel que permite as operações e acesso as variáveis.
-    @ObservedObject var chatVM: ChatViewModel
+    @Binding var chatVM: ChatViewModel
     
     // MARK: - Body View
     var body: some View {
@@ -50,5 +50,6 @@ struct ChatUserText: View {
 
 // MARK: - Preview
 #Preview {
-    ChatUserText(chatVM: ChatViewModel())
+    @Previewable @State var chatVM: ChatViewModel = ChatViewModel(manager: FoundationsManager.shared)
+    ChatUserText(chatVM: $chatVM)
 }

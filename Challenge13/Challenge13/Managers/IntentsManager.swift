@@ -16,10 +16,10 @@ import SwiftUI
 /// ## Usado em:
 /// - ``Challenge13App``
 final class IntentsManager: IntentsManaging {
-    
+    // MARK: - Variables
     /// Instância compartilhada para ser acessada dentro de AppIntents,
     /// já que AppIntents são instanciados pelo sistema e não têm acesso ao Environment.
-    static let shared = IntentsManager()
+    static let shared: IntentsManaging = IntentsManager()
 
     /// Referência fraca ao Coordinator para evitar ciclo de retenção.
     weak var coordinator: Coordinator? {
@@ -35,7 +35,10 @@ final class IntentsManager: IntentsManaging {
     
     private var hasPendingDeepLink = false
 
-    private init() { }
+    // MARK: - Init
+    private init() {
+        
+    }
 
     /// Navega até a SearchObjectView respeitando o padrão do ``Coordinator``.
     @MainActor

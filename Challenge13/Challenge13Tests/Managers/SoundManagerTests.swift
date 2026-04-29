@@ -24,13 +24,13 @@ final class SoundManagerTests: XCTestCase {
 
     // MARK: - Propriedades
 
-    private var sut: SoundManager!
+    private var sut: SoundManaging!
 
     // MARK: - Setup / Teardown
 
     override func setUp() {
         super.setUp()
-        sut = SoundManager()
+        sut = SoundManager.shared
     }
 
     override func tearDown() {

@@ -17,8 +17,14 @@ import UniformTypeIdentifiers
 /// ## Usado em:
 /// - ``StickerViewModel``
 final class PDFManager: PDFManaging {
+    // MARK: - Variables
+    /// Singleton
+    static let shared: PDFManaging = PDFManager()
+    
     // MARK: - Init
-    init() { }
+    private init() {
+        
+    }
     
     // MARK: - Functions
     /// Gera um PDF com a quantidade especificada de adesivos distribuídos em folha A4.

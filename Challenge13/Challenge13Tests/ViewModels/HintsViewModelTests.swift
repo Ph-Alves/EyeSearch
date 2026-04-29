@@ -20,9 +20,10 @@ final class HintsViewModelTests: XCTestCase {
     private var sut: HintsViewModel!
 
     // MARK: - Setup / Teardown
-
-    override func setUp() {
-        super.setUp()
+    
+    @MainActor
+    override func setUp() async throws {
+        try await super.setUp()
         sut = HintsViewModel()
     }
 
@@ -33,6 +34,7 @@ final class HintsViewModelTests: XCTestCase {
 
     // MARK: - Additional coverage
 
+    @MainActor
     func test_Init_HasThreeDefaultHints() {
         // Arrange — HintsViewModel recém-criado
 
@@ -45,6 +47,7 @@ final class HintsViewModelTests: XCTestCase {
 
     // MARK: - T24 — RN26 — Clique em card expande
 
+    @MainActor
     func test_ToggleHint_OnClosedHint_SetsSelectedID() {
         // Arrange
         let hint = sut.hints[0]
@@ -57,6 +60,7 @@ final class HintsViewModelTests: XCTestCase {
         XCTAssertEqual(sut.selectedHintID, hint.id, "toggleHint deve definir selectedHintID para o id da dica tocada.")
     }
 
+    @MainActor
     func test_ToggleHint_OnOpenHint_ClearsSelectedID() {
         // Arrange — abre a dica primeiro
         let hint = sut.hints[1]
@@ -70,6 +74,7 @@ final class HintsViewModelTests: XCTestCase {
         XCTAssertNil(sut.selectedHintID, "Ao tocar uma dica aberta, selectedHintID deve voltar a nil.")
     }
 
+    @MainActor
     func test_ToggleHint_BetweenDifferentHints_ReplacesSelectedID() {
         // Arrange — abre a primeira dica
         let firstHint  = sut.hints[0]

@@ -15,6 +15,7 @@ import SwiftUI
 /// ## Usado em:
 /// - ``HomeView``
 @Observable
+@MainActor
 class HomeViewModel {
     // MARK: - Init
     init() {}

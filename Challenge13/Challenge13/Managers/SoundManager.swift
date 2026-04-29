@@ -17,13 +17,15 @@ import AVFoundation
 /// - ``SettingsViewModel``
 final class SoundManager: SoundManaging {
     // MARK: - Variables
+    /// Singleton
+    static let shared: SoundManaging = SoundManager()
     /// Instância do player de áudio.
     private(set) var player: AVAudioPlayer?
     /// Sintetizador para falar o que receber de label
     private let synthesizer = AVSpeechSynthesizer()
     
     // MARK: - Init
-    init() {
+    private init() {
         setupAudio()
     }
     

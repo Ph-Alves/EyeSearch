@@ -13,28 +13,31 @@ import Combine
 // MARK: - Spy
 
 private final class FoundationsManagerSpy: FoundationsManaging {
-    private let messagesSubject  = CurrentValueSubject<[ChatMessage], Never>([])
-    private let isLoadingSubject = CurrentValueSubject<Bool, Never>(false)
-    private let errorSubject     = CurrentValueSubject<String?, Never>(nil)
-
-    var messagesPublisher:     AnyPublisher<[ChatMessage], Never> { messagesSubject.eraseToAnyPublisher() }
-    var isLoadingPublisher:    AnyPublisher<Bool, Never>          { isLoadingSubject.eraseToAnyPublisher() }
-    var errorMessagePublisher: AnyPublisher<String?, Never>       { errorSubject.eraseToAnyPublisher() }
-
+    static let shared: FoundationsManaging = FoundationsManagerSpy()
+    
+    private init() {}
+    
+    // Mantemos estas variáveis para que o teste possa verificar o que aconteceu
     private(set) var lastSentMessage: String?
     private(set) var clearCallCount = 0
+    
+    // Variável para simular a resposta que o Manager devolveria
+    var stubbedResponse: ChatMessage?
 
-    func sendMessage(_ userInput: String) async {
+    func sendMessage(_ userInput: String) async throws -> ChatMessage? {
         lastSentMessage = userInput
+        return stubbedResponse
     }
 
     func clearConversation() {
         clearCallCount += 1
     }
-
-    // Helpers para injetar estado nos testes
-    func simulateLoading(_ value: Bool) { isLoadingSubject.send(value) }
-    func simulateMessages(_ messages: [ChatMessage]) { messagesSubject.send(messages) }
+    
+    func reset() {
+        self.lastSentMessage = nil
+        self.clearCallCount = 0
+        self.stubbedResponse = nil
+    }
 }
 
 // MARK: - Test Suite
@@ -59,14 +62,13 @@ final class ChatViewModelTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        spy = FoundationsManagerSpy()
-        coordinator = Coordinator(dependencyContainer: DependencyContainer())
+        spy = FoundationsManagerSpy.shared as? FoundationsManagerSpy
         sut = ChatViewModel(manager: spy)
+        spy.reset()
     }
 
     override func tearDown() {
         sut = nil
-        coordinator = nil
         spy = nil
         super.tearDown()
     }
@@ -93,27 +95,26 @@ final class ChatViewModelTests: XCTestCase {
         XCTAssertFalse(sut.canSend, "canSend deve ser false quando inputText contém apenas espaços.")
     }
 
+    @MainActor
     func test_CanSend_WithTextAndNotLoading_ReturnsTrue() {
         // Arrange
         sut.inputText = "Como ativar VoiceOver?"
-        spy.simulateLoading(false)
-
-        // Act
+        // Por padrão, isLoading nasce false
 
         // Assert
-        XCTAssertTrue(sut.canSend, "canSend deve ser true quando há texto e isLoading é false.")
+        XCTAssertTrue(sut.canSend, "canSend deve ser true quando há texto e não está carregando.")
     }
 
+    @MainActor
     func test_CanSend_WhileLoading_ReturnsFalse() {
         // Arrange
         sut.inputText = "Texto válido"
-        spy.simulateLoading(true)
-
-        // Act — isLoading é atualizado via publisher (Combine); aguarda propagação no RunLoop
-        RunLoop.main.run(until: Date(timeIntervalSinceNow: 0.01))
+        
+        // Act
+        sut.sendMessage() // Isso define isLoading = true imediatamente
 
         // Assert
-        XCTAssertFalse(sut.canSend, "canSend deve ser false enquanto isLoading é true.")
+        XCTAssertFalse(sut.canSend, "canSend deve ser false enquanto o processamento (isLoading) ocorre.")
     }
 
     // MARK: - sendMessage

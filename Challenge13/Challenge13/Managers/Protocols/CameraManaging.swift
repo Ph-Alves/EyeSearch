@@ -15,6 +15,8 @@ import AVFoundation
 /// ## Implementado por:
 /// - ``CameraManager``
 protocol CameraManaging: AnyObject {
+    /// Singleton
+    static var shared: CameraManaging { get }
     /// Indica se o usuário autorizou o uso da câmera.
     var isAuthorized: Bool { get }
     /// Indica se o usuário negou o acesso à câmera (ou está restrito por controle parental).
@@ -24,6 +26,8 @@ protocol CameraManaging: AnyObject {
     /// Delegate que recebe os frames capturados pela câmera.
     var delegate: CameraManagerDelegate? { get set }
     
+    /// Callback do AVFoundation chamado a cada frame capturado. Delega o buffer ao ``CameraManagerDelegate``.
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection)
     /// Verifica e solicita permissão de acesso à câmera.
     func checkAuthorization() async
     /// Para ligar/desligar a lanterna ao utilizar a câmera
