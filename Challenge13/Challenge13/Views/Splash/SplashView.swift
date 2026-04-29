@@ -18,7 +18,7 @@ private struct FrameAnimationView: UIViewRepresentable {
         imageView.animationImages = frames
         imageView.animationDuration = Double(frames.count) / fps
         imageView.animationRepeatCount = 1
-        imageView.image = frames.first          // volta ao primeiro frame ao terminar
+        imageView.image = frames.first          // segura o frame 1 ao terminar
         imageView.setContentHuggingPriority(.defaultLow, for: .horizontal)
         imageView.setContentHuggingPriority(.defaultLow, for: .vertical)
         imageView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
@@ -57,7 +57,7 @@ struct SplashView: View {
             forward.append(frame)
             index += 1
         }
-        // 1→N depois N-1→1 (ping-pong), terminando no primeiro frame
+        // 1→N depois N-1→1, terminando no frame 1
         let reverse = Array(forward.dropLast().reversed())
         return forward + reverse
     }
@@ -73,16 +73,10 @@ struct SplashView: View {
                 .ignoresSafeArea()
 
             VStack(spacing: 24) {
-                if frames.isEmpty {
-                    Image(systemName: "eye.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 200, height: 200)
-                        .foregroundStyle(Color.accentColor)
-                } else {
-                    FrameAnimationView(frames: frames, fps: fps)
-                        .frame(width: 200, height: 200)
-                }
+               
+                FrameAnimationView(frames: frames, fps: fps)
+                    .frame(width: 200, height: 200)
+                
 
                 Text("EyeSearch")
                     .font(.largeTitle)
