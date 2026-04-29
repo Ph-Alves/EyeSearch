@@ -32,7 +32,7 @@ struct StickerView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 32) {
                         
-                        Header(title: "Adesivos", description: "Este é o adesivo que identificará seus objetos.\nEscolha a quantidade que deseja imprimir.", onBack: { coordinator.pop() })
+                        Header(title: "Adesivos", description: "Este é o adesivo que identificará seus objetos.\nEscolha a quantidade que deseja imprimir.", onAction: { coordinator.pop() })
                         
                         // Imagem com moldura branca
                         ZStack {

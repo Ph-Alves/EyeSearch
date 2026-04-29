@@ -10,11 +10,11 @@ import SwiftUI
 struct Header: View {
     let title: String
     let description: String
-    let onBack: () -> Void
+    let onAction: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            ReturnButton(action: onBack)
+            ReturnButton(action: onAction)
 
             Text(title)
                 .font(.largeTitle)
@@ -31,5 +31,5 @@ struct Header: View {
 }
 
 #Preview {
-    Header(title: "Ajustes", description: "Sua tela de ajustes", onBack: {})
+    Header(title: "Ajustes", description: "Sua tela de ajustes", onAction: {})
 }
