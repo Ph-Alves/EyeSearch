@@ -48,6 +48,7 @@ struct OnboardingView: View {
                     }
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
+                .accessibilityIdentifier("onboarding_tabview")
 
                 // Botão avança a página ou finaliza o onboarding na última.
                 OnboardingContinueButton(title: pages[currentPage].buttonTitle) {
