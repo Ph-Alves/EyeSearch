@@ -37,11 +37,11 @@ final class SearchObjectViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         sut = SearchObjectViewModel(
-            camera: CameraManager(),
-            sound: SoundManager(),
-            haptics: HapticsManager(),
+            camera: CameraManager.shared,
+            sound: SoundManager.shared,
+            haptics: HapticsManager.shared,
             mlManager: MLModelManager.shared,
-            settingsManager: SettingsManager()
+            settingsManager: SettingsManager.shared
         )
     }
 
@@ -136,7 +136,7 @@ final class SearchObjectViewModelTests: XCTestCase {
 
     func test_CameraDelegate_WhenCalled_DoesNotCrash() throws {
         // Arrange
-        let camera = CameraManager()
+        let camera = CameraManager.shared
         let buffer = try makeSampleBuffer()
 
         // Act & Assert
@@ -152,7 +152,7 @@ final class SearchObjectViewModelTests: XCTestCase {
     func test_CameraDelegate_CalledTwiceInSequence_DoesNotCrash() throws {
         // Arrange — a segunda chamada deve ser descartada pelo guard !isProcessing
         // enquanto a primeira ainda está em execução (ou já terminou — ambos são seguros)
-        let camera = CameraManager()
+        let camera = CameraManager.shared
         let buffer = try makeSampleBuffer()
 
         // Act & Assert

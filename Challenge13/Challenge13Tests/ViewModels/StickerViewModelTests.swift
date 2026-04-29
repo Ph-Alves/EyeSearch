@@ -13,6 +13,10 @@ import PDFKit
 // MARK: - Spy
 
 private final class PDFManagerSpy: PDFManaging {
+    static let shared: PDFManaging = PDFManagerSpy()
+    
+    private init() {}
+    
     private(set) var generatePDFCallCount = 0
     private(set) var lastQuantity: Int?
     var stubbedData: Data? = Data()
@@ -21,6 +25,12 @@ private final class PDFManagerSpy: PDFManaging {
         generatePDFCallCount += 1
         lastQuantity = quantity
         return stubbedData
+    }
+    
+    func reset() {
+        self.generatePDFCallCount = 0
+        self.lastQuantity = nil
+        self.stubbedData = nil
     }
 }
 
@@ -40,12 +50,13 @@ final class StickerViewModelTests: XCTestCase {
 
     // MARK: - Setup / Teardown
 
-    override func setUp() {
-        super.setUp()
-        spy = PDFManagerSpy()
-        sut = StickerViewModel(pdfManager: spy)
+    override func setUp() async throws {
+        try await super.setUp()
+        spy = await PDFManagerSpy.shared as? PDFManagerSpy
+        sut = await StickerViewModel(pdfManager: spy)
+        spy.reset()
     }
-
+    
     override func tearDown() {
         sut = nil
         spy = nil
@@ -54,6 +65,7 @@ final class StickerViewModelTests: XCTestCase {
 
     // MARK: - Additional coverage
 
+    @MainActor
     func test_Init_DoesNotGeneratePDF() {
         // Arrange — StickerViewModel recém-criado, nenhuma geração solicitada
 
@@ -67,6 +79,7 @@ final class StickerViewModelTests: XCTestCase {
 
     // MARK: - T06 — RN06 — Geração delega ao PDFManager
 
+    @MainActor
     func test_GeneratePDF_DelegatesToPDFManager() {
         // Arrange
         let expectedQuantity = 5
@@ -78,7 +91,8 @@ final class StickerViewModelTests: XCTestCase {
         XCTAssertEqual(spy.generatePDFCallCount, 1, "generatePDF do manager deve ser chamado exatamente uma vez.")
         XCTAssertEqual(spy.lastQuantity, expectedQuantity, "Quantidade passada ao manager deve ser \(expectedQuantity).")
     }
-
+    
+    @MainActor
     func test_GetDoc_AfterGenerate_ReturnsCustomPDFDoc() {
         // Arrange
         spy.stubbedData = Data([0x25, 0x50, 0x44, 0x46]) // bytes mínimos não-nil
@@ -91,6 +105,7 @@ final class StickerViewModelTests: XCTestCase {
         XCTAssertNotNil(doc, "getDoc deve retornar CustomPDFDoc não-nil quando PDFManager retorna Data.")
     }
 
+    @MainActor
     func test_GetDoc_WhenPDFDataNil_ReturnsNil() {
         // Arrange — spy retorna nil (ex: asset não encontrado no bundle)
         spy.stubbedData = nil
@@ -103,6 +118,7 @@ final class StickerViewModelTests: XCTestCase {
         XCTAssertNil(doc, "getDoc deve retornar nil quando PDFManager retorna nil.")
     }
 
+    @MainActor
     func test_GetView_WhenDocumentNil_ReturnsNil() {
         // Arrange — spy retorna nil; pdfDocument nunca é criado
         spy.stubbedData = nil
@@ -115,6 +131,7 @@ final class StickerViewModelTests: XCTestCase {
         XCTAssertNil(view, "getView deve retornar nil quando pdfDocument é nil.")
     }
 
+    @MainActor
     func test_GetView_AfterGenerate_WithValidPDF_ReturnsPDFKitView() {
         // Arrange — PDF válido gerado pelo renderer de teste (independente do asset 'sticker')
         spy.stubbedData = makeValidPDFData()
@@ -127,6 +144,7 @@ final class StickerViewModelTests: XCTestCase {
         XCTAssertNotNil(view, "getView deve retornar PDFKitView quando pdfDocument é válido.")
     }
 
+    @MainActor
     func test_GeneratePDF_CalledMultipleTimes_UsesLastData() {
         // Arrange — primeira geração com data válida
         spy.stubbedData = makeValidPDFData()

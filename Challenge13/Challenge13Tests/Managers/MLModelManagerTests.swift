@@ -14,8 +14,8 @@ final class MLModelManagerTests: XCTestCase {
     
     func test_Singleton_ReturnsSameInstance() {
         // Arrange
-        let instance1 = MLModelManager.shared
-        let instance2 = MLModelManager.shared
+        let instance1 = MLModelManager.shared as? MLModelManager
+        let instance2 = MLModelManager.shared as? MLModelManager
         
         // Act & Assert
         XCTAssertTrue(instance1 === instance2, "MLModelManager.manager deve retornar a mesma instância sempre.")

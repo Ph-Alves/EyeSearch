@@ -16,6 +16,7 @@ final class HomeViewModelTests: XCTestCase {
 
     // MARK: - Setup / Teardown
 
+    @MainActor
     override func setUp() {
         super.setUp()
         sut = HomeViewModel()
@@ -28,6 +29,7 @@ final class HomeViewModelTests: XCTestCase {
 
     // MARK: - Additional coverage
 
+    @MainActor
     func test_GenerateItems_ReturnsFourItems() {
         // Arrange — HomeViewModel recém-criado
 
@@ -38,6 +40,7 @@ final class HomeViewModelTests: XCTestCase {
         XCTAssertEqual(items.count, 4, "generateItems deve retornar exatamente 4 itens.")
     }
 
+    @MainActor
     func test_GenerateItems_HasCorrectDestinations() {
         // Arrange
         let expectedDestinations: [HomeDestination] = [.searchObject, .stickerConfig, .hints, .settings]

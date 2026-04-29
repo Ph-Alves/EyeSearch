@@ -21,13 +21,13 @@ final class PDFManagerTests: XCTestCase {
 
     // MARK: - Propriedades
 
-    private var sut: PDFManager!
+    private var sut: PDFManaging!
 
     // MARK: - Setup / Teardown
 
     override func setUp() {
         super.setUp()
-        sut = PDFManager()
+        sut = PDFManager.shared
     }
 
     override func tearDown() {

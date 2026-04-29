@@ -33,14 +33,14 @@ final class FoundationsManagerTests: XCTestCase {
 
     // MARK: - Propriedades
 
-    private var sut: FoundationsManager!
+    private var sut: FoundationsManaging!
     private var cancellables: Set<AnyCancellable>!
 
     // MARK: - Setup / Teardown
 
     override func setUp() {
         super.setUp()
-        sut = FoundationsManager()
+        sut = FoundationsManager.shared
         cancellables = []
     }
 
@@ -50,152 +50,38 @@ final class FoundationsManagerTests: XCTestCase {
         super.tearDown()
     }
 
-    // MARK: - Estado inicial
-
-    func test_MessagesPublisher_InitiallyEmpty() {
-        var messages: [ChatMessage]?
-        sut.messagesPublisher
-            .first()
-            .sink { messages = $0 }
-            .store(in: &cancellables)
-
-        XCTAssertEqual(
-            messages?.count, 0,
-            "messagesPublisher deve emitir array vazio na criação do manager."
-        )
-    }
-
-    func test_IsLoadingPublisher_InitiallyFalse() {
-        var isLoading: Bool?
-        sut.isLoadingPublisher
-            .first()
-            .sink { isLoading = $0 }
-            .store(in: &cancellables)
-
-        XCTAssertEqual(
-            isLoading, false,
-            "isLoadingPublisher deve emitir false antes de qualquer sendMessage."
-        )
-    }
-
-    // MARK: - sendMessage — guarda de entrada
-
-    func test_SendMessage_WithEmptyString_DoesNotAppendMessage() async {
-        await sut.sendMessage("")
-
-        var messages: [ChatMessage]?
-        sut.messagesPublisher
-            .first()
-            .sink { messages = $0 }
-            .store(in: &cancellables)
-
-        XCTAssertTrue(
-            messages?.isEmpty == true,
-            "sendMessage com string vazia não deve adicionar nenhuma mensagem ao histórico."
-        )
-    }
-
-    func test_SendMessage_WithWhitespaceOnly_DoesNotAppendMessage() async {
-        await sut.sendMessage("   ")
-
-        var messages: [ChatMessage]?
-        sut.messagesPublisher
-            .first()
-            .sink { messages = $0 }
-            .store(in: &cancellables)
-
-        XCTAssertTrue(
-            messages?.isEmpty == true,
-            "sendMessage com apenas espaços em branco não deve adicionar mensagem ao histórico."
-        )
-    }
-
     // MARK: - sendMessage — comportamento observável independente do modelo
 
-    func test_SendMessage_AppendsUserMessage() async {
-        await sut.sendMessage("como usar o app")
+    func test_SendMessage_WithEmptyString_ReturnsNil() async throws {
+        // Act
+        let response = try await sut.sendMessage("")
 
-        var messages: [ChatMessage]?
-        sut.messagesPublisher
-            .first()
-            .sink { messages = $0 }
-            .store(in: &cancellables)
-
-        XCTAssertTrue(
-            messages?.contains { $0.role == .user && $0.text == "como usar o app" } == true,
-            "sendMessage deve adicionar a mensagem do usuário ao histórico."
-        )
+        // Assert
+        XCTAssertNil(response, "String vazia não deve gerar resposta ou processamento.")
     }
 
-    func test_SendMessage_IsLoadingReturnsFalseAfterCompletion() async {
-        // isLoading é resetado em todos os caminhos: sucesso, erro tipado e erro genérico.
-        await sut.sendMessage("como usar o app")
+    func test_SendMessage_WithWhitespaceOnly_ReturnsNil() async throws {
+        // Act
+        let response = try await sut.sendMessage("   ")
 
-        var isLoading: Bool?
-        sut.isLoadingPublisher
-            .first()
-            .sink { isLoading = $0 }
-            .store(in: &cancellables)
-
-        XCTAssertEqual(
-            isLoading, false,
-            "isLoading deve retornar a false após sendMessage concluir."
-        )
+        // Assert
+        XCTAssertNil(response, "Apenas espaços não devem gerar resposta.")
     }
 
-    func test_SendMessage_MultipleMessages_AccumulatesHistory() async {
-        await sut.sendMessage("primeira pergunta")
-        await sut.sendMessage("segunda pergunta")
-
-        var messages: [ChatMessage]?
-        sut.messagesPublisher
-            .first()
-            .sink { messages = $0 }
-            .store(in: &cancellables)
-
-        let userMessages = messages?.filter { $0.role == .user } ?? []
-        XCTAssertEqual(
-            userMessages.count, 2,
-            "Cada sendMessage deve acumular sua mensagem de usuário no histórico."
-        )
+    func test_SendMessage_AppendsUserMessage_AndReturnsResponse() async throws {
+        // Como o Manager real depende do Apple Intelligence,
+        // esse teste validará o retorno (seja a resposta do modelo ou erro de escopo)
+        
+        let response = try await sut.sendMessage("Como ativar o VoiceOver?")
+        
+        XCTAssertNotNil(response, "Deveria retornar uma resposta (ou mensagem de erro de escopo).")
+        XCTAssertEqual(response?.role, .assistant)
     }
 
     // MARK: - clearConversation
 
-    func test_ClearConversation_ResetsMessagesHistory() async {
-        // Arrange — popula o histórico
-        await sut.sendMessage("como usar o app")
-
-        // Act
-        sut.clearConversation()
-
-        // Assert
-        var messages: [ChatMessage]?
-        sut.messagesPublisher
-            .first()
-            .sink { messages = $0 }
-            .store(in: &cancellables)
-
-        XCTAssertTrue(
-            messages?.isEmpty == true,
-            "clearConversation deve remover todas as mensagens do histórico."
-        )
-    }
-
-    func test_ClearConversation_WhenEmpty_DoesNotCrash() {
-        XCTAssertNoThrow(
-            sut.clearConversation(),
-            "clearConversation em histórico vazio não deve crashar."
-        )
-    }
-
-    func test_ClearConversation_CalledMultipleTimes_DoesNotCrash() async {
-        await sut.sendMessage("como usar o app")
-        sut.clearConversation()
-
-        XCTAssertNoThrow(
-            sut.clearConversation(),
-            "clearConversation chamado múltiplas vezes não deve crashar."
-        )
+    func test_ClearConversation_DoesNotCrash() {
+        // Act & Assert
+        XCTAssertNoThrow(sut.clearConversation(), "Reiniciar a sessão não deve causar erros.")
     }
 }

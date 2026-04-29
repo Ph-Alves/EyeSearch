@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Combine
 
 // MARK: - ViewModel
 /// # ViewModel - ChatViewModel
@@ -15,27 +14,26 @@ import Combine
 /// ## Usado em:
 /// - ``ChatView``
 @MainActor
-final class ChatViewModel: ObservableObject {
+@Observable
+final class ChatViewModel {
 
     // MARK: - Estado publicado para a View
 
     /// Lista de mensagens exibidas na interface, em ordem cronológica.
-    @Published var displayedMessages: [ChatMessage] = []
+    private(set) var displayedMessages: [ChatMessage] = []
     /// Texto atual do campo de entrada do usuário.
-    @Published var inputText: String = ""
+    var inputText: String = ""
     /// Indica se o assistente está processando uma resposta.
-    @Published var isLoading: Bool = false
+    private(set) var isLoading: Bool = false
     /// Mensagem de erro exibida no banner, ou `nil` se não houver erro ativo.
-    @Published var errorBanner: String? = nil
+    private(set) var errorBanner: String? = nil
     /// Controla a exibição do diálogo de confirmação de limpeza do histórico.
-    @Published var showClearConfirmation: Bool = false
+    private(set) var showClearConfirmation: Bool = false
 
     // MARK: - Dependências
 
     /// Manager responsável pela comunicação com o modelo de linguagem.
     private let manager: any FoundationsManaging
-    /// Conjunto de subscriptions Combine ativas.
-    private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Computed
 
@@ -53,48 +51,17 @@ final class ChatViewModel: ObservableObject {
 
     /// Init padrão: cria o ``FoundationsManager`` internamente.
     /// Usado pelo `@StateObject` na ``ChatView``.
-    /// - Parameter coordinator: Instância do coordinator responsável pela navegação.
     init() {
-        self.manager = FoundationsManager()
-        bindManager()
+        self.manager = FoundationsManager.shared
     }
 
     /// Init com injeção de dependência — útil para testes e previews.
     /// - Parameters:
     ///   - manager: Qualquer tipo que conforme com ``FoundationsManaging``.
-    ///   - coordinator: Instância do coordinator responsável pela navegação.
-    init(manager: any FoundationsManaging) {
+    init(manager: FoundationsManaging) {
         self.manager = manager
-        bindManager()
     }
 
-    // MARK: - Binding com o Manager
-
-    /// Assina os publishers do ``FoundationsManaging`` e repassa os valores para as propriedades `@Published`.
-    /// O erro é auto-descartado após 4 segundos via `Task`.
-    private func bindManager() {
-        manager.messagesPublisher
-            .receive(on: RunLoop.main)
-            .assign(to: &$displayedMessages)
-
-        manager.isLoadingPublisher
-            .receive(on: RunLoop.main)
-            .assign(to: &$isLoading)
-
-        manager.errorMessagePublisher
-            .receive(on: RunLoop.main)
-            .sink { [weak self] error in
-                self?.errorBanner = error
-                // Auto-dismiss após 4 segundos
-                if error != nil {
-                    Task { @MainActor in
-                        try? await Task.sleep(for: .seconds(4))
-                        self?.errorBanner = nil
-                    }
-                }
-            }
-            .store(in: &cancellables)
-    }
 
     // MARK: - Intenções da View
 
@@ -104,8 +71,16 @@ final class ChatViewModel: ObservableObject {
         let text = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
         inputText = ""
+        
+        isLoading = true
         Task {
-            await manager.sendMessage(text)
+            self.displayedMessages.append(ChatMessage(role: .user, text: text))
+            guard let message = try await manager.sendMessage(text) else {
+                isLoading = false
+                return
+            }
+            self.displayedMessages.append(message)
+            isLoading = false
         }
     }
 

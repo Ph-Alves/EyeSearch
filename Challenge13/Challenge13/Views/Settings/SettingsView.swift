@@ -143,15 +143,8 @@ struct SettingsView: View {
         
 #Preview {
     CoordinatedNavigationStack {
-        SettingsView(settingsVM: SettingsViewModel(haptics: HapticsManager(), soundManager: SoundManager(), settingsManager: SettingsManager())
+        SettingsView(settingsVM: SettingsViewModel(haptics: HapticsManager.shared, soundManager: SoundManager.shared, settingsManager: SettingsManager.shared)
         )
     }
     .environment(Coordinator(dependencyContainer: DependencyContainer()))
 }
-
-/*
- 
-
- 
- 
- */
