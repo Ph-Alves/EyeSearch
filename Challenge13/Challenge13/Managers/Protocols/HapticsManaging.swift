@@ -16,8 +16,7 @@ protocol HapticsManaging {
     /// Singleton
     static var shared: HapticsManaging { get }
     /// Dispara uma vibração tátil se estiver habilitado.
-    /// - Parameter isEnabled: Indica se o haptic está habilitado pelo usuário.
-    func trigger(isEnabled: Bool)
+    func trigger()
     /// Define o estado de habilitação dos haptics.
     /// - Parameter enabled: `true` para habilitar, `false` para desabilitar.
     func setEnabled(_ enabled: Bool)

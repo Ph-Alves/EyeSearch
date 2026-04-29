@@ -52,7 +52,7 @@ class SettingsViewModel {
     
     /// Dispara o feedback tátil se estiver habilitado nas configurações.
     func triggerHaptic() {
-        haptics.trigger(isEnabled: settings.isHapticsEnabled)
+        haptics.trigger()
     }
     
     

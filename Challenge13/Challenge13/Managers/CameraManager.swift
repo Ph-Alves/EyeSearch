@@ -120,7 +120,6 @@ final class CameraManager: NSObject, CameraManaging, AVCaptureVideoDataOutputSam
         // Inicia a captura em background para não travar a UI
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             self?.session.startRunning()
-            self?.setTorch(on: true)
         }
     }
     

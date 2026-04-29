@@ -116,7 +116,8 @@ class SearchObjectViewModel: CameraManagerDelegate {
         guard Date().timeIntervalSince(lastHapticsTime) > 3.0 else { return }
         lastHapticsTime = Date()
         let settings = settingsManager.load()
-        haptics.trigger(isEnabled: settings.isHapticsEnabled)
+        haptics.setEnabled(settings.isHapticsEnabled)
+        haptics.trigger()
     }
     
     /// Converte boundingBox para coordenadas swiftUI

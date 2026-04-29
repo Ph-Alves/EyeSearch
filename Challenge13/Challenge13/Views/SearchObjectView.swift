@@ -124,6 +124,9 @@ struct SearchObjectView: View {
         .task {
             await SearchObjectVM.getPermission()
             showCameraDeniedAlert = SearchObjectVM.isCameraDenied
+            if !showCameraDeniedAlert {
+                SearchObjectVM.setFlashlight(on: true)
+            }
         }
         .alert("Câmera bloqueada", isPresented: $showCameraDeniedAlert) {
             Button("Abrir Ajustes") {
