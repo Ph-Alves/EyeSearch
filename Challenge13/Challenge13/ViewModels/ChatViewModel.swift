@@ -46,7 +46,7 @@ final class ChatViewModel: ObservableObject {
 
     /// Texto de acessibilidade do status atual para VoiceOver.
     var loadingAccessibilityLabel: String {
-        isLoading ? "Assistente está digitando, aguarde." : ""
+        isLoading ? .localized(L10n.Chat.Accessibility.loading) : ""
     }
 
     // MARK: - Init
@@ -133,8 +133,10 @@ final class ChatViewModel: ObservableObject {
     /// - Parameter message: Mensagem a ser descrita.
     /// - Returns: Texto composto pelo papel do remetente, conteúdo e flag de filtro, se aplicável.
     func accessibilityLabel(for message: ChatMessage) -> String {
-        let role = message.role == .user ? "Você disse" : "Assistente respondeu"
-        let filtered = message.isFiltered ? " (mensagem fora do escopo)" : ""
+        let role: String = message.role == .user
+            ? .localized(L10n.Chat.Accessibility.userSaid)
+            : .localized(L10n.Chat.Accessibility.assistantSaid)
+        let filtered: String = message.isFiltered ? .localized(L10n.Chat.Accessibility.filteredSuffix) : ""
         return "\(role): \(message.text)\(filtered)"
     }
 
