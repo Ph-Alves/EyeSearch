@@ -194,7 +194,6 @@
 				8AC14D652F9FD59B00E1F5BD /* EyeSearchWidgets */,
 				9E7762A22FA1288800EFFE99 /* Challenge13UITests */,
 				8AC14D602F9FD59B00E1F5BD /* Frameworks */,
-				EFC4A27B2FA007A2001E7D05 /* EyeSearch copy-Info.plist */,
 				EF69E88C2F87CFDB00FD9AE7 /* Products */,
 			);
 			sourceTree = "<group>";
