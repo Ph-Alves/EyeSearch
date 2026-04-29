@@ -169,7 +169,6 @@
 				ViewModels/SettingsViewModel.swift,
 				ViewModels/StickerViewModel.swift,
 				Views/ChatView.swift,
-				Views/Components/A4InfoCardView.swift,
 				Views/Components/AIChatCardView.swift,
 				Views/Components/BiggerCardView.swift,
 				Views/Components/CompactCardView.swift,

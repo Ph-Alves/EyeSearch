@@ -15,21 +15,11 @@ import PDFKit
 struct StickerView: View {
     // MARK: - Variables
     @Environment(Coordinator.self) private var coordinator
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var stickerVM: StickerViewModel
     
     @State var quantity: Int = 1
-    
-    // Quantos adesivos cabem por folha A4
-    private let adesivosPerSheet = 24
-    
-    /// Computed property — calcula automaticamente o número de folhas A4  necessárias com base na quantidade atual de adesivos.
-    /// É recalculada toda vez que `quantity` muda.
-    private var sheetsNeeded: Int {
-        guard quantity > 0 else { return 0 }
-        return Int(ceil(Double(quantity) / Double(adesivosPerSheet)))
-    }
-    
     
     // MARK: - Header
     private var header: some View {
@@ -39,45 +29,61 @@ struct StickerView: View {
                  coordinator.pop()
             })
             
-            Text("Imprimir Adesivo")
+            Text("Adesivos")
                 .font(.largeTitle)
+                .fontWeight(.bold)
             
-            Text("Lorem Ipsum Dolor Sit Amet Lorem Ipsum Dolor Sit Amet Lorem Ipsum Dolor Sit")
+            Text("Este é o adesivo que identificará seus objetos.\nEscolha a quantidade que deseja imprimir.")
                 .font(.body)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .fixedSize(horizontal: false, vertical: true)
             
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal)
-        .padding(.top, 12)
     }
     
     // MARK: - Body View
     var body: some View {
-
         ZStack {
-            Color(.background)
+            Color.background
                 .ignoresSafeArea()
             
             VStack(spacing: 0) {
-                
                 ScrollView {
                     VStack(alignment: .leading, spacing: 32) {
+                        
                         header
                         
-                        CustomStepperView(quantity: $quantity)
-                        A4InfoCardView(quantity: quantity, sheetsNeeded: sheetsNeeded)
-                        
-                        Spacer()
-                        
-                        GeneratePDFButton {
-                            stickerVM.generatePDF(stickerQuantity: quantity)
-                            coordinator.navigate(to: .stickerPreview)
+                        // Imagem com moldura branca
+                        ZStack {
+                            Image("adesivoPrinter")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 215, height: 215)
                         }
-
+                        .frame(maxWidth: .infinity)
+                        
+                        // Quantidade + Stepper na mesma linha
+                        HStack(alignment: .center) {
+                            Text("Quantidade:")
+                                .font(.title)
+                                .foregroundStyle(.titleText)
+                            
+                            Spacer()
+                            
+                            CustomStepperView(quantity: $quantity)
+                        }
+                        .padding(.horizontal, 4)
                     }
-                    .padding()
+                    .padding(.horizontal, 25)
+                    
+                    GeneratePDFButton {
+                        stickerVM.generatePDF(stickerQuantity: quantity)
+                        coordinator.navigate(to: .stickerPreview)
+                    }
+                    .padding(.horizontal, 25)
+                    .padding(.bottom, 32)
+//                    .padding(.top, 12)
                 }
             }
         }
