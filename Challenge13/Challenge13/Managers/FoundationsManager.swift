@@ -43,6 +43,8 @@ final class FoundationsManager: FoundationsManaging {
     }
     
     // MARK: - Variables
+    /// Singleton
+    static let shared: FoundationsManaging = FoundationsManager()
     /// Histórico de mensagens da conversa.
     private let messagesSubject = CurrentValueSubject<[ChatMessage], Never>([])
     /// Indica se uma resposta está sendo processada.
@@ -139,7 +141,7 @@ final class FoundationsManager: FoundationsManaging {
 
     // MARK: - Init
     /// Inicializa o manager e configura a sessão do modelo de linguagem.
-    init() {
+    private init() {
         setupSession()
     }
 

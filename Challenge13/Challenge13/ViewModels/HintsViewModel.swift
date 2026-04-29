@@ -14,6 +14,7 @@ import Foundation
 /// ## Usado em:
 /// - ``HintsView``
 @Observable
+@MainActor
 class HintsViewModel {
     // MARK: - Variables
     /// Lista de dicas exibidas na tela.

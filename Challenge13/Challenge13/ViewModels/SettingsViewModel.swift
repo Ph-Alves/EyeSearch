@@ -32,7 +32,7 @@ class SettingsViewModel {
     ///   - haptics: Manager de haptics.
     ///   - soundManager: Manager de som.
     ///   - settingsManager: Manager de persistência.
-    init(haptics: HapticsManaging, soundManager: SoundManaging, settingsManager: SettingsManager) {
+    init(haptics: HapticsManaging, soundManager: SoundManaging, settingsManager: SettingsManaging) {
         self.haptics = haptics
         self.settingsManager = settingsManager
         self.soundManager = soundManager

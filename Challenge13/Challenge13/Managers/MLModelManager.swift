@@ -19,7 +19,7 @@ import CoreMedia   // Para CMSampleBuffer (frames da câmera)
 final class MLModelManager: MLModelManaging {
     // MARK: - Variables
     /// Singleton de instância para os modelos
-    static var shared: MLModelManager = MLModelManager()
+    static let shared: MLModelManaging = MLModelManager()
     /// Indica se os modelos foram carregados com sucesso.
     private(set) var isLoaded: Bool = false
     /// Mensagem de erro caso o carregamento falhe.

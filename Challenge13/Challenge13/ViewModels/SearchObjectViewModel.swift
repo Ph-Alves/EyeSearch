@@ -112,7 +112,7 @@ class SearchObjectViewModel: CameraManagerDelegate {
     
     /// Ativa os haptics baseando-se nas configurações do usuário
     /// para quando um adesivo for encontrado
-    func activeHapticsIfEnabled() {
+    func playHapticsIfEnabled() {
         guard Date().timeIntervalSince(lastHapticsTime) > 3.0 else { return }
         lastHapticsTime = Date()
         let settings = settingsManager.load()
@@ -161,7 +161,7 @@ extension SearchObjectViewModel {
                 
                 if self.stickerCount > self.previousStickerCount {
                     // Sticker novo: toca som e haptics imediatamente
-                    activeHapticsIfEnabled()
+                    playHapticsIfEnabled()
                     
                     if let firstLabel = self.objectsLabels.first {
                         // YOLO já classificou — fala o label
@@ -192,35 +192,6 @@ extension SearchObjectViewModel {
     }
 }
 
-/// UIView customizada que utiliza `AVCaptureVideoPreviewLayer` como layer principal.
-/// Necessária porque `AVCaptureVideoPreviewLayer` precisa ser o layer root da view.
-class PreviewView: UIView {
-    // Substitui o layer padrão (CALayer) pelo layer de preview da câmera
-    override class var layerClass: AnyClass {
-        AVCaptureVideoPreviewLayer.self
-    }
-    
-    // Atalho para acessar o layer já tipado
-    var previewLayer: AVCaptureVideoPreviewLayer {
-        layer as! AVCaptureVideoPreviewLayer
-    }
-}
 
-/// Wrapper SwiftUI para exibir o preview da câmera usando `UIViewRepresentable`.
-struct CameraPreview: UIViewRepresentable {
-    /// Sessão de captura de vídeo a ser exibida.
-    let session: AVCaptureSession
-    
-    init(session: AVCaptureSession) {
-        self.session = session
-    }
-    
-    func makeUIView(context: Context) -> PreviewView {
-        let view = PreviewView()
-        view.previewLayer.session = session
-        view.previewLayer.videoGravity = .resizeAspectFill
-        return view
-    }
-    
-    func updateUIView(_ uiView: PreviewView, context: Context) {}
-}
+
+

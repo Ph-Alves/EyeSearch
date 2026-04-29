@@ -17,6 +17,8 @@ import Foundation
 final class CameraManager: NSObject, CameraManaging, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     // MARK: - Variables
+    /// Singleton
+    static let shared: CameraManaging = CameraManager()
     /// Indica se o usuário autorizou o acesso à câmera.
     private(set) var isAuthorized = false
     /// Indica se o usuário negou o acesso (ou está restrito). Nesse caso o app deve orientar ao Ajustes.
@@ -29,6 +31,11 @@ final class CameraManager: NSObject, CameraManaging, AVCaptureVideoDataOutputSam
     weak var delegate: CameraManagerDelegate?
     // Saída de vídeo que processa os frames da câmera.
     private let videoOutput = AVCaptureVideoDataOutput()
+    
+    // MARK: - Init
+    override private init() {
+        
+    }
     
     // MARK: - Functions
     /// Verifica e solicita permissão de acesso à câmera. Se autorizado, configura a sessão.

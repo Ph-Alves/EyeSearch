@@ -15,6 +15,8 @@ import Foundation
 /// - ``SettingsViewModel``
 final class SettingsManager: SettingsManaging {
     // MARK: - Variables
+    /// Singleton
+    static let shared: SettingsManaging = SettingsManager()
     /// Instância de UserDefaults para persistência.
     private let userDefaults = UserDefaults.standard
     /// Chaves utilizadas no UserDefaults.
@@ -24,7 +26,9 @@ final class SettingsManager: SettingsManaging {
     }
     
     // MARK: - Init
-    init() { }
+    private init() {
+        
+    }
     
     // MARK: - Functions
     /// Carrega as configurações salvas do usuário. Retorna valores padrão (`true`) se não houver dados salvos.

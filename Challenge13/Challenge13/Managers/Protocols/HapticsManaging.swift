@@ -13,6 +13,8 @@ import UIKit
 /// ## Implementado por:
 /// - ``HapticsManager``
 protocol HapticsManaging {
+    /// Singleton
+    static let shared: HapticsManaging { get }
     /// Dispara uma vibração tátil se estiver habilitado.
     /// - Parameter isEnabled: Indica se o haptic está habilitado pelo usuário.
     func trigger(isEnabled: Bool)

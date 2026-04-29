@@ -15,11 +15,13 @@ import UIKit
 /// - ``SettingsViewModel``
 final class HapticsManager: HapticsManaging {
     // MARK: - Variables
+    /// Singleton
+    static let shared: HapticsManaging = HapticsManager()
     // Estado atual de habilitação dos haptics.
     private var isEnabled: Bool = true
 
     // MARK: - Init
-    init() { }
+    private init() { }
     
     // MARK: - Functions
     /// Dispara uma vibração tátil com intensidade média.
