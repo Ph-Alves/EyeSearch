@@ -31,7 +31,7 @@ struct StickerView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 32) {
                         
-                        Header(title: "Adesivos", description: "Este é o adesivo que identificará seus objetos.\nEscolha a quantidade que deseja imprimir.", onAction: { coordinator.pop() })
+                        Header(title: .localized(L10n.Sticker.Screen.title), description: .localized(L10n.Sticker.Screen.description), onAction: { coordinator.pop() })
                         
                         // Imagem com moldura branca
                         ZStack {

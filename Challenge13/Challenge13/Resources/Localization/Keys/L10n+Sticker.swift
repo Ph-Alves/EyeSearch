@@ -6,7 +6,8 @@
 extension L10n {
     enum Sticker {
         enum Screen {
-            static let title = "sticker.screen.title"
+            static let title       = "sticker.screen.title"
+            static let description = "sticker.screen.description"
         }
         enum Button {
             static let generatePDF = "sticker.button.generatePDF"
