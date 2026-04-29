@@ -173,6 +173,7 @@
 				Views/Components/BiggerCardView.swift,
 				Views/Components/CompactCardView.swift,
 				Views/Components/CustomStepperView.swift,
+				Views/Components/Header.swift,
 				Views/Components/HintCardView.swift,
 				Views/Components/PDFButton.swift,
 				Views/Components/ReturnButton.swift,

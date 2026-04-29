@@ -21,26 +21,6 @@ struct StickerView: View {
     
     @State var quantity: Int = 1
     
-    // MARK: - Header
-    private var header: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            
-            ReturnButton(action: {
-                 coordinator.pop()
-            })
-            
-            Text("Adesivos")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-            
-            Text("Este é o adesivo que identificará seus objetos.\nEscolha a quantidade que deseja imprimir.")
-                .font(.body)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .fixedSize(horizontal: false, vertical: true)
-            
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
     
     // MARK: - Body View
     var body: some View {
@@ -52,7 +32,7 @@ struct StickerView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 32) {
                         
-                        header
+                        Header(title: "Adesivos", description: "Este é o adesivo que identificará seus objetos.\nEscolha a quantidade que deseja imprimir.", onBack: { coordinator.pop() })
                         
                         // Imagem com moldura branca
                         ZStack {
@@ -83,7 +63,6 @@ struct StickerView: View {
                     }
                     .padding(.horizontal, 25)
                     .padding(.bottom, 32)
-//                    .padding(.top, 12)
                 }
             }
         }

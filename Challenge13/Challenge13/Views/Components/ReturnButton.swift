@@ -35,7 +35,7 @@ struct ReturnButton: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.top, 12)
-        .padding(.bottom, 24)
+        .padding(.bottom, 18)
     }
 }
 
