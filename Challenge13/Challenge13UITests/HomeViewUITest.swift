@@ -72,7 +72,7 @@ final class HomeViewUITest: XCTestCase {
         stickersCard.tap()
 
         // Assert
-        XCTAssertTrue(app.staticTexts["Imprimir Adesivo"].waitForExistence(timeout: 5),
+        XCTAssertTrue(app.staticTexts["Adesivos"].waitForExistence(timeout: 5),
                       "Tocar no card 'Imprimir Adesivo' deve navegar para a StickerView")
     }
 

@@ -58,7 +58,7 @@ final class CameraManager: NSObject, CameraManaging, AVCaptureVideoDataOutputSam
     }
     
     /// Para ligar/desligar a lanterna ao utilizar a câmera
-    ///  - Parameter on: Parâmetro booleano que define se liga ou desliga a lanterna, usando tochMode
+    ///  - Parameter on: Parâmetro booleano que define se liga ou desliga a lanterna, usando `torchMode`
     func setTorch(on: Bool) {
         guard let device, device.hasTorch else { return }
         do {

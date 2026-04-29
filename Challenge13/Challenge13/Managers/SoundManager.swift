@@ -13,6 +13,7 @@ import AVFoundation
 /// Gerencia a reprodução de sons de feedback utilizando `AVAudioPlayer`.
 /// Toca o som de detecção quando um objeto adesivado é encontrado.
 /// ## Usado em:
+/// - ``SearchObjectViewModel``
 /// - ``SettingsViewModel``
 final class SoundManager: SoundManaging {
     // MARK: - Variables
