@@ -15,7 +15,15 @@ struct PDFKitView: UIViewRepresentable {
     
     func makeUIView(context: Context) -> PDFView {
         let pdfView = PDFView()
+        // Escala e layout
         pdfView.autoScales = true
+        pdfView.displayMode = .singlePageContinuous
+        pdfView.displayDirection = .vertical
+        
+        // Aparência
+        pdfView.backgroundColor = .background
+        pdfView.pageShadowsEnabled = true
+        pdfView.pageBreakMargins = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         return pdfView
     }
     
