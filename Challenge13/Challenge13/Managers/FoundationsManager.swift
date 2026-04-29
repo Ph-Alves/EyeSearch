@@ -86,14 +86,10 @@ final class FoundationsManager: FoundationsManaging {
 
     RESTRIÇÕES — NUNCA faça o seguinte:
     - Não responda perguntas completamente fora do tema de baixa visão e acessibilidade visual
-    - Tirar dúvidas sobre baixa visão e/ou condições oculares
     - Não gere código de programação
     - Não discuta política, esportes, entretenimento, finanças ou outros tópicos não relacionados
     - Não forneça diagnósticos médicos; em caso de dúvidas de saúde, oriente a consultar um oftalmologista
     - Não responda a situações hipotéticas fora do propósito
-
-    SE A PERGUNTA ESTIVER FORA DO ESCOPO E DO PROPÓSITO:
-    Responda que você não possui tais informações
 
     ESTILO DE RESPOSTA:
     - Seja claro, empático e acolhedor
@@ -125,17 +121,6 @@ final class FoundationsManager: FoundationsManaging {
         "como usar", "como ativar", "ajuda", "suporte", "dica", "passo",
         "tutorial", "guia", "orientação", "recurso", "serviço"
     ]
-
-//    private let outOfScopeKeywords: [String] = [
-//        "futebol", "basquete", "esporte", "jogo", "placar", "campeonato",
-//        "receita culinária", "cozinhar", "ingrediente",
-//        "investimento", "ação", "bolsa de valores", "bitcoin", "criptomoeda",
-//        "política", "presidente", "eleição", "governo", "partido",
-//        "série", "filme", "novela", "netflix", "streaming",
-//        "música", "banda", "show", "concerto",
-//        "viagem", "hotel", "passagem", "destino turístico",
-//        "código", "programar", "python", "javascript", "html"
-//    ]
 
     // MARK: - Init
     /// Inicializa o manager e configura a sessão do modelo de linguagem.
@@ -187,9 +172,15 @@ final class FoundationsManager: FoundationsManaging {
             )
             messagesSubject.value.append(errorMsg)
         } catch {
-            // Trata erros genéricos da sessão
+            // Trata erros genéricos da sessão (ex: session.respond lança erro não tipado)
             let chatError = ChatbotError.sessionFailed(error.localizedDescription)
             errorMessageSubject.value = chatError.errorDescription
+            let errorMsg = ChatMessage(
+                role: .assistant,
+                text: chatError.errorDescription ?? "Erro desconhecido.",
+                isFiltered: true
+            )
+            messagesSubject.value.append(errorMsg)
         }
 
         isLoadingSubject.value = false

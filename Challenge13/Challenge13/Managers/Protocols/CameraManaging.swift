@@ -17,6 +17,8 @@ import AVFoundation
 protocol CameraManaging: AnyObject {
     /// Indica se o usuário autorizou o uso da câmera.
     var isAuthorized: Bool { get }
+    /// Indica se o usuário negou o acesso à câmera (ou está restrito por controle parental).
+    var isDenied: Bool { get }
     /// Sessão de captura de vídeo do AVFoundation.
     var session: AVCaptureSession { get }
     /// Delegate que recebe os frames capturados pela câmera.

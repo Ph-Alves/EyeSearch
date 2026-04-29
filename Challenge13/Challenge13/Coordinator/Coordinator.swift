@@ -77,7 +77,7 @@ class Coordinator {
         case .stickerPreview : PrintStickerView(stickerVM: dependencyContainer.stickerViewModel)
         case .hints : HintsView()
         case .settings : SettingsView(settingsVM: dependencyContainer.settingsViewModel)
-        case .chat : ChatView(coordinator: self)
+        case .chat : ChatView(chatVM: self.dependencyContainer.chatViewModel)
         }
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 import AVFoundation
 
 // MARK: - View
@@ -16,19 +17,22 @@ struct SearchObjectView: View {
     // MARK: - Variables
     /// Coordinator
     @Environment(Coordinator.self) private var coordinator
-    /// ViewModel
+    /// ViewModel responsável pela câmera, detecção e feedback.
     var SearchObjectVM: SearchObjectViewModel
     /// States
     @State private var flashLight: Bool = true
+    @State private var showCameraDeniedAlert = false
     @State private var isRotating = false
 
     /// init
     init(SearchObjectVM: SearchObjectViewModel) {
         self.SearchObjectVM = SearchObjectVM
     }
-    /// View values
+    /// Espaçamento padrão das seções superior e inferior.
     private var padding: CGFloat = 20
+    /// Z-index da camada de preview da câmera.
     private var cameraZIndex: Double = 2
+    /// Z-index da camada de efeito visual (WaveOverlay) sobreposta à câmera.
     private var effectZIndex: Double = 3
     
     // MARK: - Body View
@@ -53,7 +57,7 @@ struct SearchObjectView: View {
                         .foregroundColor(.primary)
                         
                 }
-                
+                .accessibilityLabel(flashLight ? "Lanterna ligada" : "Lanterna desligada")
             }
             .padding(padding)
             .background(Color.onboardingProgressInactive)
@@ -120,8 +124,16 @@ struct SearchObjectView: View {
             .background(Color.onboardingProgressInactive)
         }
         .task {
-            // Solicita permissão de câmera ao aparecer
             await SearchObjectVM.getPermission()
+            showCameraDeniedAlert = SearchObjectVM.isCameraDenied
+        }
+        .alert("Câmera bloqueada", isPresented: $showCameraDeniedAlert) {
+            Button("Abrir Ajustes") {
+                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+            }
+            Button("Cancelar", role: .cancel) { }
+        } message: {
+            Text("Para usar o EyeSearch, permita o acesso à câmera em Ajustes > Privacidade & Segurança > Câmera.")
         }
         .preferredColorScheme(.dark)
         .navigationBarBackButtonHidden(true)

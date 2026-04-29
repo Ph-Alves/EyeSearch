@@ -13,6 +13,7 @@ import Foundation
 /// ## Usado em:
 /// - ``SettingsView``
 @Observable
+@MainActor
 class SettingsViewModel {
     // MARK: - Variables
     /// Manager de feedback tátil (injetado via protocolo).
@@ -30,7 +31,7 @@ class SettingsViewModel {
     /// - Parameters:
     ///   - haptics: Manager de haptics.
     ///   - soundManager: Manager de som.
-    ///   - settingsManager: Manager de persistência.
+    ///   - settingsManager: Manager de persistência (tipo concreto — não possui protocolo).
     init(haptics: HapticsManaging, soundManager: SoundManaging, settingsManager: SettingsManager) {
         self.haptics = haptics
         self.settingsManager = settingsManager

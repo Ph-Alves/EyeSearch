@@ -21,7 +21,6 @@ struct StickerView: View {
     
     @State var quantity: Int = 1
     
-    
     // MARK: - Body View
     var body: some View {
         ZStack {

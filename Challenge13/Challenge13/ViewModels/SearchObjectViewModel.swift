@@ -26,6 +26,7 @@ class SearchObjectViewModel: CameraManagerDelegate {
     var isModelLoaded: Bool { mlManager.isLoaded }
     /// Mensagem de erro do carregamento dos modelos, se houver.
     var modelError: String? { mlManager.error }
+    /// Labels YOLO dos objetos detectados no frame atual.
     var objectsLabels: [String] {
         detections
             .compactMap { detection -> String? in
@@ -73,10 +74,15 @@ class SearchObjectViewModel: CameraManagerDelegate {
         camera.delegate = self
     }
 
+    /// Indica se o usuário negou o acesso à câmera e precisa ser direcionado para Ajustes.
+    private(set) var isCameraDenied = false
+
     // MARK: - Functions
     /// Solicita permissão de acesso à câmera.
+    @MainActor
     func getPermission() async {
         await camera.checkAuthorization()
+        isCameraDenied = camera.isDenied
     }
     
     /// Retorna a view de preview da câmera.
