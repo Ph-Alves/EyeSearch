@@ -53,13 +53,13 @@ final class CameraManagerTests: XCTestCase {
 
     // MARK: - Propriedades
 
-    private var sut: CameraManager!
+    private var sut: CameraManaging!
 
     // MARK: - Setup / Teardown
 
     override func setUp() {
         super.setUp()
-        sut = CameraManager()
+        sut = CameraManager.shared
     }
 
     override func tearDown() {

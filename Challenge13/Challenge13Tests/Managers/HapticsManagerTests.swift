@@ -21,13 +21,13 @@ final class HapticsManagerTests: XCTestCase {
 
     // MARK: - Propriedades
 
-    private var sut: HapticsManager!
+    private var sut: HapticsManaging!
 
     // MARK: - Setup / Teardown
 
     override func setUp() {
         super.setUp()
-        sut = HapticsManager()
+        sut = HapticsManager.shared
     }
 
     override func tearDown() {
@@ -43,8 +43,9 @@ final class HapticsManagerTests: XCTestCase {
         // Act & Assert
         // guard isEnabled (linha 28 do HapticsManager) deve retornar imediatamente,
         // sem instanciar UIImpactFeedbackGenerator.
+        sut.setEnabled(false)
         XCTAssertNoThrow(
-            sut.trigger(isEnabled: false),
+            sut.trigger(),
             "trigger(isEnabled: false) não deve lançar exceção nem crashar."
         )
     }
@@ -55,8 +56,9 @@ final class HapticsManagerTests: XCTestCase {
         // Arrange — simulador não produz vibração real mas aceita a chamada ao generator
 
         // Act & Assert
+        sut.setEnabled(true)
         XCTAssertNoThrow(
-            sut.trigger(isEnabled: true),
+            sut.trigger(),
             "trigger(isEnabled: true) não deve crashar no simulador."
         )
     }

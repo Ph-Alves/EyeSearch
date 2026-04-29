@@ -22,7 +22,8 @@ protocol MLModelManaging {
     var isLoaded: Bool { get }
     /// Mensagem de erro caso o carregamento dos modelos falhe.
     var error: String? { get }
-    
+    /// Limiar mínimo de confiança para considerar uma detecção válida.
+    var confidenceThreshold: Float { get }
     /// Modelo CoreML para detecção de adesivos.
     var stickerModel: MLModel? { get }
     /// Modelo CoreML YOLOv3 para detecção de objetos.
