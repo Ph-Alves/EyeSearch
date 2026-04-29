@@ -18,8 +18,10 @@ protocol SoundManaging {
     /// Reproduz o som de feedback quando um objeto é detectado.
     /// - Parameter isEnabled: Indica se o som está habilitado pelo usuário.
     func playSound(isEnabled: Bool)
-    /// Reproduz um som falado do label recebido
-    /// - Parameter label: String do que é para ser falado
+    /// Fala o label do objeto detectado no idioma do dispositivo.
+    /// - Parameters:
+    ///   - isEnabled: Indica se o som está habilitado pelo usuário.
+    ///   - label: Raw value do label YOLO (ex: `"person"`, `"chair"`).
     func speakLabel(isEnabled: Bool, label: String)
     /// Restaura o manager para o estado padrão, liberando o player.
     func reset()

@@ -17,7 +17,7 @@ struct SearchObjectView: View {
     // MARK: - Variables
     /// Coordinator
     @Environment(Coordinator.self) private var coordinator
-    /// ViewModel
+    /// ViewModel responsável pela câmera, detecção e feedback.
     var SearchObjectVM: SearchObjectViewModel
     /// States
     @State private var flashLight: Bool = true
@@ -28,9 +28,11 @@ struct SearchObjectView: View {
     init(SearchObjectVM: SearchObjectViewModel) {
         self.SearchObjectVM = SearchObjectVM
     }
-    /// View values
+    /// Espaçamento padrão das seções superior e inferior.
     private var padding: CGFloat = 20
+    /// Z-index da camada de preview da câmera.
     private var cameraZIndex: Double = 2
+    /// Z-index da camada de efeito visual (WaveOverlay) sobreposta à câmera.
     private var effectZIndex: Double = 3
     
     // MARK: - Body View
@@ -124,9 +126,6 @@ struct SearchObjectView: View {
         .task {
             await SearchObjectVM.getPermission()
             showCameraDeniedAlert = SearchObjectVM.isCameraDenied
-            if !showCameraDeniedAlert {
-                SearchObjectVM.setFlashlight(on: true)
-            }
         }
         .alert("Câmera bloqueada", isPresented: $showCameraDeniedAlert) {
             Button("Abrir Ajustes") {

@@ -51,7 +51,6 @@ final class ChatViewModel {
 
     /// Init padrão: cria o ``FoundationsManager`` internamente.
     /// Usado pelo `@StateObject` na ``ChatView``.
-    /// - Parameter coordinator: Instância do coordinator responsável pela navegação.
     init() {
         self.manager = FoundationsManager.shared
     }
@@ -59,10 +58,10 @@ final class ChatViewModel {
     /// Init com injeção de dependência — útil para testes e previews.
     /// - Parameters:
     ///   - manager: Qualquer tipo que conforme com ``FoundationsManaging``.
-    ///   - coordinator: Instância do coordinator responsável pela navegação.
     init(manager: FoundationsManaging) {
         self.manager = manager
     }
+
 
     // MARK: - Intenções da View
 
@@ -72,8 +71,16 @@ final class ChatViewModel {
         let text = inputText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return }
         inputText = ""
+        
+        isLoading = true
         Task {
-            await manager.sendMessage(text)
+            self.displayedMessages.append(ChatMessage(role: .user, text: text))
+            guard let message = try await manager.sendMessage(text) else {
+                isLoading = false
+                return
+            }
+            self.displayedMessages.append(message)
+            isLoading = false
         }
     }
 

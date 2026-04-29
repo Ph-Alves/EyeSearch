@@ -30,8 +30,8 @@ class SettingsViewModel {
     /// Inicializa com os managers injetados e carrega as configurações do UserDefaults.
     /// - Parameters:
     ///   - haptics: Manager de haptics.
-    ///   - soundManager: Manager de som.
-    ///   - settingsManager: Manager de persistência.
+    ///   - soundManaging: Manager de som.
+    ///   - settingsManaging: Manager de persistência.
     init(haptics: HapticsManaging, soundManager: SoundManaging, settingsManager: SettingsManaging) {
         self.haptics = haptics
         self.settingsManager = settingsManager
@@ -48,6 +48,7 @@ class SettingsViewModel {
     func toggleHaptics(_ enabled: Bool) {
         settings.isHapticsEnabled = enabled
         settingsManager.save(settings)
+        haptics.setEnabled(enabled)
     }
     
     /// Dispara o feedback tátil se estiver habilitado nas configurações.
