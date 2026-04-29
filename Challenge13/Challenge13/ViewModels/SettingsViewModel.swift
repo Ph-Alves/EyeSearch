@@ -13,6 +13,7 @@ import Foundation
 /// ## Usado em:
 /// - ``SettingsView``
 @Observable
+@MainActor
 class SettingsViewModel {
     // MARK: - Variables
     /// Manager de feedback tátil (injetado via protocolo).
@@ -23,15 +24,15 @@ class SettingsViewModel {
     private let settingsManager: SettingsManaging
     
     /// Configurações atuais do usuário.
-    var settings: UserSettings
+    private(set) var settings: UserSettings
     
     // MARK: - Init
     /// Inicializa com os managers injetados e carrega as configurações do UserDefaults.
     /// - Parameters:
     ///   - haptics: Manager de haptics.
-    ///   - soundManager: Manager de som.
-    ///   - settingsManager: Manager de persistência.
-    init(haptics: HapticsManaging, soundManager: SoundManaging, settingsManager: SettingsManager) {
+    ///   - soundManaging: Manager de som.
+    ///   - settingsManaging: Manager de persistência.
+    init(haptics: HapticsManaging, soundManager: SoundManaging, settingsManager: SettingsManaging) {
         self.haptics = haptics
         self.settingsManager = settingsManager
         self.soundManager = soundManager
@@ -47,11 +48,12 @@ class SettingsViewModel {
     func toggleHaptics(_ enabled: Bool) {
         settings.isHapticsEnabled = enabled
         settingsManager.save(settings)
+        haptics.setEnabled(enabled)
     }
     
     /// Dispara o feedback tátil se estiver habilitado nas configurações.
     func triggerHaptic() {
-        haptics.trigger(isEnabled: settings.isHapticsEnabled)
+        haptics.trigger()
     }
     
     

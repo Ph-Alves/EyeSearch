@@ -24,17 +24,18 @@ struct ReturnButton: View {
             Button(action: action, label: {
                 HStack {
                     Image(systemName: "chevron.left")
+                        .font(.title)
                         .fontWeight(.bold)
                     Text(returnText)
                         .font(.title)
-                        .fontWeight(.bold)
+                        .fontWeight(.semibold)
                 }
             })
             .buttonStyle(.plain)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.top, 12)
-        .padding(.bottom, 24)
+        .padding(.bottom, 18)
     }
 }
 

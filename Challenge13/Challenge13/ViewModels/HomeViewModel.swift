@@ -15,6 +15,7 @@ import SwiftUI
 /// ## Usado em:
 /// - ``HomeView``
 @Observable
+@MainActor
 class HomeViewModel {
     // MARK: - Init
     init() {}
@@ -22,13 +23,14 @@ class HomeViewModel {
     // MARK: - Functions
     /// Gera a lista de itens do menu principal com título, ícone, cor e destino de navegação.
     /// - Returns: Array de tuplas representando cada item da home.
-    func generateItems() -> [(title: String, icon: String, color: Color, screen: HomeDestination)] {
+    func generateItems() -> [(title: String, icon: String, color: Color, borderColor: Color, screen: HomeDestination)] {
         return [
 
-            ("Procurar",     "magnifyingglass", Color("searchPrimary"),    HomeDestination.searchObject),
-            ("Gerar",        "eye",             Color("stickerPrimary"),    HomeDestination.stickerConfig),
-            ("Dicas",        "lightbulb.fill",  Color("hintsPrimary"),    HomeDestination.hints),
-            ("Configurações", "gearshape.fill", Color("settingsPrimary"), HomeDestination.settings)
+            (.localized(L10n.Home.Menu.search),     "eye.fill", Color("searchPrimary"), Color("SearchPrimaryBorder"), HomeDestination.searchObject),
+            (.localized(L10n.Home.Menu.generate),        "printer.fill",             Color("stickerPrimary"), Color("StickerPrimaryBorder"),   HomeDestination.stickerConfig),
+            (.localized(L10n.Home.Menu.hints),        "lightbulb.fill",  Color("hintsPrimary"),  Color("HintsPrimaryBorder"),  HomeDestination.hints),
+            (.localized(L10n.Home.Menu.settings), "gearshape.fill", Color("settingsPrimary"), Color("settingsPrimaryBorder"), HomeDestination.settings)
         ]
     }
 }
+

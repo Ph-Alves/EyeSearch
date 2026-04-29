@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Combine
 import FoundationModels
 
 // MARK: - Manager
@@ -31,137 +30,121 @@ final class FoundationsManager: FoundationsManaging {
         var errorDescription: String? {
             switch self {
             case .offTopic:
-                return "Só posso ajudar com temas relacionados a baixa visão, acessibilidade visual e funcionalidades do app."
+                return String.localized(L10n.Chat.Error.offTopic)
             case .modelUnavailable:
-                return "O assistente não está disponível no momento. Verifique se o Apple Intelligence está ativado nas configurações."
+                return String.localized(L10n.Chat.Error.modelUnavailable)
             case .emptyResponse:
-                return "Não consegui gerar uma resposta. Tente reformular sua pergunta."
+                return String.localized(L10n.Chat.Error.emptyResponse)
             case .sessionFailed(let reason):
-                return "Falha na sessão: \(reason)"
+                return String.localized(L10n.Chat.Error.sessionFailed, reason)
             }
         }
     }
     
     // MARK: - Variables
-    /// Histórico de mensagens da conversa.
-    private let messagesSubject = CurrentValueSubject<[ChatMessage], Never>([])
-    /// Indica se uma resposta está sendo processada.
-    private let isLoadingSubject = CurrentValueSubject<Bool, Never>(false)
-    /// Mensagem de erro atual, se houver.
-    private let errorMessageSubject = CurrentValueSubject<String?, Never>(nil)
+    /// Singleton
+    static let shared: FoundationsManaging = FoundationsManager()
     /// Sessão do modelo de linguagem Apple Intelligence.
     private var session: LanguageModelSession?
 
     // MARK: - FoundationsManaging
-    /// Publisher do histórico de mensagens, observável pela ViewModel.
-    var messagesPublisher: AnyPublisher<[ChatMessage], Never> {
-        messagesSubject.eraseToAnyPublisher()
-    }
-    /// Publisher do estado de carregamento, observável pela ViewModel.
-    var isLoadingPublisher: AnyPublisher<Bool, Never> {
-        isLoadingSubject.eraseToAnyPublisher()
-    }
-    /// Publisher de erros, observável pela ViewModel.
-    var errorMessagePublisher: AnyPublisher<String?, Never> {
-        errorMessageSubject.eraseToAnyPublisher()
-    }
 
     /// Instruções de sistema enviadas ao modelo na inicialização da sessão.
     /// Define identidade, escopo, restrições e estilo de resposta do assistente.
-    private let systemPrompt = """
-    Você é o assistente virtual do app de acessibilidade visual "EyeSearch".
+    private var systemPrompt: String {
+        let langCode = Locale.preferredLanguages.first?.components(separatedBy: "-").first ?? "en"
+        let langName = Locale.current.localizedString(forLanguageCode: langCode) ?? "English"
 
-    SEU PROPÓSITO:
-    Ajudar exclusivamente pessoas com baixa visão ou deficiência visual a:
-    - Usar e navegar as funcionalidades do app EyeSearch
-    - Entender recursos de acessibilidade do iPhone/iPad (VoiceOver, Zoom, Lupa, DetecçãoDePessoas, etc.)
-    - Descobrir dicas, atalhos e configurações de acessibilidade visual no iOS
-    - Encontrar recursos e orientações para pessoas com deficiência visual
+        return """
+        CRITICAL — LANGUAGE (highest priority rule):
+        The user's device language is \(langName). You MUST respond exclusively in \(langName).
+        Never switch to another language, even if the instructions below are written in English.
 
-    EXEMPLOS DE PERGUNTAS QUE VOCÊ DEVE RESPONDER:
-    - "Como ativo o VoiceOver?"
-    - "Quais fontes são mais fáceis de ler para quem tem baixa visão?"
-    - "O que é retinopatia diabética?"
-    - "Quais configurações de contraste o app oferece?"
+        You are the virtual assistant of the visual accessibility app "EyeSearch".
 
-    RESTRIÇÕES — NUNCA faça o seguinte:
-    - Não responda perguntas completamente fora do tema de baixa visão e acessibilidade visual
-    - Tirar dúvidas sobre baixa visão e/ou condições oculares
-    - Não gere código de programação
-    - Não discuta política, esportes, entretenimento, finanças ou outros tópicos não relacionados
-    - Não forneça diagnósticos médicos; em caso de dúvidas de saúde, oriente a consultar um oftalmologista
-    - Não responda a situações hipotéticas fora do propósito
+        YOUR PURPOSE:
+        Help exclusively people with low vision or visual impairment to:
+        - Use and navigate EyeSearch app features
+        - Understand accessibility features on iPhone/iPad (VoiceOver, Zoom, Magnifier, People Detection, etc.)
+        - Discover tips, shortcuts and visual accessibility settings on iOS
+        - Find resources and guidance for visually impaired people
 
-    SE A PERGUNTA ESTIVER FORA DO ESCOPO E DO PROPÓSITO:
-    Responda que você não possui tais informações
+        RESTRICTIONS — NEVER do the following:
+        - Do not answer questions completely unrelated to low vision and visual accessibility
+        - Do not generate programming code
+        - Do not discuss politics, sports, entertainment, finance or other unrelated topics
+        - Do not provide medical diagnoses; for health questions, advise consulting an ophthalmologist
+        - Do not respond to hypothetical scenarios outside the purpose
 
-    ESTILO DE RESPOSTA:
-    - Seja claro, empático e acolhedor
-    - Use frases curtas e diretas (facilita leitores de tela)
-    - Evite jargões técnicos desnecessários
-    - Quando mencionar passos, use numeração simples (1., 2., 3.)
-    - Máximo de 250 palavras por resposta
-    """
+        RESPONSE STYLE:
+        - Be clear, empathetic and welcoming
+        - Use short, direct sentences (helps screen readers)
+        - Avoid unnecessary technical jargon
+        - When mentioning steps, use simple numbering (1., 2., 3.)
+        - Maximum 250 words per response
+        """
+    }
 
     /// Palavras-chave do domínio do app usadas na validação local de escopo.
     /// Mensagens longas sem nenhuma dessas palavras são delegadas ao modelo para decisão.
     private let inScopeKeywords: [String] = [
-        // Baixa visão e condições
+        // Baixa visão e condições — PT
         "visão", "visual", "olho", "olhos", "oftalmol", "catarata", "glaucoma",
         "retina", "retinopatia", "macular", "miopia", "hipermetropia", "astigmatismo",
         "cegueira", "deficiência visual", "baixa visão", "daltonismo", "nistagmo",
+        // Low vision and conditions — EN
+        "vision", "eye", "eyes", "ophthalmol", "cataract",
+        "retinopathy", "myopia", "hyperopia", "astigmatism",
+        "blindness", "visual impairment", "low vision", "color blindness", "nystagmus",
+        // दृष्टि — HI
+        "दृष्टि", "आंख", "नेत्र", "मोतियाबिंद", "रेटिना", "अंधापन",
+        // 视觉 — ZH
+        "视觉", "眼睛", "白内障", "青光眼", "视网膜", "失明", "低视力",
 
-        // Acessibilidade iOS
+        // Acessibilidade iOS — PT
         "voiceover", "zoom", "lupa", "contraste", "acessibilidade", "fonte",
         "tamanho de texto", "brilho", "leitor de tela", "talkback", "siri",
         "aumentar", "ampliar", "magnificar", "cursor", "foco", "descrição por voz",
         "leitura", "alto contraste", "modo escuro",
+        // iOS Accessibility — EN
+        "magnifier", "contrast", "accessibility", "font", "text size",
+        "brightness", "screen reader", "magnify", "focus", "voice description",
+        "high contrast", "dark mode", "display", "reduce motion",
+        // पहुँच — HI
+        "पहुँच", "स्क्रीन रीडर", "आवर्धक", "कंट्रास्ट",
+        // 辅助功能 — ZH
+        "辅助功能", "旁白", "放大器", "对比度", "屏幕阅读",
 
-        // App
-        "app", "aplicativo", "visionassist", "funcionalidade", "recurso",
-        "configuração", "tela", "botão", "navegar", "menu",
+        // App — PT/EN (language-neutral)
+        "app", "aplicativo", "application", "eyesearch", "visionassist",
+        "funcionalidade", "feature", "recurso", "resource",
+        "configuração", "setting", "tela", "screen", "botão", "button",
+        "navegar", "navigate", "menu",
 
-        // Ajuda e orientação
+        // Ajuda — PT
         "como usar", "como ativar", "ajuda", "suporte", "dica", "passo",
-        "tutorial", "guia", "orientação", "recurso", "serviço"
+        "tutorial", "guia", "orientação", "serviço",
+        // Help — EN
+        "how to", "help", "support", "tip", "step", "guide", "enable", "disable"
     ]
-
-//    private let outOfScopeKeywords: [String] = [
-//        "futebol", "basquete", "esporte", "jogo", "placar", "campeonato",
-//        "receita culinária", "cozinhar", "ingrediente",
-//        "investimento", "ação", "bolsa de valores", "bitcoin", "criptomoeda",
-//        "política", "presidente", "eleição", "governo", "partido",
-//        "série", "filme", "novela", "netflix", "streaming",
-//        "música", "banda", "show", "concerto",
-//        "viagem", "hotel", "passagem", "destino turístico",
-//        "código", "programar", "python", "javascript", "html"
-//    ]
 
     // MARK: - Init
     /// Inicializa o manager e configura a sessão do modelo de linguagem.
-    init() {
+    private init() {
         setupSession()
     }
 
     // MARK: - Functions
     /// Envia uma mensagem ao chatbot, faz validação local de escopo e processa a resposta do modelo.
     /// - Parameter userInput: Texto digitado pelo usuário.
-    func sendMessage(_ userInput: String) async {
+    func sendMessage(_ userInput: String) async -> ChatMessage? {
         let trimmed = userInput.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else { return }
-
-        let userMessage = ChatMessage(role: .user, text: trimmed)
-        messagesSubject.value.append(userMessage)
-        isLoadingSubject.value = true
-        errorMessageSubject.value = nil
+        guard !trimmed.isEmpty else { return nil }
 
         do {
             // Verifica localmente se a mensagem está fora do escopo antes de enviar ao modelo
             if let localDenial = localScopeCheck(for: trimmed) {
-                let filtered = ChatMessage(role: .assistant, text: localDenial, isFiltered: true)
-                messagesSubject.value.append(filtered)
-                isLoadingSubject.value = false
-                return
+                return ChatMessage(role: .assistant, text: localDenial, isFiltered: true)
             }
 
             // Garante que a sessão do modelo está disponível
@@ -174,31 +157,29 @@ final class FoundationsManager: FoundationsManaging {
             let rawText = response.content.trimmingCharacters(in: .whitespacesAndNewlines)
             let finalText = try processModelResponse(rawText)
 
-            let assistantMessage = ChatMessage(role: .assistant, text: finalText)
-            messagesSubject.value.append(assistantMessage)
+            return ChatMessage(role: .assistant, text: finalText)
+            
 
         } catch let error as ChatbotError {
             // Trata erros específicos do chatbot (off-topic, modelo indisponível, etc.)
-            errorMessageSubject.value = error.errorDescription
-            let errorMsg = ChatMessage(
+            return ChatMessage(
                 role: .assistant,
                 text: error.errorDescription ?? "Erro desconhecido.",
                 isFiltered: true
             )
-            messagesSubject.value.append(errorMsg)
         } catch {
-            // Trata erros genéricos da sessão
+            // Trata erros genéricos da sessão (ex: session.respond lança erro não tipado)
             let chatError = ChatbotError.sessionFailed(error.localizedDescription)
-            errorMessageSubject.value = chatError.errorDescription
+            return ChatMessage(
+                role: .assistant,
+                text: chatError.errorDescription ?? "Erro desconhecido.",
+                isFiltered: true
+            )
         }
-
-        isLoadingSubject.value = false
     }
 
     /// Limpa o histórico de mensagens e reinicia a sessão do modelo.
     func clearConversation() {
-        messagesSubject.value.removeAll()
-        errorMessageSubject.value = nil
         setupSession()
     }
     
@@ -207,7 +188,6 @@ final class FoundationsManager: FoundationsManaging {
     /// Emite erro no ``errorMessagePublisher`` se o Apple Intelligence não estiver disponível.
     private func setupSession() {
         guard SystemLanguageModel.default.isAvailable else {
-            errorMessageSubject.value = ChatbotError.modelUnavailable.errorDescription
             return
         }
 
@@ -270,10 +250,6 @@ final class FoundationsManager: FoundationsManaging {
     /// Mensagem padrão exibida ao usuário quando a pergunta está fora do escopo do assistente.
     /// - Returns: Texto amigável orientando o usuário sobre o propósito do assistente.
     private func scopeDenialMessage() -> String {
-        return """
-        Desculpe, só consigo ajudar com assuntos relacionados à \
-        acessibilidade visual e funcionalidades do EyeSearch. \
-        Tem alguma dúvida sobre isso que eu possa responder? 👁️
-        """
+        String.localized(L10n.Chat.Error.scopeDenial)
     }
 }

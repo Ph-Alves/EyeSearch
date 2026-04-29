@@ -26,11 +26,9 @@
       }
     },
     {
-      "enabled" : false,
-      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:EyeSearch.xcodeproj",
-        "identifier" : "EF69E8A32F87CFDD00FD9AE7",
+        "identifier" : "9E7762A02FA1288800EFFE99",
         "name" : "EyeSearchUITests"
       }
     }

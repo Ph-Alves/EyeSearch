@@ -18,11 +18,11 @@ class DependencyContainer {
     /// ViewModel da tela principal.
     lazy var homeViewModel = HomeViewModel()
     /// ViewModel da tela de busca de objetos.
-    lazy var searchViewModel = SearchObjectViewModel(camera: CameraManager(), sound: SoundManager(), haptics: HapticsManager(), mlManager: MLModelManager.shared, settingsManager: SettingsManager())
+    lazy var searchViewModel = SearchObjectViewModel(camera: CameraManager.shared, sound: SoundManager.shared, haptics: HapticsManager.shared, mlManager: MLModelManager.shared, settingsManager: SettingsManager.shared)
     /// ViewModel da tela de geração de adesivos.
-    lazy var stickerViewModel = StickerViewModel(pdfManager: PDFManager())
+    lazy var stickerViewModel = StickerViewModel(pdfManager: PDFManager.shared)
     /// Manager do chat (compartilhado para manter estado da sessão).
-    lazy var foundationsManager = FoundationsManager()
+    lazy var chatViewModel = ChatViewModel()
     /// ViewModel da tela de configurações.
-    lazy var settingsViewModel = SettingsViewModel(haptics: HapticsManager(), soundManager: SoundManager(), settingsManager: SettingsManager())
+    lazy var settingsViewModel = SettingsViewModel(haptics: HapticsManager.shared, soundManager: SoundManager.shared, settingsManager: SettingsManager.shared)
 }

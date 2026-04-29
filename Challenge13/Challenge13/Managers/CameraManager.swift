@@ -17,8 +17,12 @@ import Foundation
 final class CameraManager: NSObject, CameraManaging, AVCaptureVideoDataOutputSampleBufferDelegate {
     
     // MARK: - Variables
+    /// Singleton
+    static let shared: CameraManaging = CameraManager()
     /// Indica se o usuário autorizou o acesso à câmera.
     private(set) var isAuthorized = false
+    /// Indica se o usuário negou o acesso (ou está restrito). Nesse caso o app deve orientar ao Ajustes.
+    private(set) var isDenied = false
     /// Sessão de captura de vídeo do AVFoundation.
     private(set) var session = AVCaptureSession()
     /// Salva o device para permitir ligar a lanterna em camadas posteriores
@@ -28,26 +32,40 @@ final class CameraManager: NSObject, CameraManaging, AVCaptureVideoDataOutputSam
     // Saída de vídeo que processa os frames da câmera.
     private let videoOutput = AVCaptureVideoDataOutput()
     
+    // MARK: - Init
+    override private init() {
+        
+    }
+    
     // MARK: - Functions
     /// Verifica e solicita permissão de acesso à câmera. Se autorizado, configura a sessão.
     @MainActor
     func checkAuthorization() async {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized:
+            isDenied = false
             isAuthorized = true
             setupSession()
         case .notDetermined:
-            isAuthorized = await AVCaptureDevice.requestAccess(for: .video)
-            if isAuthorized {
+            let granted = await AVCaptureDevice.requestAccess(for: .video)
+            if granted {
+                isDenied = false
+                isAuthorized = true
                 setupSession()
+            } else {
+                isDenied = true
+                isAuthorized = false
             }
-        default:
+        case .denied, .restricted:
+            isDenied = true
+            isAuthorized = false
+        @unknown default:
             isAuthorized = false
         }
     }
     
     /// Para ligar/desligar a lanterna ao utilizar a câmera
-    ///  - Parameter on: Parâmetro booleano que define se liga ou desliga a lanterna, usando tochMode
+    ///  - Parameter on: Parâmetro booleano que define se liga ou desliga a lanterna, usando `torchMode`
     func setTorch(on: Bool) {
         guard let device, device.hasTorch else { return }
         do {

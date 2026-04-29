@@ -13,16 +13,19 @@ import AVFoundation
 /// Gerencia a reprodução de sons de feedback utilizando `AVAudioPlayer`.
 /// Toca o som de detecção quando um objeto adesivado é encontrado.
 /// ## Usado em:
+/// - ``SearchObjectViewModel``
 /// - ``SettingsViewModel``
 final class SoundManager: SoundManaging {
     // MARK: - Variables
+    /// Singleton
+    static let shared: SoundManaging = SoundManager()
     /// Instância do player de áudio.
     private(set) var player: AVAudioPlayer?
     /// Sintetizador para falar o que receber de label
     private let synthesizer = AVSpeechSynthesizer()
     
     // MARK: - Init
-    init() {
+    private init() {
         setupAudio()
     }
     
@@ -40,11 +43,11 @@ final class SoundManager: SoundManaging {
         guard isEnabled else { return }
         let cleanLabel = label.trimmingCharacters(in: .whitespaces)
         
-        guard let translation = YoloTranslations(rawValue: cleanLabel) else { return }
-        let textToSpeak = translation.localizedString
-        
+        let textToSpeak = String.localized("yolo.label.\(cleanLabel)", table: L10n.YOLO.Label.table)
+        guard !textToSpeak.hasPrefix("yolo.label.") else { return }
+
         let utterance = AVSpeechUtterance(string: textToSpeak)
-        utterance.voice = AVSpeechSynthesisVoice(language: "pt-BR")
+        utterance.voice = AVSpeechSynthesisVoice(language: Locale.preferredLanguages.first ?? "en")
         utterance.rate = 0.53
         
         if synthesizer.isSpeaking {

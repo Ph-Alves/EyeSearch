@@ -16,10 +16,10 @@ import SwiftUI
 /// ## Usado em:
 /// - ``Challenge13App``
 final class IntentsManager: IntentsManaging {
-    
+    // MARK: - Variables
     /// Instância compartilhada para ser acessada dentro de AppIntents,
     /// já que AppIntents são instanciados pelo sistema e não têm acesso ao Environment.
-    static let shared = IntentsManager()
+    static let shared: IntentsManaging = IntentsManager()
 
     /// Referência fraca ao Coordinator para evitar ciclo de retenção.
     weak var coordinator: Coordinator? {
@@ -35,7 +35,10 @@ final class IntentsManager: IntentsManaging {
     
     private var hasPendingDeepLink = false
 
-    private init() { }
+    // MARK: - Init
+    private init() {
+        
+    }
 
     /// Navega até a SearchObjectView respeitando o padrão do ``Coordinator``.
     @MainActor
@@ -57,8 +60,8 @@ final class IntentsManager: IntentsManaging {
 /// # Manager - App Intent
 /// Intent exposta à Siri e ao app Atalhos para abrir a tela de busca de objetos.
 struct OpenSearchObjectSiriIntent: AppIntent {
-    static var title: LocalizedStringResource = "Buscar objeto"
-    static var description = IntentDescription("Abre a tela de busca de objetos pela câmera.")
+    static var title: LocalizedStringResource = "intents.searchObject.title"
+    static var description = IntentDescription("intents.searchObject.openSearch")
 
     /// Garante que o app seja trazido para o primeiro plano ao executar a intent.
     static var openAppWhenRun: Bool = true
@@ -82,11 +85,12 @@ struct Challenge13Shortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: OpenSearchObjectSiriIntent(),
             phrases: [
-                "Buscar objeto com \(.applicationName)",
-                "Abrir busca no \(.applicationName)",
-                "Procurar objeto no \(.applicationName)"
+                "Find my items with \(.applicationName)",
+                "Search object with \(.applicationName)",
+                "Open search in \(.applicationName)",
+                "Find object in \(.applicationName)"
             ],
-            shortTitle: "Buscar objeto",
+            shortTitle: "intents.searchObject.shortTitle",
             systemImageName: "magnifyingglass"
         )
     }
