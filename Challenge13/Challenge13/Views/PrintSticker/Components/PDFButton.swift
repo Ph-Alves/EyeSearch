@@ -12,7 +12,7 @@ import SwiftUI
 struct GeneratePDFButton: View {
     // MARK: - Properties
     
-    let generatorText: String = "Imprimir"
+    let generatorText: String = .localized(L10n.Sticker.Button.generatePDF)
     let action: () -> Void
     
     // MARK: - Body

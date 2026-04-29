@@ -26,10 +26,10 @@ class HomeViewModel {
     func generateItems() -> [(title: String, icon: String, color: Color, borderColor: Color, screen: HomeDestination)] {
         return [
 
-            ("Procurar",     "eye.fill", Color("searchPrimary"), Color("SearchPrimaryBorder"), HomeDestination.searchObject),
-            ("Adesivos",        "printer.fill",             Color("stickerPrimary"), Color("StickerPrimaryBorder"),   HomeDestination.stickerConfig),
-            ("Dicas",        "lightbulb.fill",  Color("hintsPrimary"),  Color("HintsPrimaryBorder"),  HomeDestination.hints),
-            ("Ajustes", "gearshape.fill", Color("settingsPrimary"), Color("settingsPrimaryBorder"), HomeDestination.settings)
+            (.localized(L10n.Home.Menu.search),     "eye.fill", Color("searchPrimary"), Color("SearchPrimaryBorder"), HomeDestination.searchObject),
+            (.localized(L10n.Home.Menu.generate),        "printer.fill",             Color("stickerPrimary"), Color("StickerPrimaryBorder"),   HomeDestination.stickerConfig),
+            (.localized(L10n.Home.Menu.hints),        "lightbulb.fill",  Color("hintsPrimary"),  Color("HintsPrimaryBorder"),  HomeDestination.hints),
+            (.localized(L10n.Home.Menu.settings), "gearshape.fill", Color("settingsPrimary"), Color("settingsPrimaryBorder"), HomeDestination.settings)
         ]
     }
 }

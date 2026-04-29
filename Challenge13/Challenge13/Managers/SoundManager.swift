@@ -43,8 +43,8 @@ final class SoundManager: SoundManaging {
         guard isEnabled else { return }
         let cleanLabel = label.trimmingCharacters(in: .whitespaces)
         
-        guard YoloTranslations(rawValue: cleanLabel) != nil else { return }
-        let textToSpeak = String.localized("yolo.label.\(cleanLabel)")
+        let textToSpeak = String.localized("yolo.label.\(cleanLabel)", table: L10n.YOLO.Label.table)
+        guard !textToSpeak.hasPrefix("yolo.label.") else { return }
 
         let utterance = AVSpeechUtterance(string: textToSpeak)
         utterance.voice = AVSpeechSynthesisVoice(language: Locale.preferredLanguages.first ?? "en")

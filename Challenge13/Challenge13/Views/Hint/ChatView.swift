@@ -28,6 +28,7 @@ struct ChatView: View {
                     if chatVM.isLoading {
                         ProgressView()
                             .padding()
+                            .id("loading")
                     }
                 }
                 .onChange(of: chatVM.displayedMessages.count) {

@@ -15,11 +15,11 @@ struct ChatUserText: View {
     // MARK: - Variables
     /// Objeto viewModel que permite as operações e acesso as variáveis.
     @Binding var chatVM: ChatViewModel
-    
+
     // MARK: - Body View
     var body: some View {
         HStack(spacing: 8) {
-            TextField("Insira sua pergunta aqui", text: $chatVM.inputText)
+            TextField(LocalizedStringKey(L10n.Chat.Input.placeholder), text: $chatVM.inputText)
                 .textFieldStyle(.plain)
 
             Button(action: {
@@ -41,10 +41,6 @@ struct ChatUserText: View {
                 .stroke(Color.gray.opacity(0.5), lineWidth: 1)
         )
         .padding()
-        .task() {
-            chatVM.inputText = "Olá!"
-            chatVM.sendMessage()
-        }
     }
 }
 

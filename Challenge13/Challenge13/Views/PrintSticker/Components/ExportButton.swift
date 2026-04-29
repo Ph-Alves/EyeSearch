@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct ExportButton: View {
-    let title: String = "Exportar PDF"
+    let title: String = .localized(L10n.Sticker.Button.exportPDF)
     let icon: String = "square.and.arrow.down"
     
     var body: some View {
