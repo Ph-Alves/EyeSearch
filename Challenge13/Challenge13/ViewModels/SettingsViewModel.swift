@@ -24,7 +24,7 @@ class SettingsViewModel {
     private let settingsManager: SettingsManaging
     
     /// Configurações atuais do usuário.
-    var settings: UserSettings
+    private(set) var settings: UserSettings
     
     // MARK: - Init
     /// Inicializa com os managers injetados e carrega as configurações do UserDefaults.

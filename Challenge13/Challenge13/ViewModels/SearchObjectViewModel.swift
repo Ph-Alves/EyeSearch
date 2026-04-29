@@ -57,14 +57,14 @@ class SearchObjectViewModel: CameraManagerDelegate {
     /// Manager dos modelos de ML.
     private let mlManager: MLModelManaging
     /// Manager das configs
-    private let settingsManager: SettingsManager
+    private let settingsManager: SettingsManaging
     /// Flag para evitar processamento concorrente de frames.
     private var isProcessing = false
     /// Indica que detectou sticker mas ainda não conseguiu falar o label do YOLO
     private var hasPendingSpeech = false
 
     // MARK: - Init
-    init(camera: CameraManager, sound: SoundManager, haptics: HapticsManager, mlManager: MLModelManager, settingsManager: SettingsManager) {
+    init(camera: CameraManaging, sound: SoundManaging, haptics: HapticsManaging, mlManager: MLModelManaging, settingsManager: SettingsManaging) {
         self.camera = camera
         self.sound = sound
         self.haptics = haptics

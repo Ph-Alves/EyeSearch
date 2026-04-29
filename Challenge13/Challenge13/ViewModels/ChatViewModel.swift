@@ -20,15 +20,15 @@ final class ChatViewModel: ObservableObject {
     // MARK: - Estado publicado para a View
 
     /// Lista de mensagens exibidas na interface, em ordem cronológica.
-    @Published var displayedMessages: [ChatMessage] = []
+    @Published private(set) var displayedMessages: [ChatMessage] = []
     /// Texto atual do campo de entrada do usuário.
-    @Published var inputText: String = ""
+    @Published private(set) var inputText: String = ""
     /// Indica se o assistente está processando uma resposta.
-    @Published var isLoading: Bool = false
+    @Published private(set) var isLoading: Bool = false
     /// Mensagem de erro exibida no banner, ou `nil` se não houver erro ativo.
-    @Published var errorBanner: String? = nil
+    @Published private(set) var errorBanner: String? = nil
     /// Controla a exibição do diálogo de confirmação de limpeza do histórico.
-    @Published var showClearConfirmation: Bool = false
+    @Published private(set) var showClearConfirmation: Bool = false
 
     // MARK: - Dependências
 

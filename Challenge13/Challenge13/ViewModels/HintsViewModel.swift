@@ -17,7 +17,7 @@ import Foundation
 class HintsViewModel {
     // MARK: - Variables
     /// Lista de dicas exibidas na tela.
-    var hints: [Hint] = [
+    private(set) var hints: [Hint] = [
         Hint(
             id: UUID(),
             title: .localized(L10n.Hints.Card.Stickers.title),
@@ -55,7 +55,7 @@ class HintsViewModel {
     ]
     
     /// ID da dica atualmente expandida. `nil` se nenhuma estiver aberta.
-    var selectedHintID: UUID?
+    private(set) var selectedHintID: UUID?
     
     // MARK: - Functions
     /// Alterna o estado de expansão de uma dica. Se já estiver aberta, fecha. Se estiver fechada, abre.
