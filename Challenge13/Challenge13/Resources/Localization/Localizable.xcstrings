@@ -22,7 +22,7 @@
         "hi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Stickers.pdf"
+            "value": "स्टिकर.pdf"
           }
         },
         "pt-BR": {
@@ -34,7 +34,7 @@
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Stickers.pdf"
+            "value": "贴纸.pdf"
           }
         }
       }
