@@ -74,6 +74,7 @@ struct CustomStepperView: View {
                                         .foregroundColor(.titleText)
                                 }
                             }
+                            .accessibilityIdentifier("StepperMinusButton")
 
                             Button {
                                 quantity += 1
@@ -87,6 +88,7 @@ struct CustomStepperView: View {
                                         .foregroundColor(.titleText)
                                 }
                             }
+                            .accessibilityIdentifier("StepperPlusButton")
                         }
                     )
                     .offset(y: -22)
