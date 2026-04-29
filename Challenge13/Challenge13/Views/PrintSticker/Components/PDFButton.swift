@@ -12,28 +12,32 @@ import SwiftUI
 struct GeneratePDFButton: View {
     // MARK: - Properties
     
-    let generatorText: String = "Gerar PDF"
+    let generatorText: String = "Imprimir"
     let action: () -> Void
     
     // MARK: - Body
     var body: some View {
         Button(action: action) {
             HStack {
-                Image(systemName: "printer")
+                Image(systemName: "printer.fill")
                     .font(.title)
+                
                 Text(generatorText)
                     .font(.title)
                 Spacer()
                 Image(systemName: "chevron.right")
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.title2)
             }
             .foregroundColor(.titleText)
             .padding(.vertical, 24)
             .padding(.horizontal, 24)
+            .background((Color(.stickerPrimary)))
             .frame(maxWidth: .infinity)
-            .background(
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(Color(.stickerPrimary))
+            .cornerRadius(22)
+            .contentShape(Rectangle())
+            .overlay(
+                RoundedRectangle(cornerRadius: 22)
+                    .stroke(Color.stickerPrimaryBorder, lineWidth: 4)
             )
         }
     }

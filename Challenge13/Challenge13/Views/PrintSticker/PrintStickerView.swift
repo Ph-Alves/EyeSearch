@@ -23,34 +23,18 @@ struct PrintStickerView: View {
             
             Color(.background)
                 .ignoresSafeArea()
-            
 
-            VStack(spacing: 16) {
+            VStack(spacing: 0) {
 
-                // Botão voltar alinhado à esquerda
+                // Botão voltar
                 HStack {
-                    ReturnButton(action: {
-                        coordinator.pop()
-                    })
-                    Spacer()
+                    ReturnButton(action: { coordinator.pop() })
                 }
-
-//                // Texto centralizado
-//                Text("Lorem Ipsum Dolor Sit Amet Lorem Ipsum Dolor Sit Amet Lorem Ipsum Dolor Sit")
-//                    .font(.body)
-//                    .multilineTextAlignment(.center)
-//                    .frame(maxWidth: .infinity)
-//                    .foregroundStyle(.white)
 
                 // Preview do PDF gerado
                 if let stickerView = stickerVM.getView() {
                     stickerView
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.clear)
-                        )
                 }
 
                 // Botão salvar via ShareLink
@@ -59,19 +43,11 @@ struct PrintStickerView: View {
                         item: document,
                         preview: SharePreview("Adesivos.pdf", image: Image("sticker"))
                     ) {
-                        Label("Exportar PDF", systemImage: "square.and.arrow.up")
-                            .foregroundColor(.titleText)
-                            .padding(.vertical, 24)
-                            .padding(.horizontal, 24)
-                            .frame(maxWidth: .infinity)
-                            .background(
-                                RoundedRectangle(cornerRadius: 20)
-                                    .fill(Color(.stickerPrimary))
-                            )
+                        ExportButton()
                     }
                 }
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 25)
             .navigationBarBackButtonHidden(true)
         }
     }
