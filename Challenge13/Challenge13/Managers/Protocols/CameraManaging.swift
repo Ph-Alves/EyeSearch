@@ -16,7 +16,7 @@ import AVFoundation
 /// - ``CameraManager``
 protocol CameraManaging: AnyObject {
     /// Singleton
-    static let shared: CameraManaging { get }
+    static var shared: CameraManaging { get }
     /// Indica se o usuário autorizou o uso da câmera.
     var isAuthorized: Bool { get }
     /// Indica se o usuário negou o acesso à câmera (ou está restrito por controle parental).

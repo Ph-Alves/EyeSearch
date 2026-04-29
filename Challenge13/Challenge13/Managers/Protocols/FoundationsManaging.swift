@@ -16,7 +16,7 @@ import Combine
 /// - ``FoundationsManager``
 protocol FoundationsManaging {
     /// Singleton
-    static let shared: FoundationsManaging { get }
+    static var shared: FoundationsManaging { get }
     /// Publishers expostos como AnyPublisher — sem amarrar a implementação
     var messagesPublisher: AnyPublisher<[ChatMessage], Never> { get }
     var isLoadingPublisher: AnyPublisher<Bool, Never> { get }

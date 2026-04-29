@@ -14,7 +14,7 @@ import Foundation
 /// - ``PDFManager``
 protocol PDFManaging {
     /// Singleton
-    static let shared: PDFManaging { get }
+    static var shared: PDFManaging { get }
     /// Gera um PDF contendo adesivos distribuídos em folha A4.
     /// - Parameter quantity: Número de adesivos a incluir no PDF.
     /// - Returns: Os dados binários do PDF, ou `nil` se a imagem do adesivo não for encontrada.

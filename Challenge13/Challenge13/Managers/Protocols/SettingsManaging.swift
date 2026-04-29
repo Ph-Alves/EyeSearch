@@ -14,7 +14,7 @@ import Foundation
 /// - ``SettingsManager``
 protocol SettingsManaging {
     /// Singleton
-    static let shared: SettingsManaging { get }
+    static var shared: SettingsManaging { get }
     /// Carrega as configurações salvas do usuário.
     /// - Returns: Instância de ``UserSettings`` com os valores persistidos.
     func load() -> UserSettings

@@ -22,7 +22,7 @@ final class ChatViewModel: ObservableObject {
     /// Lista de mensagens exibidas na interface, em ordem cronológica.
     @Published private(set) var displayedMessages: [ChatMessage] = []
     /// Texto atual do campo de entrada do usuário.
-    @Published private(set) var inputText: String = ""
+    @Published var inputText: String = ""
     /// Indica se o assistente está processando uma resposta.
     @Published private(set) var isLoading: Bool = false
     /// Mensagem de erro exibida no banner, ou `nil` se não houver erro ativo.
@@ -57,7 +57,7 @@ final class ChatViewModel: ObservableObject {
     /// Usado pelo `@StateObject` na ``ChatView``.
     /// - Parameter coordinator: Instância do coordinator responsável pela navegação.
     init(coordinator: Coordinator) {
-        self.manager = FoundationsManager()
+        self.manager = FoundationsManager.shared
         self.coordinator = coordinator
         bindManager()
     }

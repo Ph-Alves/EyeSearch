@@ -51,16 +51,6 @@ struct ChatView: View {
         .navigationTitle("Assistente Visual")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbarContent }
-        .confirmationDialog(
-            "Limpar conversa?",
-            isPresented: $viewModel.showClearConfirmation,
-            titleVisibility: .visible
-        ) {
-            Button("Limpar", role: .destructive) { viewModel.confirmClear() }
-            Button("Cancelar", role: .cancel) { }
-        } message: {
-            Text("Todo o histórico será apagado.")
-        }
         .animation(.easeInOut(duration: 0.25), value: viewModel.errorBanner)
         .onDisappear {
             viewModel.onViewDisappear()
@@ -144,17 +134,6 @@ struct ChatView: View {
                     .multilineTextAlignment(.center)
             }
             .padding(.horizontal, 24)
-
-            // Sugestões rápidas
-            VStack(spacing: 10) {
-                ForEach(quickSuggestions, id: \.self) { suggestion in
-                    SuggestionChipView(text: suggestion) {
-                        viewModel.inputText = suggestion
-                        viewModel.sendMessage()
-                    }
-                }
-            }
-            .padding(.horizontal, 16)
 
             Spacer(minLength: 40)
         }

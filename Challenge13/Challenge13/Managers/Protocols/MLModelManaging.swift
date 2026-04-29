@@ -17,7 +17,7 @@ import AVFoundation
 /// - ``MLModelManager``
 protocol MLModelManaging {
     /// Singleton
-    static let shared: MLModelManaging { get }
+    static var shared: MLModelManaging { get }
     /// Indica se os modelos foram carregados com sucesso.
     var isLoaded: Bool { get }
     /// Mensagem de erro caso o carregamento dos modelos falhe.

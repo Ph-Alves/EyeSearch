@@ -15,7 +15,7 @@ import SwiftUI
 /// - ``IntentsManager``
 protocol IntentsManaging: AnyObject {
     /// Singleton
-    static let shared: IntentsManaging { get }
+    static var shared: IntentsManaging { get }
     /// Recebe um coordinator responsável por permitir o intents abrir o app em uma view específica
     var coordinator: Coordinator? { get set }
     /// Função de abrir a tela de procurar objeto, utilizando-se do ``Coordinator``

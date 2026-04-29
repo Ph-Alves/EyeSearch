@@ -145,7 +145,7 @@ struct SearchObjectView: View {
 // MARK: - Preview
 #Preview{
     CoordinatedNavigationStack {
-        SearchObjectView(SearchObjectVM: SearchObjectViewModel(camera: CameraManager(), sound: SoundManager(), haptics: HapticsManager(), mlManager: MLModelManager.shared, settingsManager: SettingsManager()))
+        SearchObjectView(SearchObjectVM: SearchObjectViewModel(camera: CameraManager.shared, sound: SoundManager.shared, haptics: HapticsManager.shared, mlManager: MLModelManager.shared, settingsManager: SettingsManager.shared))
     }
     .environment(Coordinator(dependencyContainer: DependencyContainer()))
 }

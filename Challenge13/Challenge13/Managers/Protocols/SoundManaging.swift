@@ -14,7 +14,7 @@ import AVFoundation
 /// - ``SoundManager``
 protocol SoundManaging {
     /// Singleton
-    static let shared: SoundManaging { get }
+    static var shared: SoundManaging { get }
     /// Reproduz o som de feedback quando um objeto é detectado.
     /// - Parameter isEnabled: Indica se o som está habilitado pelo usuário.
     func playSound(isEnabled: Bool)
