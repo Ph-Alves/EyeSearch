@@ -1,4 +1,4 @@
 // MARK: - PDF Constants
 enum PDFConstants {
-    static let fileName = "Adesivos.pdf"
+    static var fileName: String { String.localized("Adesivos.pdf") }
 }
