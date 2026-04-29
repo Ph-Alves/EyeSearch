@@ -61,7 +61,7 @@ final class ChatViewModelTests: XCTestCase {
         super.setUp()
         spy = FoundationsManagerSpy()
         coordinator = Coordinator(dependencyContainer: DependencyContainer())
-        sut = ChatViewModel(manager: spy, coordinator: coordinator)
+        sut = ChatViewModel(manager: spy)
     }
 
     override func tearDown() {
@@ -153,36 +153,6 @@ final class ChatViewModelTests: XCTestCase {
         // Assert
         XCTAssertEqual(spy.clearCallCount, 1, "manager.clearConversation deve ser chamado uma vez.")
         XCTAssertFalse(sut.showClearConfirmation, "showClearConfirmation deve ser false após confirmClear.")
-    }
-
-    // MARK: - Navegação
-
-    func test_NavigateToSettings_AppendsToPath() {
-        // Arrange
-        let initialCount = coordinator.path.count
-
-        // Act
-        sut.navigateToSettings()
-
-        // Assert
-        XCTAssertEqual(
-            coordinator.path.count, initialCount + 1,
-            "navigateToSettings deve adicionar um destino à pilha de navegação."
-        )
-    }
-
-    func test_NavigateToHints_AppendsToPath() {
-        // Arrange
-        let initialCount = coordinator.path.count
-
-        // Act
-        sut.navigateToHints()
-
-        // Assert
-        XCTAssertEqual(
-            coordinator.path.count, initialCount + 1,
-            "navigateToHints deve adicionar um destino à pilha de navegação."
-        )
     }
 
     // MARK: - handleSubmit

@@ -74,7 +74,6 @@
 		EF69E88B2F87CFDB00FD9AE7 /* EyeSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EyeSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF69E89A2F87CFDD00FD9AE7 /* EyeSearchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EyeSearchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFAB54E92F96C95A00A009CE /* EyeSearchDoc.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = EyeSearchDoc.docc; sourceTree = "<group>"; };
-		EFC4A27B2FA007A2001E7D05 /* EyeSearch copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "EyeSearch copy-Info.plist"; path = "/Users/ph/Desktop/Programação/Swift/Projetos/Challenge13/Challenge13/EyeSearch copy-Info.plist"; sourceTree = "<absolute>"; };
 		EFE2E23A2F9903D100413ED1 /* Challenge13.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = Challenge13.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
