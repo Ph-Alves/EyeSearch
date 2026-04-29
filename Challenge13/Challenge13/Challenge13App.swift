@@ -21,9 +21,16 @@ struct Challenge13App: App {
     // Flag de primeira execução: enquanto false, exibe o onboarding em vez da Home.
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding: Bool = false
 
+    // Controla exibição da splash — true até a animação terminar
+    @State private var showSplash = true
+
     var body: some Scene {
         WindowGroup {
-            if hasCompletedOnboarding {
+            if showSplash {
+                SplashView {
+                    showSplash = false
+                }
+            } else if hasCompletedOnboarding {
                 // Para o coordinator receber a view raiz e fazer sua estrutura de navigationStack
                 CoordinatedNavigationStack {
                     HomeView(homeVM: coordinator.dependencyContainer.homeViewModel)
