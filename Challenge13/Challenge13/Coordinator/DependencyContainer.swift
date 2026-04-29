@@ -22,7 +22,8 @@ class DependencyContainer {
     /// ViewModel da tela de geração de adesivos.
     lazy var stickerViewModel = StickerViewModel(pdfManager: PDFManager())
     /// Manager do chat (compartilhado para manter estado da sessão).
-    lazy var foundationsManager = FoundationsManager()
+//    lazy var foundationsManager = FoundationsManager()
+    lazy var chatViewModel = ChatViewModel()
     /// ViewModel da tela de configurações.
     lazy var settingsViewModel = SettingsViewModel(haptics: HapticsManager(), soundManager: SoundManager(), settingsManager: SettingsManager())
 }

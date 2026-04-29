@@ -34,8 +34,6 @@ final class ChatViewModel: ObservableObject {
 
     /// Manager responsável pela comunicação com o modelo de linguagem.
     private let manager: any FoundationsManaging
-    /// Coordinator responsável pela navegação entre telas.
-    private let coordinator: Coordinator
     /// Conjunto de subscriptions Combine ativas.
     private var cancellables = Set<AnyCancellable>()
 
@@ -56,9 +54,8 @@ final class ChatViewModel: ObservableObject {
     /// Init padrão: cria o ``FoundationsManager`` internamente.
     /// Usado pelo `@StateObject` na ``ChatView``.
     /// - Parameter coordinator: Instância do coordinator responsável pela navegação.
-    init(coordinator: Coordinator) {
+    init() {
         self.manager = FoundationsManager()
-        self.coordinator = coordinator
         bindManager()
     }
 
@@ -66,9 +63,8 @@ final class ChatViewModel: ObservableObject {
     /// - Parameters:
     ///   - manager: Qualquer tipo que conforme com ``FoundationsManaging``.
     ///   - coordinator: Instância do coordinator responsável pela navegação.
-    init(manager: any FoundationsManaging, coordinator: Coordinator) {
+    init(manager: any FoundationsManaging) {
         self.manager = manager
-        self.coordinator = coordinator
         bindManager()
     }
 
@@ -129,18 +125,6 @@ final class ChatViewModel: ObservableObject {
     func confirmClear() {
         manager.clearConversation()
         showClearConfirmation = false
-    }
-
-    // MARK: - Navegação (via Coordinator)
-
-    /// Navega para a tela de configurações via ``Coordinator``.
-    func navigateToSettings() {
-        coordinator.navigate(to: .settings)
-    }
-
-    /// Navega para a tela de dicas via ``Coordinator``.
-    func navigateToHints() {
-        coordinator.navigate(to: .hints)
     }
 
     // MARK: - Helpers de apresentação
